@@ -2,39 +2,25 @@ package b00080902.mabs2;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.transition.Explode;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 
 import java.util.Arrays;
 import java.util.List;
 
 public class SignIn extends AppCompatActivity {
 
-    EditText item, value;
-    Button submit, signout;
-
+    private static final int RC_SIGN_IN = 123;
+    public boolean signedIn = false;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -52,54 +38,51 @@ public class SignIn extends AppCompatActivity {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
         // Set the right content view
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_sign_in);
         //  Fixed Portrait orientation
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.PhoneBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build());
 
-        // UI connections
-        item = (EditText)findViewById(R.id.item);
-        value = (EditText)findViewById(R.id.value);
-        submit = (Button) findViewById(R.id.submit);
-        signout = (Button) findViewById(R.id.signout);
-
-        signout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        // Create and launch sign-in intent
+        startActivityForResult(
                 AuthUI.getInstance()
-                        .signOut(getBaseContext())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
-                            }
-                        });
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .setLogo(R.drawable.logo)      // Set logo drawable
+                        .build(),
+                RC_SIGN_IN);
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == RESULT_OK) {
+                // Successfully signed in
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+
+
+            } else {
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+                // ...
             }
-        });
-
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-//                Intent intent = new Intent(getApplicationContext(), SignIn.class);
-//                startActivity(intent);
-
-//                // Firebase Database
-//                FirebaseDatabase database = FirebaseDatabase.getInstance();
-//                DatabaseReference myRef = database.getReference("message");
-//
-//                myRef.setValue("Hello, World!");
-
-            }
-        });
-
-
-
-
-
-
-
+        }
     }
 
 }

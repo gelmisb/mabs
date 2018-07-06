@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back2"
+    tools:context="b00080902.mabs2.MainActivity">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/txtSpeechInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:textColor="@color/white"
+            android:textSize="26dp"
+            android:textStyle="normal" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="60dp"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/btnSpeak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@color/blue" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/tap_on_mic"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                android:textStyle="normal" />
+        </LinearLayout>
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:text="Welcome to MABS"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/browser_actions_bg_grey"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.168" />
+
+    <EditText
+        android:id="@+id/item"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_marginBottom="300dp"
+        android:layout_marginTop="99dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Item"
+        android:textColor="@color/cardview_light_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.833" />
+
+    <Button
+        android:id="@+id/submit"
+        style="@style/FirebaseUI.Button.AccountChooser.EmailButton"
+        android:layout_width="176dp"
+        android:layout_height="39dp"
+        android:layout_marginBottom="72dp"
+        android:layout_marginTop="8dp"
+        android:text="Submit"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Value"
+        android:textColor="@color/cardview_light_background"
+        app:layout_constraintBottom_toTopOf="@+id/currency"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item"
+        app:layout_constraintVertical_bias="0.476" />
+
+    <ExpandableListView
+        android:id="@+id/currency"
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="66dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/submit"
+        app:layout_constraintHorizontal_bias="0.379"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.905" />
+
+    <Button
+        android:id="@+id/signout"
+        style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:text="Sign out"
+        android:textColor="@color/fui_bgEmail"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="6dp" />
+
+</android.support.constraint.ConstraintLayout>

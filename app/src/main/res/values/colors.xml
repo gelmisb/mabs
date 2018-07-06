@@ -10,6 +10,8 @@
     <color name="firstOne">#4db8ff</color>
     <color name="secondOne">#008ae6</color>
     <color name="thirdOne">#004d80</color>
-
+    <color name="white">#ffffff</color>
+    <color name="bg_gradient_start">#31244e</color>
+    <color name="bg_gradient_end">#6b394c</color>
     <color name="black_overlay">#0066cc</color>
 </resources>
