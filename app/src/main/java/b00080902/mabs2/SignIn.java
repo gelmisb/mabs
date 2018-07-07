@@ -2,9 +2,7 @@ package b00080902.mabs2;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,13 +18,11 @@ import java.util.List;
 public class SignIn extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
-    public boolean signedIn = false;
+    private FirebaseUser user;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         // Fullscreen without a title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -57,6 +53,8 @@ public class SignIn extends AppCompatActivity {
                         .setLogo(R.drawable.logo)      // Set logo drawable
                         .build(),
                 RC_SIGN_IN);
+
+
     }
 
 
@@ -70,10 +68,10 @@ public class SignIn extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                user = FirebaseAuth.getInstance().getCurrentUser();
 
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                Intent success = new Intent(this, MainActivity.class);
+                startActivity(success);
 
 
             } else {
@@ -81,8 +79,15 @@ public class SignIn extends AppCompatActivity {
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 // ...
+                Intent fail = new Intent(this, Fail.class);
+                startActivity(fail);
+
+
             }
         }
     }
+
+
+
 
 }

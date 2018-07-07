@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back2"
-    tools:context="b00080902.mabs2.FragmentDialogDemo">
+    tools:context=".Fail">
 
 </android.support.constraint.ConstraintLayout>
