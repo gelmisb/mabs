@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_list"
+        android:icon="@drawable/list"
+        android:title="List"/>
+
+    <item
+        android:id="@+id/navigation_balance"
+        android:icon="@drawable/balance"
+        android:title="Balance"/>
+
+    <item
+        android:id="@+id/navigation_info"
+        android:icon="@drawable/info"
+        android:title="Info"/>
+</menu>

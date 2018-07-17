@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 27
@@ -29,9 +30,8 @@ dependencies {
     implementation 'com.ibm.watson.developer_cloud:text-to-speech:6.1.0'
     implementation 'com.ibm.watson.developer_cloud:speech-to-text:6.1.0'
 
-
-
     implementation 'com.firebaseui:firebase-ui-auth:4.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
 
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.squareup.okhttp3:okhttp:3.8.0'
@@ -44,9 +44,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 
 
 
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}
