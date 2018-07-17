@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class WelcomeScreen extends AppCompatActivity {
@@ -44,7 +45,15 @@ public class WelcomeScreen extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
 
 
-        Button log = (Button)findViewById(R.id.log);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+        ImageButton log = (ImageButton)findViewById(R.id.log);
 
         log.setOnClickListener(new View.OnClickListener() {
             @Override

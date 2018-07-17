@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#0066cc</color>
     <color name="colorAccent">#113ab2</color>
     <color name="bg_bubble_self">#008ae6</color>
-    <color name="bg_bubble_watbot">#ecf0f1</color>
+    <color name="bg_bubble_watbot">#898a8a</color>
     <color name="backgroundColour">#004d99</color>
 
     <color name="firstOne">#4db8ff</color>

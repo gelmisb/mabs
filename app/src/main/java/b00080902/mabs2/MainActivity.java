@@ -1,6 +1,5 @@
 package b00080902.mabs2;
 
-import android.app.ActionBar;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -10,24 +9,27 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,16 +39,15 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HeadlinesFragment.OnHeadlineSelectedListener{
 
+    private static final String TAG_FRAGMENT_ONE = "fragment_one";
+    private static final String TAG_FRAGMENT_TWO = "fragment_two";
+    private static final String TAG_FRAGMENT_THREE = "fragment_three";
 
     private TextView txtSpeechInput;
     private ImageButton btnSpeak, btnSignOut;
@@ -62,9 +63,14 @@ public class MainActivity extends AppCompatActivity {
     int itemNo = 4;
 
 
+    private FragmentTransaction transaction;
+    private FragmentManager fragmentManager;
+    private Fragment currentFragment;
+    private BottomNavigationView bottomNavigationView;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         model = new NewsModel();
@@ -85,16 +91,94 @@ public class MainActivity extends AppCompatActivity {
 
         //  Fixed Portrait orientation
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        database = FirebaseDatabase.getInstance();
-
-        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.navigationView);
-
 
         View decorView = getWindow().getDecorView();
 
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+
+
+
+
+
+        database = FirebaseDatabase.getInstance();
+
+//        final BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.navigationView);
+//
+//        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//
+//
+//
+//                int id = item.getItemId();
+//
+//                if (id == R.id.navigation_home) {
+//
+//                    return true;
+//                } else if (id == R.id.navigation_list) {
+//
+//                    ListFragment lf = ListFragment.newInstance();
+////                    openFragment( android.support.v4.app.Fragment.);
+//                    return true;
+//                } else if (id == R.id.navigation_balance) {
+//                    return true;
+//
+//                } else if (id == R.id.navigation_info) {
+//                    return true;
+//                }
+//
+//                return false;
+//            }
+//        });
+
+
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        fragmentManager = getSupportFragmentManager();
+
+        Fragment fragment = fragmentManager.findFragmentByTag("Lists");
+        if (fragment == null) {
+            fragment = ListFragment.newInstance();
+        }
+        replaceFragment(fragment, "Lists");
+
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragment = null;
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+//                        // I'm aware that this code can be optimized by a method which accepts a class definition and returns the proper fragment
+//                        fragment = fragmentManager.findFragmentByTag("Home");
+//                        if (fragment == null) {
+//                            fragment = Home.newInstance();
+//                        }
+//                        replaceFragment(fragment, TAG_FRAGMENT_ONE);
+//                        break;
+                    case R.id.navigation_list:
+                        fragment = fragmentManager.findFragmentByTag("Lists");
+                        if (fragment == null) {
+                            fragment = ListFragment.newInstance();
+                        }
+                        replaceFragment(fragment, "Lists");
+                        break;
+//                    case R.id.navigation_balance:
+//                        fragment = fragmentManager.findFragmentByTag(TAG_FRAGMENT_THREE);
+//                        if (fragment == null) {
+//                            fragment = ThirdFragment.newInstance();
+//                        }
+//                        replaceFragment(fragment, TAG_FRAGMENT_THREE);
+//                        break;
+                }
+                return true;
+            }
+        });
+        /// //////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
         // Initials for recording
@@ -129,8 +213,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         recallDB();
+    }
+
+
+    private void replaceFragment(@NonNull Fragment fragment, @NonNull String tag) {
+        if (!fragment.equals(currentFragment)) {
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container, fragment, tag)
+                    .commit();
+            currentFragment = fragment;
+        }
+    }
+
+//    private void openFragment(Fragment fragment) {
+//        transaction = getFragmentManager().beginTransaction();
+//        fragment = android.app.Fragment;
+//        transaction.replace(R.id.container, fragment);
+//        transaction.addToBackStack(null);
+//        transaction.commit();
+//    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus){
+        super.onWindowFocusChanged(hasFocus);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
     public void PopulateView(ArrayList<Article> model){
@@ -150,9 +264,6 @@ public class MainActivity extends AppCompatActivity {
                 if (vibe != null) {
                     vibe.vibrate(100);
                 }
-
-
-
             }
         });
 
@@ -266,5 +377,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
+    }
+
+    @Override
+    public void onArticleSelected(int position) {
+        
     }
 }
