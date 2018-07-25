@@ -17,13 +17,10 @@ package b00080902.mabs2;
 
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -36,7 +33,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -44,20 +40,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class MainActivity extends FragmentActivity
-        implements HeadlinesFragment.OnHeadlineSelectedListener {
+public class MainActivity extends FragmentActivity{
 
 
     private TextView txtSpeechInput;
@@ -74,7 +65,7 @@ public class MainActivity extends FragmentActivity
     int itemNo = 4;
     int position = 0;
 
-    BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView;
 
 
     /** Called when the activity is first created. */
@@ -85,6 +76,7 @@ public class MainActivity extends FragmentActivity
 
         model = new NewsModel();
         database = FirebaseDatabase.getInstance();
+
 
 
         // Fullscreen without a title
@@ -109,7 +101,7 @@ public class MainActivity extends FragmentActivity
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-
+        // Items list
 
         // Initials for recording
         txtSpeechInput = (TextView) findViewById(R.id.txtSpeechInput);
@@ -143,7 +135,6 @@ public class MainActivity extends FragmentActivity
             }
         });
 
-        recallDB();
 
 
 
@@ -156,40 +147,55 @@ public class MainActivity extends FragmentActivity
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
 
-
                 int id = item.getItemId();
 
                 if (id == R.id.navigation_home) {
-                    Toast.makeText(getApplicationContext(), "Home", Toast.LENGTH_SHORT).show();
+                    // Check that the activity is using the layout version with
+                    // the fragment_container FrameLayout
+                    if (findViewById(R.id.fragment_container) != null) {
 
+                        // Create fragment and give it an argument specifying the article it should show
+                        HomeFragment newFragment = new HomeFragment();
+                        Bundle args = new Bundle();
+                        args.putInt(ArticleFragment.ARG_POSITION, position);
+                        newFragment.setArguments(args);
+
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+                        // Replace whatever is in the fragment_container view with this fragment,
+                        // and add the transaction to the back stack so the user can navigate back
+                        transaction.replace(R.id.fragment_container, newFragment);
+                        transaction.addToBackStack(null);
+
+                        // Commit the transaction
+                        transaction.commit();
+                    }
                     return true;
                 } else if (id == R.id.navigation_list) {
 
-                    Toast.makeText(getApplicationContext(), "Lists", Toast.LENGTH_SHORT).show();
-
+                    // Check that the activity is using the layout version with
+                    // the fragment_container FrameLayout
                     if (findViewById(R.id.fragment_container) != null) {
 
-                        Toast.makeText(getApplicationContext(), "fragment_Container != null", Toast.LENGTH_SHORT).show();
+                        // Create fragment and give it an argument specifying the article it should show
+                        ArticleFragment newFragment = new ArticleFragment();
+                        Bundle args = new Bundle();
+                        args.putInt(ArticleFragment.ARG_POSITION, position);
+                        newFragment.setArguments(args);
 
-                        // However, if we're being restored from a previous state,
-                        // then we don't need to do anything and should return or else
-                        // we could end up with overlapping fragments.
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-                        // Create an instance of ExampleFragment
-                        HeadlinesFragment firstFragment = new HeadlinesFragment();
+                        // Replace whatever is in the fragment_container view with this fragment,
+                        // and add the transaction to the back stack so the user can navigate back
+                        transaction.replace(R.id.fragment_container, newFragment);
+                        transaction.addToBackStack(null);
 
-                        // In case this activity was started with special instructions from an Intent,
-                        // pass the Intent's extras to the fragment as arguments
-                        firstFragment.setArguments(getIntent().getExtras());
-
-                        // Add the fragment to the 'fragment_container' FrameLayout
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.fragment_container, firstFragment).commit();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "fragment_Container == null", Toast.LENGTH_SHORT).show();
+                        // Commit the transaction
+                        transaction.commit();
                     }
 
                     return true;
+
                 } else if (id == R.id.navigation_balance) {
                     Toast.makeText(getApplicationContext(), "Balance", Toast.LENGTH_SHORT).show();
 
@@ -252,34 +258,14 @@ public class MainActivity extends FragmentActivity
         super.onWindowFocusChanged(hasFocus);
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
-    public void PopulateView(ArrayList<Article> model){
 
-        itemList = (ListView) findViewById(R.id.itemList);
-
-        adapter = new CustomListAdapter(model,getBaseContext());
-
-        itemList.setAdapter(adapter);
-
-        itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.whoop);
-                mp.start();
-                if (vibe != null) {
-                    vibe.vibrate(100);
-                }
-            }
-        });
-
-    }
 
 
     /**
@@ -359,32 +345,6 @@ public class MainActivity extends FragmentActivity
         myRef.child(itemID).setValue(items);
     }
 
-    public void recallDB(){
-
-        myRef = database.getReference("items");
-
-
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                long value=dataSnapshot.getChildrenCount();
-                Log.d("Number","no of children: "+value);
-
-                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
-
-                ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
-
-                PopulateView(fullItemList);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("Failed", "Failed to read value.", error.toException());
-            }
-        });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

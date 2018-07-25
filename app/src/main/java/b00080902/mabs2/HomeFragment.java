@@ -42,7 +42,7 @@ import java.util.Objects;
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.firebase.ui.auth.AuthUI.getInstance;
 
-public class ArticleFragment extends Fragment {
+public class HomeFragment extends Fragment {
 
 
     final static String ARG_POSITION = "position";
@@ -70,13 +70,10 @@ public class ArticleFragment extends Fragment {
         }
 
 
-        model = new NewsModel();
-        database = FirebaseDatabase.getInstance();
-
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.article_view, container, false);
+        return inflater.inflate(R.layout.fragment_home, container, false);
 
 
 
@@ -100,56 +97,8 @@ public class ArticleFragment extends Fragment {
         }
     }
 
-    public void recallDB(){
-
-        myRef = database.getReference("items");
-
-
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                long value=dataSnapshot.getChildrenCount();
-                Log.d("Number","no of children: "+value);
-
-                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
-
-                ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
-
-                PopulateView(fullItemList);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("Failed", "Failed to read value.", error.toException());
-            }
-        });
-    }
-
-    public void PopulateView(ArrayList<Article> model){
-        itemList = Objects.requireNonNull(getActivity()).findViewById(R.id.itemList);
-
-        adapter = new CustomListAdapter(model, getActivity().getBaseContext());
-
-        itemList.setAdapter(adapter);
-
-        itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Vibrator vibe = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                MediaPlayer mp = MediaPlayer.create(getActivity().getBaseContext(), R.raw.whoop);
-                mp.start();
-                if (vibe != null) {
-                    vibe.vibrate(100);
-                }
-            }
-        });
-
-    }
 
     public void updateArticleView(int position) {
-        recallDB();
 
         mCurrentPosition = position;
     }
