@@ -114,15 +114,6 @@ public class MainActivity extends FragmentActivity{
             }
         });
 
-        // Showing the lists of all the items that  have been added
-        btnList = (Button) findViewById(R.id.btnList);
-        btnList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent intent  = new Intent(getApplicationContext(), Lists.class);
-//                startActivity(intent);
-            }
-        });
 
         // User sign out using Firebase
         btnSignOut = (ImageButton) findViewById(R.id.btnSignOut);
@@ -170,7 +161,9 @@ public class MainActivity extends FragmentActivity{
                         // Commit the transaction
                         transaction.commit();
                     }
+
                     return true;
+
                 } else if (id == R.id.navigation_list) {
 
                     // Check that the activity is using the layout version with
@@ -305,7 +298,7 @@ public class MainActivity extends FragmentActivity{
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
                     // Shows output to user
-                    txtSpeechInput.setText(result.get(0));
+                    Toast.makeText(getApplicationContext(), "Was it: " + result.get(0), Toast.LENGTH_SHORT).show();
 
                     fullResponse = result.get(0);
 

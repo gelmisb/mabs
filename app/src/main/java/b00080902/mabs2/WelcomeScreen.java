@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class WelcomeScreen extends AppCompatActivity {
@@ -56,13 +58,25 @@ public class WelcomeScreen extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
 
+        // Check if user has already accessed the application or not
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Intent success = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(success);
+        } else {
+            // No user is signed in
+            // Ask user to sign in
+            Intent failure = new Intent(getApplicationContext(), SignIn.class);
+            startActivity(failure);
+        }
+
         ImageButton log = (ImageButton)findViewById(R.id.log);
 
         log.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent success = new Intent(getApplicationContext(), SignIn.class);
-                startActivity(success);
+
             }
         });
     }
