@@ -51,21 +51,26 @@ import java.util.Locale;
 public class MainActivity extends FragmentActivity{
 
 
+    // UI config
     private TextView txtSpeechInput;
     private ImageButton btnSpeak, btnSignOut;
-    private Button btnList;
-    private final int REQ_CODE_SPEECH_INPUT = 100;
-    DatabaseReference myRef;
-    FirebaseDatabase database;
-    private String one, two, three, four, fullResponse;
     private ListView itemList;
     private static CustomListAdapter adapter;
     private ArrayList<String> full ;
     private NewsModel model;
+    private BottomNavigationView bottomNavigationView;
+
+    // STT params
+    private final int REQ_CODE_SPEECH_INPUT = 100;
+
+    // Database config
+    private DatabaseReference myRef;
+    private FirebaseDatabase database;
+
+    // Iteration params
+    private String one, two, three, four, fullResponse;
     int itemNo = 4;
     int position = 0;
-
-    private BottomNavigationView bottomNavigationView;
 
 
     /** Called when the activity is first created. */
@@ -74,38 +79,57 @@ public class MainActivity extends FragmentActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Instantiate initial params for DB
         model = new NewsModel();
         database = FirebaseDatabase.getInstance();
 
-
-
+        /**
+         * This is for the application remain in fullscreen mode
+         */
         // Fullscreen without a title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         // Overwriting the fullscreen parameters
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        // inside your activity (if you did not enable transitions in your theme)
+        // Inside your activity (if you did not enable transitions in your theme)
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
         // Set the right content view
         setContentView(R.layout.activity_main);
+
+        // Hiding the Android soft navigation keys
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-        //  Fixed Portrait orientation
+        // Fixed Portrait orientation
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        // Decoration view
         View decorView = getWindow().getDecorView();
 
+        // Force Hiding the Navigation UI
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        // Items list
 
-        // Initials for recording
+        /**
+         * UI initial params
+         */
+        // To show speech results
         txtSpeechInput = (TextView) findViewById(R.id.txtSpeechInput);
+
+        // Enable the ability for the user to speak to the application
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
+
+        // Bottom nav bar
+        bottomNavigationView = (BottomNavigationView)findViewById(R.id.navigationView);
+
+        // Button to sign out
+        btnSignOut = (ImageButton) findViewById(R.id.btnSignOut);
+
+
+        // Microphone to listen to the user when activated
         btnSpeak.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -116,7 +140,6 @@ public class MainActivity extends FragmentActivity{
 
 
         // User sign out using Firebase
-        btnSignOut = (ImageButton) findViewById(R.id.btnSignOut);
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,10 +152,6 @@ public class MainActivity extends FragmentActivity{
 
 
 
-
-
-        bottomNavigationView = (BottomNavigationView)findViewById(R.id.navigationView);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -140,7 +159,9 @@ public class MainActivity extends FragmentActivity{
 
                 int id = item.getItemId();
 
+                // If home navigation is clicked
                 if (id == R.id.navigation_home) {
+
                     // Check that the activity is using the layout version with
                     // the fragment_container FrameLayout
                     if (findViewById(R.id.fragment_container) != null) {
@@ -203,15 +224,10 @@ public class MainActivity extends FragmentActivity{
                 return false;
             }
         });
-
-
-
-
-        // Check whether the activity is using the layout version with
-        // the fragment_container FrameLayout. If so, we must add the first fragment
-
     }
 
+
+/*
     public void onArticleSelected(int position) {
         // The user selected the headline of an article from the HeadlinesFragment
 
@@ -245,7 +261,14 @@ public class MainActivity extends FragmentActivity{
             transaction.commit();
         }
     }
+*/
 
+
+    /**
+     * Force hiding system UI
+     *
+     * @param hasFocus
+     */
     @Override
     public void onWindowFocusChanged(boolean hasFocus){
         super.onWindowFocusChanged(hasFocus);

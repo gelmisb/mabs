@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,61 +46,78 @@ import static com.firebase.ui.auth.AuthUI.getInstance;
 public class ArticleFragment extends Fragment {
 
 
+    // Fragment params
     final static String ARG_POSITION = "position";
     int mCurrentPosition = -1;
+
+    // Database config
     private DatabaseReference myRef;
     private FirebaseDatabase database;
+
+    // UI config
     private ListView itemList;
     private static CustomListAdapter adapter;
-    private ArrayList<String> full ;
     private NewsModel model;
 
 
 
+    /**
+     * If activity recreated (such as from screen rotate), restore
+     * the previous article selection set by onSaveInstanceState().
+     * This is primarily necessary when in the two-pane layout.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-
-        // If activity recreated (such as from screen rotate), restore
-        // the previous article selection set by onSaveInstanceState().
-        // This is primarily necessary when in the two-pane layout.
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null)
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
-        }
 
 
         model = new NewsModel();
         database = FirebaseDatabase.getInstance();
 
 
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.article_view, container, false);
-
-
-
     }
 
+
+
+    /**
+     * During startup, check if there are
+     * arguments passed to the fragment
+     */
     @Override
     public void onStart() {
         super.onStart();
 
-        // During startup, check if there are arguments passed to the fragment.
-        // onStart is a good place to do this because the layout has already been
-        // applied to the fragment at this point so we can safely call the method
-        // below that sets the article text.
         Bundle args = getArguments();
+
         if (args != null) {
+
             // Set article based on argument passed in
             updateArticleView(args.getInt(ARG_POSITION));
+
         } else if (mCurrentPosition != -1) {
+
             // Set article based on saved instance state defined during onCreateView
             updateArticleView(mCurrentPosition);
+
         }
     }
 
+    /**
+     * Structuring the database so it would be able
+     * to retrieve the wanted information about the
+     * items using a genericTypeIndicator for arrayLists
+     *
+     */
     public void recallDB(){
 
         myRef = database.getReference("items");
@@ -122,11 +140,19 @@ public class ArticleFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
+                Toast.makeText(getActivity().getApplicationContext(), "Oops, something went wrong, try again", Toast.LENGTH_SHORT).show();
                 Log.w("Failed", "Failed to read value.", error.toException());
             }
         });
     }
 
+    /**
+     * Populating the view with the retrieved data
+     * which is encapsulated using a list view
+     * with a custom listView adapter
+     *
+     * @param model
+     */
     public void PopulateView(ArrayList<Article> model){
         itemList = Objects.requireNonNull(getActivity()).findViewById(R.id.itemList);
 
@@ -148,12 +174,25 @@ public class ArticleFragment extends Fragment {
 
     }
 
+    /**
+     * Updating the view in order
+     * to show the user the list they have already submitted
+     *
+     * @param position
+     */
     public void updateArticleView(int position) {
+
         recallDB();
 
         mCurrentPosition = position;
+
     }
 
+    /**
+     * Beginning from the savedInstanceState
+     *
+     * @param outState
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
