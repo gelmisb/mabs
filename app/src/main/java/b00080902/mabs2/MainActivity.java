@@ -210,6 +210,11 @@ public class MainActivity extends FragmentActivity{
 
                     return true;
 
+                } else if (id == R.id.navigation_categories) {
+                    Toast.makeText(getApplicationContext(), "Categories", Toast.LENGTH_SHORT).show();
+
+                    return true;
+
                 } else if (id == R.id.navigation_balance) {
                     Toast.makeText(getApplicationContext(), "Balance", Toast.LENGTH_SHORT).show();
 

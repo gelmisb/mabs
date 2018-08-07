@@ -12,6 +12,11 @@
         android:title="List"/>
 
     <item
+        android:id="@+id/navigation_categories"
+        android:icon="@drawable/categories"
+        android:title="Categories"/>
+
+    <item
         android:id="@+id/navigation_balance"
         android:icon="@drawable/scale"
         android:title="Balance"/>

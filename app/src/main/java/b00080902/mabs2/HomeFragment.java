@@ -36,6 +36,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -49,10 +53,9 @@ public class HomeFragment extends Fragment {
     int mCurrentPosition = -1;
     private DatabaseReference myRef;
     private FirebaseDatabase database;
-    private ListView itemList;
-    private static CustomListAdapter adapter;
-    private ArrayList<String> full ;
     private NewsModel model;
+    private TextView expenses, income;
+
 
 
 
@@ -60,21 +63,22 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-
-        // If activity recreated (such as from screen rotate), restore
-        // the previous article selection set by onSaveInstanceState().
-        // This is primarily necessary when in the two-pane layout.
         if (savedInstanceState != null) {
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
         }
 
+        income = (TextView)getActivity().findViewById(R.id.income);
 
 
+        // Access to DB
+        model = new NewsModel();
+        database = FirebaseDatabase.getInstance();
+
+        // Show the results
+        recallDB();
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
-
 
 
     }
@@ -97,6 +101,60 @@ public class HomeFragment extends Fragment {
         }
     }
 
+
+    public void recallDB(){
+
+        myRef = database.getReference("items");
+
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
+
+                ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
+
+                int sum = 0 ;
+
+                for(int i = 0; i < fullItemList.size(); i++){
+
+                    String liveprice = fullItemList.get(i).getValue();
+
+                    String newStr = liveprice.replaceAll("[€,]", "").trim();
+
+                    sum = sum + Integer.parseInt(newStr);
+
+                }
+
+                Log.d("Sum", "Sum is: : " + sum + "");
+                expenses = (TextView) Objects.requireNonNull(getActivity()).findViewById(R.id.expenses);
+
+                expenses.setText("Your total expenses: €" + sum);
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("Failed", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    /**
+     * Populating the view with the retrieved data
+     * which is encapsulated using a list view
+     * with a custom listView adapter
+     *
+     * @param model
+     */
+    public void PopulateView(ArrayList<Article> model){
+
+
+
+    }
 
     public void updateArticleView(int position) {
 

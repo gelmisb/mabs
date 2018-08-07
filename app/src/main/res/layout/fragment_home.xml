@@ -7,7 +7,7 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/example"
+        android:id="@+id/expenses"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -19,11 +19,11 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/example2"
+        android:id="@+id/income"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/example"
+        android:layout_alignStart="@+id/expenses"
         android:layout_marginTop="161dp"
         android:text="Your total income: "
         android:textAlignment="center"
