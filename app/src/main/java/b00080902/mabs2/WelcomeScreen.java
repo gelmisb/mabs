@@ -58,6 +58,20 @@ public class WelcomeScreen extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
 
+
+        ImageButton log = (ImageButton)findViewById(R.id.log);
+
+        log.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userLogedIn();
+
+            }
+        });
+    }
+
+
+    public void userLogedIn(){
         // Check if user has already accessed the application or not
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -70,14 +84,5 @@ public class WelcomeScreen extends AppCompatActivity {
             Intent failure = new Intent(getApplicationContext(), SignIn.class);
             startActivity(failure);
         }
-
-        ImageButton log = (ImageButton)findViewById(R.id.log);
-
-        log.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
     }
 }
