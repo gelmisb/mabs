@@ -91,6 +91,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         income = (TextView) myView.findViewById(R.id.income);
         btnSpeak = (ImageButton) myView.findViewById(R.id.btnSpeak);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        itemNo = preferences.getInt("Item", 0);
+
+
 
         // Access to DB
         model = new NewsModel();
@@ -220,7 +224,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
                     // Shows output to user
-                    Toast.makeText(getActivity().getApplicationContext(), "Was it: " + result.get(0), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Was it: " + result.get(0), Toast.LENGTH_LONG).show();
 
                     fullResponse = result.get(0);
 
@@ -230,18 +234,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     // Segments the string
                     one = alphabets[0];
                     two = alphabets[1];
-//                    three = alphabets[2];
+                    three = alphabets[2];
 //                    three = alphabets[2];
 
                     // gets the current time
                     Date currentTime = Calendar.getInstance().getTime();
                     // Logs the details for the dev
-                    Log.i("IMPORTANT", one);
-                    Log.i("IMPORTANT1", two);
+                    Log.i("Name ", one);
+                    Log.i("Value ", two);
+                    Log.i("Category ", three);
 
 
                     // Writes to DB
-                    writeNewItem(itemNo + "", one, two, currentTime.toString());
+                    writeNewItem(itemNo + "", one, two, three, currentTime.toString());
 
                     itemNo++;
 
@@ -257,11 +262,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
     }
-    private void writeNewItem(String itemID, String name, String value, String date) {
+    private void writeNewItem(String itemID, String name, String value, String category, String date) {
         Date currentTime = Calendar.getInstance().getTime();
 
-        Article items = new Article(name, value, date);
-        model.addArticle(new Article(one, two, currentTime.toString()));
+        date = currentTime.toString().replace("GMT+01:00 2018", "");
+
+
+        Article items = new Article(name, value , date, category);
+        model.addArticle(new Article(one, two, date, category));
 
         myRef = database.getReference("items");
         myRef.child(itemID).setValue(items);

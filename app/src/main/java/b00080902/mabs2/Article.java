@@ -8,19 +8,21 @@ public class Article implements Serializable{
     private String item;
     private String value;
     private String date;
+    private String category;
 
     public Article() {
 
     }
 
-
-    public Article(String item, String value, String date){
+    public Article(String item, String value, String date, String category){
 
         this.item = item;
         this.value = value;
         this.date = date;
+        this.category = category;
 
     }
+
 
     public String getItem() {
         return item;
@@ -38,13 +40,6 @@ public class Article implements Serializable{
         this.value = value;
     }
 
-    @Override
-    public  String toString(){
-
-        return item;
-
-    }
-
     public String getDate() {
         return date;
     }
@@ -53,5 +48,14 @@ public class Article implements Serializable{
         this.date = date;
     }
 
+    public String getCategory() { return category; }
 
+    public void setCategory(String category) { this.category = category; }
+
+    @Override
+    public String toString(){
+
+        return item;
+
+    }
 }

@@ -95,6 +95,8 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
 
     }
 
+
+
     @Override
     public void onStart() {
         super.onStart();

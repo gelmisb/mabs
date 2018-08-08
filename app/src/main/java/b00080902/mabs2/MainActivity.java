@@ -140,10 +140,6 @@ public class MainActivity extends FragmentActivity{
         });
 
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        itemNo = preferences.getInt("Item", 0);
-
-
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
