@@ -60,7 +60,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         View myView = inflater.inflate(R.layout.fragment_category, container, false);
 
         income = (TextView)myView.findViewById(R.id.income);
-        press = (Button)myView.findViewById(R.id.press);
+        press = (Button)myView.findViewById(R.id.house);
 
 
 
@@ -189,7 +189,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
 
         switch (getId()) {
-            case R.id.press:
+            case R.id.house:
                 onBackPressed();
 
                 break;
