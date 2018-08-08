@@ -240,7 +240,6 @@ public class MainActivity extends FragmentActivity{
     }
 
 
-
     /**
      * Force hiding system UI
      *
@@ -257,9 +256,6 @@ public class MainActivity extends FragmentActivity{
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
-
-
-
 
 
     @Override
