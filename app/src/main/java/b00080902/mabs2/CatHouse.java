@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -96,7 +97,15 @@ public class CatHouse extends AppCompatActivity {
 
                 ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
 
-                PopulateView(fullItemList);
+                String[] fullArray = {""};
+                ArrayList<String[]> list = new ArrayList<String[]>();
+
+
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    Query recentPostsQuery = myRef.child("items").equalTo("house")
+
+                }
+
             }
 
             @Override
@@ -114,7 +123,7 @@ public class CatHouse extends AppCompatActivity {
      *
      * @param model
      */
-    public void PopulateView(ArrayList<Article> model){
+    public void PopulateView(ArrayList<String> model){
         itemList = findViewById(R.id.showcase);
 
         adapter = new CustomListAdapter(model, this);
