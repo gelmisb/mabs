@@ -169,7 +169,7 @@ public class MainActivity extends FragmentActivity{
                         // Create fragment and give it an argument specifying the article it should show
                         HomeFragment newFragment = new HomeFragment();
                         Bundle args = new Bundle();
-                        args.putInt(ArticleFragment.ARG_POSITION, position);
+                        args.putInt(HomeFragment.ARG_POSITION, position);
                         newFragment.setArguments(args);
 
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
