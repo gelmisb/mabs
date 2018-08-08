@@ -17,7 +17,6 @@ package b00080902.mabs2;
 
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -36,7 +35,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -122,8 +120,6 @@ public class MainActivity extends FragmentActivity{
         // To show speech results
         txtSpeechInput = (TextView) findViewById(R.id.txtSpeechInput);
 
-        // Enable the ability for the user to speak to the application
-        btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
 
         // Bottom nav bar
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.navigationView);
@@ -131,15 +127,6 @@ public class MainActivity extends FragmentActivity{
         // Button to sign out
         btnSignOut = (ImageButton) findViewById(R.id.btnSignOut);
 
-
-        // Microphone to listen to the user when activated
-        btnSpeak.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                promptSpeechInput();
-            }
-        });
 
 
         // User sign out using Firebase
@@ -257,42 +244,6 @@ public class MainActivity extends FragmentActivity{
     }
 
 
-/*
-    public void onArticleSelected(int position) {
-        // The user selected the headline of an article from the HeadlinesFragment
-
-
-        // Capture the article fragment from the activity layout
-        ArticleFragment articleFrag = (ArticleFragment)
-                getSupportFragmentManager().findFragmentById(R.id.article);
-
-        if (articleFrag != null) {
-            // If article frag is available, we're in two-pane layout...
-
-            // Call a method in the ArticleFragment to update its content
-            articleFrag.updateArticleView(position);
-
-        } else {
-            // If the frag is not available, we're in the one-pane layout and must swap frags...
-
-            // Create fragment and give it an argument for the selected article
-            ArticleFragment newFragment = new ArticleFragment();
-            Bundle args = new Bundle();
-            args.putInt(ArticleFragment.ARG_POSITION, position);
-            newFragment.setArguments(args);
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-            // Replace whatever is in the fragment_container view with this fragment,
-            // and add the transaction to the back stack so the user can navigate back
-            transaction.replace(R.id.fragment_container, newFragment);
-            transaction.addToBackStack(null);
-
-            // Commit the transaction
-            transaction.commit();
-        }
-    }
-*/
-
 
     /**
      * Force hiding system UI
@@ -313,90 +264,6 @@ public class MainActivity extends FragmentActivity{
 
 
 
-
-    /**
-     * Showing google speech input dialog
-     */
-    private void promptSpeechInput() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-                getString(R.string.speech_prompt));
-        try {
-            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
-        } catch (ActivityNotFoundException a) {
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.speech_not_supported),
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * Receiving speech input
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case REQ_CODE_SPEECH_INPUT: {
-                if (resultCode == RESULT_OK && null != data) {
-
-
-
-                    // Stores result
-                    ArrayList<String> result = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
-                    // Shows output to user
-                    Toast.makeText(getApplicationContext(), "Was it: " + result.get(0), Toast.LENGTH_SHORT).show();
-
-                    fullResponse = result.get(0);
-
-                    // Splits the string
-                    String[] alphabets= result.get(0).split("\\s");
-
-                    // Segments the string
-                    one = alphabets[0];
-                    two = alphabets[1];
-//                    three = alphabets[2];
-//                    three = alphabets[2];
-
-                    // gets the current time
-                    Date currentTime = Calendar.getInstance().getTime();
-                    // Logs the details for the dev
-                    Log.i("IMPORTANT", one);
-                    Log.i("IMPORTANT1", two);
-
-
-                    // Writes to DB
-                    writeNewItem(itemNo + "", one, two, currentTime.toString());
-
-                    itemNo++;
-
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putInt("Item", itemNo);
-                    editor.apply();
-                }
-                break;
-            }
-
-        }
-
-
-    }
-    private void writeNewItem(String itemID, String name, String value, String date) {
-        Date currentTime = Calendar.getInstance().getTime();
-
-        Article items = new Article(name, value, date);
-        model.addArticle(new Article(one, two, currentTime.toString()));
-
-        myRef = database.getReference("items");
-        myRef.child(itemID).setValue(items);
-    }
 
 
     @Override
