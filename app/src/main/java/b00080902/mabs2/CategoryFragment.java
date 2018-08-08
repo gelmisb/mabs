@@ -16,18 +16,25 @@
 package b00080902.mabs2;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,7 +53,7 @@ import java.util.Objects;
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.firebase.ui.auth.AuthUI.getInstance;
 
-public class HomeFragment extends Fragment {
+public class CategoryFragment extends Fragment implements View.OnClickListener {
 
 
     final static String ARG_POSITION = "position";
@@ -55,7 +62,7 @@ public class HomeFragment extends Fragment {
     private FirebaseDatabase database;
     private NewsModel model;
     private TextView expenses, income;
-
+    private Button press;
 
 
 
@@ -67,19 +74,41 @@ public class HomeFragment extends Fragment {
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
         }
 
-        income = (TextView)getActivity().findViewById(R.id.income);
+        View myView = inflater.inflate(R.layout.fragment_category, container, false);
+
+        income = (TextView)myView.findViewById(R.id.income);
+        press = (Button)myView.findViewById(R.id.press);
+
+
+
+        press.setOnClickListener(this);
 
 
         // Access to DB
         model = new NewsModel();
         database = FirebaseDatabase.getInstance();
 
-        // Show the results
-        recallDB();
+        return myView;
+    }
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+    public void onBackPressed() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity().getApplicationContext());
+        alert.setTitle("Do you want to logout?");
+        // alert.setMessage("Message");
 
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //Your action here
+            }
+        });
+
+        alert.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                });
+
+        alert.show();
 
     }
 
@@ -121,17 +150,14 @@ public class HomeFragment extends Fragment {
 
                     String liveprice = fullItemList.get(i).getValue();
 
-                    String newStr = liveprice.replace("€", "");
-                    String newStr1 = newStr.replace(",", "");
-                    String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+                    String newStr = liveprice.replaceAll("[€,]", "").trim();
 
-                    Log.i("Show", " " + newStr2);
-                    sum = sum + Integer.parseInt(newStr2);
+                    sum = sum + Integer.parseInt(newStr);
 
                 }
 
                 Log.d("Sum", "Sum is: : " + sum + "");
-                expenses = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.expenses);
+                expenses = (TextView) Objects.requireNonNull(getActivity()).findViewById(R.id.expenses);
 
                 expenses.setText("Your total expenses: €" + sum);
 
@@ -173,4 +199,22 @@ public class HomeFragment extends Fragment {
     }
 
 
+
+    @Override
+    public void onClick(View v) {
+
+        switch (getId()) {
+            case R.id.press:
+                onBackPressed();
+
+                break;
+
+
+            default:
+                break;
+
+        }
+
+
+    }
 }

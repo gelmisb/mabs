@@ -17,10 +17,13 @@ package b00080902.mabs2;
 
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -69,7 +72,7 @@ public class MainActivity extends FragmentActivity{
 
     // Iteration params
     private String one, two, three, four, fullResponse;
-    int itemNo = 4;
+    int itemNo ;
     int position = 0;
 
 
@@ -150,6 +153,9 @@ public class MainActivity extends FragmentActivity{
         });
 
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        itemNo = preferences.getInt("Item", 0);
+
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -212,6 +218,25 @@ public class MainActivity extends FragmentActivity{
 
                 } else if (id == R.id.navigation_categories) {
                     Toast.makeText(getApplicationContext(), "Categories", Toast.LENGTH_SHORT).show();
+
+                    if (findViewById(R.id.fragment_container) != null) {
+
+                        // Create fragment and give it an argument specifying the article it should show
+                        CategoryFragment newFragment = new CategoryFragment();
+                        Bundle args = new Bundle();
+                        args.putInt(CategoryFragment.ARG_POSITION, position);
+                        newFragment.setArguments(args);
+
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+                        // Replace whatever is in the fragment_container view with this fragment,
+                        // and add the transaction to the back stack so the user can navigate back
+                        transaction.replace(R.id.fragment_container, newFragment);
+                        transaction.addToBackStack(null);
+
+                        // Commit the transaction
+                        transaction.commit();
+                    }
 
                     return true;
 
@@ -319,7 +344,7 @@ public class MainActivity extends FragmentActivity{
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {
 
-                    itemNo++;
+
 
                     // Stores result
                     ArrayList<String> result = data
@@ -348,6 +373,13 @@ public class MainActivity extends FragmentActivity{
 
                     // Writes to DB
                     writeNewItem(itemNo + "", one, two, currentTime.toString());
+
+                    itemNo++;
+
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt("Item", itemNo);
+                    editor.apply();
                 }
                 break;
             }
