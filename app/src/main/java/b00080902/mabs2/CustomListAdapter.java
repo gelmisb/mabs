@@ -85,7 +85,6 @@ public class CustomListAdapter extends ArrayAdapter<Article> implements View.OnC
         lastPosition = position;
 
         assert model != null;
-
         if(model.getItem() == null){
             viewHolder.txtName.setText("Test");
         }else {

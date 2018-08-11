@@ -7,12 +7,11 @@
     android:background="@drawable/mback112"
     tools:context=".CatHouse">
 
-    <ListView
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/showcase"
         android:layout_width="match_parent"
-        android:layout_height="650dp"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
-        android:layout_marginTop="77dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
