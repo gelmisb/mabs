@@ -19,7 +19,7 @@
             android:id="@+id/btnSpeak"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/mic"
+            android:background="@drawable/mik"
             android:src="@null" />
 
         <TextView

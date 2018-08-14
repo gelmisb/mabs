@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,17 +27,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.Objects;
-
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class CategoryFragment extends Fragment implements View.OnClickListener {
 
@@ -64,7 +54,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         View myView = inflater.inflate(R.layout.fragment_category, container, false);
 
         income = (TextView)myView.findViewById(R.id.income);
-        press = (Button)myView.findViewById(R.id.house);
+        press = (Button)myView.findViewById(R.id.housing);
 
 
 
@@ -141,10 +131,11 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.house:
+            case R.id.housing:
                 Toast.makeText(getActivity().getApplicationContext(), "House", Toast.LENGTH_SHORT).show();
 
                 Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+//                house.putExtra("cat", v.getId());
                 startActivity(house);
 
                 break;

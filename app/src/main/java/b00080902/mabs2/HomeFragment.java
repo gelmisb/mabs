@@ -171,7 +171,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 Log.d("Sum", "Sum is: : " + sum + "");
 
                 // Show it to the user
-                expenses = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.expenses);
+                expenses = getView().findViewById(R.id.expenses);
 
                 // Show the total to the user
                 expenses.setText("Your total expenses: €" + sum);

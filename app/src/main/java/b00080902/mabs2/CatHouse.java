@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,16 +36,14 @@ public class CatHouse extends AppCompatActivity {
 
 
 
-    private ListView itemList;
-    private static CustomListAdapter adapter;
-    private ArrayList<String> full ;
-    private NewsModel model;
-
-    // STT params
-
     // Database config
     private DatabaseReference myRef;
     private FirebaseDatabase database;
+
+    // UI config
+    private ListView itemList;
+    private static CustomListAdapter adapter;
+    private NewsModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +84,45 @@ public class CatHouse extends AppCompatActivity {
         recallDB();
     }
 
+    public void recallDB(){
 
+        myRef = database.getReference("items");
 
+        myRef.orderByChild("category").equalTo("house").addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                long value=dataSnapshot.getChildrenCount();
+                Log.d("Number","no of children: "+value);
+
+                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
+
+                ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
+
+                assert fullItemList != null;
+                for(int i = 0 ; i < fullItemList.size(); i++){
+                    if(fullItemList.get(i) == null){
+                        fullItemList.remove(i);
+
+                    } else {
+                        Log.i("list" + i, fullItemList.get(i).getItem());
+
+                    }
+                }
+
+                PopulateView(fullItemList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(getApplicationContext(), "Oops, something went wrong, try again", Toast.LENGTH_SHORT).show();
+                Log.w("Failed", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+/*
     public void recallDB(){
 
         myRef = database.getReference("items");
@@ -101,17 +137,17 @@ public class CatHouse extends AppCompatActivity {
 
                 ArrayList<Article> list  = dataSnapshot.getValue(genericTypeIndicator);
 
-                for (DataSnapshot child: dataSnapshot.getChildren()) {
-                    Log.i("Real", child.getValue(Article.class).getItem() + "");
-                    list.add(new Article(
-                          child.getValue(Article.class).getItem(),
-                          child.getValue(Article.class).getValue(),
-                          child.getValue(Article.class).getDate(),
-                          child.getValue(Article.class).getCategory())
-                      );
-                    break;
-
-                }
+//                for (DataSnapshot child: dataSnapshot.getChildren()) {
+//                    Log.i("Real", child.getValue(Article.class).getItem() + "");
+//                    list.add(new Article(
+//                          child.getValue(Article.class).getItem(),
+//                          child.getValue(Article.class).getValue(),
+//                          child.getValue(Article.class).getDate(),
+//                          child.getValue(Article.class).getCategory())
+//                      );
+//                    break;
+//
+//                }
 
                 PopulateView(list);
 
@@ -143,7 +179,7 @@ public class CatHouse extends AppCompatActivity {
             }
         });
     }
-
+*/
     /**
      * Populating the view with the retrieved data
      * which is encapsulated using a list view
@@ -152,9 +188,9 @@ public class CatHouse extends AppCompatActivity {
      * @param model
      */
     public void PopulateView(ArrayList<Article> model){
-        itemList = (ListView) findViewById(R.id.showcase);
+        itemList = findViewById(R.id.showcase);
 
-        adapter = new CustomListAdapter(model,this );
+        adapter = new CustomListAdapter(model, getBaseContext());
 
         itemList.setAdapter(adapter);
 
@@ -162,13 +198,12 @@ public class CatHouse extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.whoop);
+                MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.whoop);
                 mp.start();
                 if (vibe != null) {
                     vibe.vibrate(100);
                 }
             }
         });
-
     }
 }

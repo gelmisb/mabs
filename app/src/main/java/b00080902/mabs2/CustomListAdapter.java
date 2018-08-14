@@ -95,6 +95,7 @@ public class CustomListAdapter extends ArrayAdapter<Article> implements View.OnC
         viewHolder.txtVersion.setText(model.getValue());
         viewHolder.info.setOnClickListener(this);
         viewHolder.info.setTag(position);
+
         // Return the completed view to render on screen
         return convertView;
     }
