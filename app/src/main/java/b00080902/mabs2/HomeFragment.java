@@ -48,6 +48,7 @@ import org.w3c.dom.Text;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -224,7 +225,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
                     // Shows output to user
-                    Toast.makeText(getActivity().getApplicationContext(), "Was it: " + result.get(0), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getActivity().getApplicationContext(), "Was it: " + result.get(0), Toast.LENGTH_LONG).show();
 
                     fullResponse = result.get(0);
 
@@ -232,47 +233,78 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     String[] alphabets= result.get(0).split("\\s");
 
                     // Segments the string
-                    one = alphabets[0];
-                    two = alphabets[1];
-                    three = alphabets[2];
-//                    three = alphabets[2];
-
-                    // gets the current time
-                    Date currentTime = Calendar.getInstance().getTime();
-                    // Logs the details for the dev
-                    Log.i("Name ", one);
-                    Log.i("Value ", two);
-                    Log.i("Category ", three);
+                    if (Arrays.asList(alphabets).contains(null)) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Oops! There was a problem, try again! ", Toast.LENGTH_LONG).show();
 
 
-                    // Writes to DB
-                    writeNewItem(itemNo + "", one, two, three, currentTime.toString());
+                    } else {
 
-                    itemNo++;
 
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putInt("Item", itemNo);
-                    editor.apply();
+                        try {
+
+                            one = alphabets[0];
+                            two = alphabets[1];
+                            three = alphabets[2];
+
+
+                            // gets the current time
+                            Date currentTime = Calendar.getInstance().getTime();
+                            // Logs the details for the dev
+                            Log.i("Name ", one);
+                            Log.i("Value ", two);
+                            Log.i("Category ", three);
+
+
+                            // Writes to DB
+                            writeNewItem(itemNo + "", one, two, three, currentTime.toString());
+
+                            itemNo++;
+
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putInt("Item", itemNo);
+                            editor.apply();
+
+                        } catch (ArrayIndexOutOfBoundsException e) {
+
+                            Toast.makeText(getActivity().getApplicationContext(), "Oops! There was an error, try again! ", Toast.LENGTH_LONG).show();
+
+                        }
+                    }
                 }
-                break;
             }
 
+            break;
         }
 
+    }
 
+
+
+    // returns true if the string does not have a number at the beginning
+    public boolean isNoNumberAtBeginning(String s){
+        Log.i("Chosen One", " " + s);
+
+        return  s.matches(".*[a-zA-Z]+.*");
     }
     private void writeNewItem(String itemID, String name, String value, String category, String date) {
         Date currentTime = Calendar.getInstance().getTime();
 
         date = currentTime.toString().replace("GMT+01:00 2018", "");
 
+        Log.i("You", "didn't get an error!");
 
-        Article items = new Article(name, value , date, category);
-        model.addArticle(new Article(one, two, date, category));
+        if(isNoNumberAtBeginning(value)){
+            Toast.makeText(getActivity().getApplicationContext(), "The value you have entered was wrong!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(), "SUCCESS!!!!", Toast.LENGTH_LONG).show();
+        }
 
-        myRef = database.getReference("items");
-        myRef.child(itemID).setValue(items);
+//        Article items = new Article(name, value , date, category);
+//        model.addArticle(new Article(one, two, date, category));
+//
+//        myRef = database.getReference("items");
+//        myRef.child(itemID).setValue(items);
     }
 
 
