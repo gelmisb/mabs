@@ -224,10 +224,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-                    // Shows output to user
-//                    Toast.makeText(getActivity().getApplicationContext(), "Was it: " + result.get(0), Toast.LENGTH_LONG).show();
-
-                    fullResponse = result.get(0);
 
                     // Splits the string
                     String[] alphabets= result.get(0).split("\\s");
@@ -258,12 +254,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                             // Writes to DB
                             writeNewItem(itemNo + "", one, two, three, currentTime.toString());
 
-                            itemNo++;
 
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putInt("Item", itemNo);
-                            editor.apply();
 
                         } catch (ArrayIndexOutOfBoundsException e) {
 
@@ -297,14 +288,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         if(isNoNumberAtBeginning(value)){
             Toast.makeText(getActivity().getApplicationContext(), "The value you have entered was wrong!", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getActivity().getApplicationContext(), "SUCCESS!!!!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity().getApplicationContext(),  " '" + one  + "' has been added to your list", Toast.LENGTH_LONG).show();
+            Article items = new Article(name, value , date, category);
+            model.addArticle(new Article(one, two, date, category));
+
+            myRef = database.getReference("items");
+            myRef.child(itemID).setValue(items);
+
+            itemNo++ ;
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("Item", itemNo);
+            editor.apply();
         }
 
-//        Article items = new Article(name, value , date, category);
-//        model.addArticle(new Article(one, two, date, category));
-//
-//        myRef = database.getReference("items");
-//        myRef.child(itemID).setValue(items);
+
     }
 
 

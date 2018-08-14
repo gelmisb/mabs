@@ -95,12 +95,16 @@ public class CatHouse extends AppCompatActivity {
                 long value=dataSnapshot.getChildrenCount();
                 Log.d("Number","no of children: "+value);
 
-                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
+//                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator = new GenericTypeIndicator<ArrayList<Article>>(){};
+//
+//                ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
 
-                ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
-
+                ArrayList<Article> fullItemList = new ArrayList<Article>();
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    fullItemList.add(child.getValue(Article.class));
+                }
                 assert fullItemList != null;
-                for(int i = 0 ; i < fullItemList.size(); i++){
+                for (int i = 0 ; i < fullItemList.size(); i++){
                     if(fullItemList.get(i) == null){
                         fullItemList.remove(i);
 

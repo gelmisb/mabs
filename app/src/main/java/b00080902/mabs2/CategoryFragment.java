@@ -47,13 +47,20 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null)
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
-        }
 
         View myView = inflater.inflate(R.layout.fragment_category, container, false);
 
         income = (TextView)myView.findViewById(R.id.income);
+        press = (Button)myView.findViewById(R.id.housing);
+        press = (Button)myView.findViewById(R.id.fuel);
+        press = (Button)myView.findViewById(R.id.food);
+        press = (Button)myView.findViewById(R.id.house);
+        press = (Button)myView.findViewById(R.id.leisure);
+        press = (Button)myView.findViewById(R.id.tel);
+        press = (Button)myView.findViewById(R.id.other);
+        press = (Button)myView.findViewById(R.id.transport);
         press = (Button)myView.findViewById(R.id.housing);
 
 
@@ -129,14 +136,16 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Toast.makeText(getActivity().getApplicationContext(), " " + v.getId(), Toast.LENGTH_SHORT).show();
+
 
         switch (v.getId()) {
-            case R.id.housing:
-                Toast.makeText(getActivity().getApplicationContext(), "House", Toast.LENGTH_SHORT).show();
 
-                Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+            case R.id.housing:
+
+//                Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
 //                house.putExtra("cat", v.getId());
-                startActivity(house);
+//                startActivity(house);
 
                 break;
 
