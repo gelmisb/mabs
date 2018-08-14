@@ -39,7 +39,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
     private FirebaseDatabase database;
     private NewsModel model;
     private TextView expenses, income;
-    private Button press;
+    private Button press, press1, press2, press3, press4, press5, press6, press7, press8;
 
 
 
@@ -54,18 +54,26 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
 
         income = (TextView)myView.findViewById(R.id.income);
         press = (Button)myView.findViewById(R.id.housing);
-        press = (Button)myView.findViewById(R.id.fuel);
-        press = (Button)myView.findViewById(R.id.food);
-        press = (Button)myView.findViewById(R.id.house);
-        press = (Button)myView.findViewById(R.id.leisure);
-        press = (Button)myView.findViewById(R.id.tel);
-        press = (Button)myView.findViewById(R.id.other);
-        press = (Button)myView.findViewById(R.id.transport);
-        press = (Button)myView.findViewById(R.id.housing);
+        press1 = (Button)myView.findViewById(R.id.fuel);
+        press2 = (Button)myView.findViewById(R.id.food);
+        press3 = (Button)myView.findViewById(R.id.house);
+        press4 = (Button)myView.findViewById(R.id.leisure);
+        press5 = (Button)myView.findViewById(R.id.tel);
+        press6 = (Button)myView.findViewById(R.id.other);
+        press7 = (Button)myView.findViewById(R.id.transport);
+        press8 = (Button)myView.findViewById(R.id.util);
 
 
 
         press.setOnClickListener(this);
+        press1.setOnClickListener(this);
+        press2.setOnClickListener(this);
+        press3.setOnClickListener(this);
+        press4.setOnClickListener(this);
+        press5.setOnClickListener(this);
+        press6.setOnClickListener(this);
+        press7.setOnClickListener(this);
+        press8.setOnClickListener(this);
 
 
         // Access to DB
@@ -132,7 +140,14 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         outState.putInt(ARG_POSITION, mCurrentPosition);
     }
 
-
+//    press1 = (Button)myView.findViewById(R.id.fuel);
+//    press2 = (Button)myView.findViewById(R.id.food);
+//    press3 = (Button)myView.findViewById(R.id.house);
+//    press4 = (Button)myView.findViewById(R.id.leisure);
+//    press5 = (Button)myView.findViewById(R.id.tel);
+//    press6 = (Button)myView.findViewById(R.id.other);
+//    press7 = (Button)myView.findViewById(R.id.transport);
+//    press8 = (Button)myView.findViewById(R.id.util);
 
     @Override
     public void onClick(View v) {
@@ -143,9 +158,51 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
 
             case R.id.housing:
 
-//                Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-//                house.putExtra("cat", v.getId());
-//                startActivity(house);
+                Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+                house.putExtra("cat", v.getId());
+                startActivity(house);
+
+                break;
+            case R.id.fuel:
+
+                Intent fuel = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+                house.putExtra("cat", v.getId());
+                startActivity(house);
+
+                break;
+            case R.id.food:
+
+                Intent food = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+                house.putExtra("cat", v.getId());
+                startActivity(house);
+
+                break;
+            case R.id.tel:
+
+                Intent tel = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+                house.putExtra("cat", v.getId());
+                startActivity(house);
+
+                break;
+            case R.id.other:
+
+                Intent other = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+                house.putExtra("cat", v.getId());
+                startActivity(house);
+
+                break;
+            case R.id.transport:
+
+                Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+                house.putExtra("cat", v.getId());
+                startActivity(house);
+
+                break;
+            case R.id.util:
+
+                Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+                house.putExtra("cat", v.getId());
+                startActivity(house);
 
                 break;
 
