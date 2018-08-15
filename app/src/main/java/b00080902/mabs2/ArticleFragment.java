@@ -154,7 +154,7 @@ public class ArticleFragment extends Fragment {
      * @param model
      */
     public void PopulateView(ArrayList<Article> model){
-        itemList = Objects.requireNonNull(getActivity()).findViewById(R.id.itemList);
+        itemList = getActivity().findViewById(R.id.itemList);
 
         adapter = new CustomListAdapter(model, getActivity().getBaseContext());
 
@@ -174,6 +174,11 @@ public class ArticleFragment extends Fragment {
 
     }
 
+//    ref.orderByChild("date").startAt("2017-01-01").endAt("2017-01-31")
+
+    public void makeASelection(){
+
+    }
     /**
      * Updating the view in order
      * to show the user the list they have already submitted

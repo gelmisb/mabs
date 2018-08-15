@@ -238,9 +238,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                         try {
 
-                            one = alphabets[0];
-                            two = alphabets[1];
-                            three = alphabets[2];
+                            one = alphabets[0].toUpperCase();
+                            two = alphabets[1].toUpperCase();
+                            three = alphabets[2].toUpperCase();
 
 
                             // gets the current time

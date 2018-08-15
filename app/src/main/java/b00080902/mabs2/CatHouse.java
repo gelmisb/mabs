@@ -1,6 +1,7 @@
 package b00080902.mabs2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
@@ -44,6 +45,7 @@ public class CatHouse extends AppCompatActivity {
     private ListView itemList;
     private static CustomListAdapter adapter;
     private NewsModel model;
+    private String category = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,10 @@ public class CatHouse extends AppCompatActivity {
 
 
 
+        Intent intent = getIntent();
+        category = intent.getStringExtra("cat");
+
+
         // Instantiate initial params for DB
         model = new NewsModel();
         database = FirebaseDatabase.getInstance();
@@ -88,7 +94,7 @@ public class CatHouse extends AppCompatActivity {
 
         myRef = database.getReference("items");
 
-        myRef.orderByChild("category").equalTo("house").addValueEventListener(new ValueEventListener(){
+        myRef.orderByChild("category").equalTo(category).addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

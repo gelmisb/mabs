@@ -124,9 +124,6 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
-
-
     public void updateArticleView(int position) {
 
         mCurrentPosition = position;
@@ -140,78 +137,82 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         outState.putInt(ARG_POSITION, mCurrentPosition);
     }
 
-//    press1 = (Button)myView.findViewById(R.id.fuel);
-//    press2 = (Button)myView.findViewById(R.id.food);
-//    press3 = (Button)myView.findViewById(R.id.house);
-//    press4 = (Button)myView.findViewById(R.id.leisure);
-//    press5 = (Button)myView.findViewById(R.id.tel);
-//    press6 = (Button)myView.findViewById(R.id.other);
-//    press7 = (Button)myView.findViewById(R.id.transport);
-//    press8 = (Button)myView.findViewById(R.id.util);
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(getActivity().getApplicationContext(), " " + v.getId(), Toast.LENGTH_SHORT).show();
 
 
         switch (v.getId()) {
 
+            case R.id.house:
+
+                Intent house1 = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+                house1.putExtra("cat", "house");
+                startActivity(house1);
+
+                break;
+
             case R.id.housing:
 
                 Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house.putExtra("cat", v.getId());
+                house.putExtra("cat", "housing");
                 startActivity(house);
 
                 break;
             case R.id.fuel:
 
                 Intent fuel = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house.putExtra("cat", v.getId());
-                startActivity(house);
+                fuel.putExtra("cat", "fuel");
+                startActivity(fuel);
 
                 break;
             case R.id.food:
 
                 Intent food = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house.putExtra("cat", v.getId());
-                startActivity(house);
+                food.putExtra("cat", "food");
+                startActivity(food);
 
                 break;
             case R.id.tel:
 
                 Intent tel = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house.putExtra("cat", v.getId());
-                startActivity(house);
+                tel.putExtra("cat", "telephone");
+                startActivity(tel);
 
                 break;
             case R.id.other:
 
                 Intent other = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house.putExtra("cat", v.getId());
-                startActivity(house);
+                other.putExtra("cat", "other");
+                startActivity(other);
 
                 break;
             case R.id.transport:
 
-                Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house.putExtra("cat", v.getId());
-                startActivity(house);
+                Intent transport = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+                transport.putExtra("cat", "transport");
+                startActivity(transport);
 
                 break;
             case R.id.util:
 
-                Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house.putExtra("cat", v.getId());
-                startActivity(house);
+                Intent util = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+                util.putExtra("cat", "utilities");
+                startActivity(util);
 
                 break;
 
+            case R.id.leisure:
+
+                Intent leisure = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+                leisure.putExtra("cat", "leisure");
+                startActivity(leisure);
+
+                break;
 
             default:
                 break;
 
         }
-
-
     }
 }
