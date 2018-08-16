@@ -156,22 +156,20 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
         myRef = database.getReference("items");
 
 
+        if(from.isEmpty() || to.isEmpty())
+            Toast.makeText(getActivity().getApplicationContext(), "Incorrect dates were entered", Toast.LENGTH_SHORT).show();
 
-        myRef.orderByChild("date").startAt("16-07-2018").endAt("16-08-2018").addValueEventListener(new ValueEventListener() {
+
+        myRef.orderByChild("date").startAt(from).endAt(to).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 long value=dataSnapshot.getChildrenCount();
                 Log.d("Number","no of children: "+value);
 
-                if(value <= 0 )
+                if(value > 0 )
                     try{
 
-//                        GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
-//
-//                        ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
-//
-//                        PopulateView(fullItemList);
                         ArrayList<Article> fullItemList = new ArrayList<Article>();
                         for (DataSnapshot child: dataSnapshot.getChildren()) {
                             fullItemList.add(child.getValue(Article.class));
@@ -312,7 +310,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
         }
 
         public void populateSetDate(int year, int month, int day) {
-            start.setText(year + "/" + month+ "/" + day);
+            start.setText(day + "-0" + month+ "-" + year);
         }
     }
 
@@ -336,7 +334,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
         }
 
         public void populateSetDate(int year, int month, int day) {
-            end.setText(year + "/" + month+ "/" + day);
+            end.setText(day + "-0" + month+ "-" + year);
         }
     }
 }

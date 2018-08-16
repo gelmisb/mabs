@@ -101,10 +101,6 @@ public class CatHouse extends AppCompatActivity {
                 long value=dataSnapshot.getChildrenCount();
                 Log.d("Number","no of children: "+value);
 
-//                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator = new GenericTypeIndicator<ArrayList<Article>>(){};
-//
-//                ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
-
                 ArrayList<Article> fullItemList = new ArrayList<Article>();
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
                     fullItemList.add(child.getValue(Article.class));
@@ -132,64 +128,7 @@ public class CatHouse extends AppCompatActivity {
         });
     }
 
-/*
-    public void recallDB(){
 
-        myRef = database.getReference("items");
-
-//                    item, String value, String date, String category)
-
-        myRef.orderByChild("category").equalTo("house").addValueEventListener(new ValueEventListener(){
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
-
-                ArrayList<Article> list  = dataSnapshot.getValue(genericTypeIndicator);
-
-//                for (DataSnapshot child: dataSnapshot.getChildren()) {
-//                    Log.i("Real", child.getValue(Article.class).getItem() + "");
-//                    list.add(new Article(
-//                          child.getValue(Article.class).getItem(),
-//                          child.getValue(Article.class).getValue(),
-//                          child.getValue(Article.class).getDate(),
-//                          child.getValue(Article.class).getCategory())
-//                      );
-//                    break;
-//
-//                }
-
-                PopulateView(list);
-
-
-
-//                    list.add(child.getValue(Friends.class));
-
-//
-//                for(DataSnapshot datas: dataSnapshot.getChildren()){
-//                    String date =datas.child("date").getValue()   + "";
-//                    String cat = datas.getValue(Article.class).getCategory();
-//                    String item = datas.getValue(Article.class).getItem();
-//                    String value = datas.getValue(Article.class).getValue();
-//
-//                    Article a = new Article(date, cat, item, value);
-//
-//                    Log.i("Super", a.toString());
-//
-//
-//                }
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-                Log.w("Failed", "Failed to read value.", error.toException());
-            }
-        });
-    }
-*/
     /**
      * Populating the view with the retrieved data
      * which is encapsulated using a list view

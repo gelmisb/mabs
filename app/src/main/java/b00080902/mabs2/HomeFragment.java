@@ -265,7 +265,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                             // gets the current time
                             Date c = Calendar.getInstance().getTime();
-                            System.out.println("Current time => " + c);
 
                             SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
                             String formattedDate = df.format(c);
@@ -278,7 +277,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                             // Writes to DB
                             writeNewItem(itemNo + "", one, two, three, formattedDate);
-
 
 
                         } catch (ArrayIndexOutOfBoundsException e) {
