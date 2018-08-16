@@ -15,17 +15,26 @@
  */
 package b00080902.mabs2;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.icu.text.SimpleDateFormat;
 import android.media.MediaPlayer;
-import android.os.Vibrator;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,14 +46,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-import static com.firebase.ui.auth.AuthUI.getInstance;
+public class ArticleFragment extends Fragment implements View.OnClickListener {
 
-public class ArticleFragment extends Fragment {
-
+    private static TextView start, end;
 
     // Fragment params
     final static String ARG_POSITION = "position";
@@ -52,6 +62,7 @@ public class ArticleFragment extends Fragment {
 
     // Database config
     private DatabaseReference myRef;
+    private static View myView;
     private FirebaseDatabase database;
 
     // UI config
@@ -59,7 +70,9 @@ public class ArticleFragment extends Fragment {
     private static CustomListAdapter adapter;
     private NewsModel model;
 
-
+    private Calendar myCalendar;
+    private Button selectDate1, selectDate2, showList;
+    private DatePickerDialog.OnDateSetListener date;
 
     /**
      * If activity recreated (such as from screen rotate), restore
@@ -71,6 +84,7 @@ public class ArticleFragment extends Fragment {
      * @param savedInstanceState
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,13 +92,30 @@ public class ArticleFragment extends Fragment {
         if (savedInstanceState != null)
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
 
+        myView = inflater.inflate(R.layout.article_view, container, false);
+
+        start = (TextView) myView.findViewById(R.id.startDate);
+        end = (TextView) myView.findViewById(R.id.endDate);
+
+
+
+
+        selectDate1 = (Button) myView.findViewById(R.id.picDate);
+        selectDate2 = (Button) myView.findViewById(R.id.picDate2);
+        showList = (Button) myView.findViewById(R.id.showList);
+
+        selectDate1.setOnClickListener(this);
+        selectDate2.setOnClickListener(this);
+        showList.setOnClickListener(this);
+
+
 
         model = new NewsModel();
         database = FirebaseDatabase.getInstance();
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.article_view, container, false);
+        return myView;
     }
 
 
@@ -108,7 +139,6 @@ public class ArticleFragment extends Fragment {
 
             // Set article based on saved instance state defined during onCreateView
             updateArticleView(mCurrentPosition);
-
         }
     }
 
@@ -120,21 +150,49 @@ public class ArticleFragment extends Fragment {
      */
     public void recallDB(){
 
+        String from = start.getText().toString();
+        String to = end.getText().toString();
+
         myRef = database.getReference("items");
 
 
-        myRef.addValueEventListener(new ValueEventListener() {
+
+        myRef.orderByChild("date").startAt("16-07-2018").endAt("16-08-2018").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 long value=dataSnapshot.getChildrenCount();
                 Log.d("Number","no of children: "+value);
 
-                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
+                if(value <= 0 )
+                    try{
 
-                ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
+//                        GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
+//
+//                        ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
+//
+//                        PopulateView(fullItemList);
+                        ArrayList<Article> fullItemList = new ArrayList<Article>();
+                        for (DataSnapshot child: dataSnapshot.getChildren()) {
+                            fullItemList.add(child.getValue(Article.class));
+                        }
+                        assert fullItemList != null;
+                        for (int i = 0 ; i < fullItemList.size(); i++){
+                            if(fullItemList.get(i) == null){
+                                fullItemList.remove(i);
 
-                PopulateView(fullItemList);
+                            } else {
+                                Log.i("list" + i, fullItemList.get(i).getItem());
+
+                            }
+                        }
+
+                        PopulateView(fullItemList);
+                    } catch (NullPointerException e){
+                        Toast.makeText(getActivity().getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
+                    }
+
+
             }
 
             @Override
@@ -154,7 +212,7 @@ public class ArticleFragment extends Fragment {
      * @param model
      */
     public void PopulateView(ArrayList<Article> model){
-        itemList = getActivity().findViewById(R.id.itemList);
+        itemList = myView.findViewById(R.id.itemList);
 
         adapter = new CustomListAdapter(model, getActivity().getBaseContext());
 
@@ -174,11 +232,7 @@ public class ArticleFragment extends Fragment {
 
     }
 
-//    ref.orderByChild("date").startAt("2017-01-01").endAt("2017-01-31")
 
-    public void makeASelection(){
-
-    }
     /**
      * Updating the view in order
      * to show the user the list they have already submitted
@@ -187,7 +241,6 @@ public class ArticleFragment extends Fragment {
      */
     public void updateArticleView(int position) {
 
-        recallDB();
 
         mCurrentPosition = position;
 
@@ -207,4 +260,85 @@ public class ArticleFragment extends Fragment {
     }
 
 
+    @Override
+    public void onClick(View v) {
+
+
+        switch (v.getId()){
+            case R.id.picDate:
+                DialogFragment newFragment = new SelectDateFragment();
+                newFragment.show(getFragmentManager(), "DatePicker");
+
+                break;
+
+            case R.id.picDate2:
+                DialogFragment newFragment1 = new SelectDateFragment1();
+                newFragment1.show(getFragmentManager(), "DatePicker");
+
+                break;
+
+            case R.id.showList:
+                recallDB();
+
+
+                break;
+
+            default:
+                break;
+        }
+
+
+    }
+
+    /**
+     * Create a SelectDateFragment class that extends DialogFragment.
+     * Define the onCreateDialog() method to return an instance of DatePickerDialog
+     */
+    public static class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            start = (TextView) myView.findViewById(R.id.startDate);
+
+            final Calendar calendar = Calendar.getInstance();
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            return new DatePickerDialog(getActivity(), this, yy, mm, dd);
+        }
+
+        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+            populateSetDate(yy, mm + 1, dd);
+        }
+
+        public void populateSetDate(int year, int month, int day) {
+            start.setText(year + "/" + month+ "/" + day);
+        }
+    }
+
+    /**
+     * Create a SelectDateFragment class that extends DialogFragment.
+     * Define the onCreateDialog() method to return an instance of DatePickerDialog
+     */
+    public static class SelectDateFragment1 extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar = Calendar.getInstance();
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            return new DatePickerDialog(getActivity(), this, yy, mm, dd);
+        }
+
+        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+            populateSetDate(yy, mm + 1, dd);
+        }
+
+        public void populateSetDate(int year, int month, int day) {
+            end.setText(year + "/" + month+ "/" + day);
+        }
+    }
 }
+
+

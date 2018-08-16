@@ -15,9 +15,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/mabslogo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/mabslogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
@@ -30,12 +30,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainTest" />
         <activity
             android:name=".ListActivity"
             android:label="@string/title_activity_list"
             android:theme="@style/AppTheme" />
-        <activity android:name=".CatHouse"></activity>
+        <activity android:name=".CatHouse" />
     </application>
 
 </manifest>

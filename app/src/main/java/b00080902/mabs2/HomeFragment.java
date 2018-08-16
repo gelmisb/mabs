@@ -19,10 +19,13 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.text.SimpleDateFormat;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -77,6 +80,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     int itemNo ;
     int position = 0;
 
+    private View myView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,7 +89,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         if (savedInstanceState != null)
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
 
-        View myView = inflater.inflate(R.layout.fragment_home, container, false);
+        myView = inflater.inflate(R.layout.fragment_home, container, false);
 
 
         // Enable the ability for the user to speak to the application
@@ -172,7 +176,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 Log.d("Sum", "Sum is: : " + sum + "");
 
                 // Show it to the user
-                expenses = getView().findViewById(R.id.expenses);
+                expenses = myView.findViewById(R.id.expenses);
 
                 // Show the total to the user
                 expenses.setText("Your total expenses: €" + sum);
@@ -210,6 +214,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     /**
      * Receiving speech input
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -238,13 +243,33 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                         try {
 
-                            one = alphabets[0].toUpperCase();
-                            two = alphabets[1].toUpperCase();
-                            three = alphabets[2].toUpperCase();
+                            one = alphabets[0];
+                            two = alphabets[1];
+                            three = alphabets[2];
+
+                            String s1 = one.substring(0, 1).toUpperCase();
+                            String nameCapitalized = s1 + one.substring(1);
+
+                            String s2 = two.substring(0, 1).toUpperCase();
+                            String nameCapitalized1 = s2 + two.substring(1);
+
+                            String s3 = three.substring(0, 1).toUpperCase();
+                            String nameCapitalized2 = s3 + three.substring(1);
+
+
+                            one = nameCapitalized;
+                            two = nameCapitalized1;
+                            three = nameCapitalized2;
+
 
 
                             // gets the current time
-                            Date currentTime = Calendar.getInstance().getTime();
+                            Date c = Calendar.getInstance().getTime();
+                            System.out.println("Current time => " + c);
+
+                            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                            String formattedDate = df.format(c);
+
                             // Logs the details for the dev
                             Log.i("Name ", one);
                             Log.i("Value ", two);
@@ -252,7 +277,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
                             // Writes to DB
-                            writeNewItem(itemNo + "", one, two, three, currentTime.toString());
+                            writeNewItem(itemNo + "", one, two, three, formattedDate);
 
 
 
@@ -279,9 +304,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         return  s.matches(".*[a-zA-Z]+.*");
     }
     private void writeNewItem(String itemID, String name, String value, String category, String date) {
-        Date currentTime = Calendar.getInstance().getTime();
 
-        date = currentTime.toString().replace("GMT+01:00 2018", "");
 
         Log.i("You", "didn't get an error!");
 
