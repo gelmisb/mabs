@@ -140,6 +140,21 @@ public class MainActivity extends FragmentActivity{
         });
 
 
+        // Create fragment and give it an argument specifying the article it should show
+        HomeFragment newFragment = new HomeFragment();
+        Bundle args = new Bundle();
+        args.putInt(HomeFragment.ARG_POSITION, position);
+        newFragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.fragment_container, newFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

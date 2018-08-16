@@ -38,7 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="107dp"
+        android:layout_marginTop="212dp"
+        android:fontFamily="@font/CaviarDreams"
         android:text="Your total expenses: "
         android:textAlignment="center"
         android:textSize="24sp"
@@ -50,10 +51,23 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/expenses"
-        android:layout_marginTop="161dp"
+        android:layout_marginTop="279dp"
+        android:fontFamily="@font/CaviarDreams"
         android:text="Your total income: "
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/userHi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/expenses"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/CaviarDreams"
+        android:text="TextView"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        android:textSize="38sp" />
 
 </RelativeLayout>

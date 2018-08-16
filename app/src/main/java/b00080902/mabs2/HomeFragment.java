@@ -39,6 +39,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -69,7 +71,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private DatabaseReference myRef;
     private FirebaseDatabase database;
     private NewsModel model;
-    private TextView expenses, income;
+    private TextView expenses, income, userHi;
     private ImageButton btnSpeak;
 
     // STT params
@@ -94,12 +96,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         // Enable the ability for the user to speak to the application
         income = (TextView) myView.findViewById(R.id.income);
+        userHi = (TextView) myView.findViewById(R.id.userHi);
         btnSpeak = (ImageButton) myView.findViewById(R.id.btnSpeak);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         itemNo = preferences.getInt("Item", 0);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String name = user.getDisplayName();
 
+        userHi.setText("Welcome "  + name + "!");
 
         // Access to DB
         model = new NewsModel();
