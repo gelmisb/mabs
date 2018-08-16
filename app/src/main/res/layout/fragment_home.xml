@@ -26,6 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:fontFamily="@font/caviardreams"
             android:text="@string/tap_on_mic"
             android:textColor="@color/white"
             android:textSize="15dp"
@@ -39,9 +40,10 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="212dp"
-        android:fontFamily="@font/CaviarDreams"
+        android:fontFamily="@font/caviardreams"
         android:text="Your total expenses: "
         android:textAlignment="center"
+        android:textColor="@android:color/darker_gray"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -52,9 +54,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/expenses"
         android:layout_marginTop="279dp"
-        android:fontFamily="@font/CaviarDreams"
+        android:fontFamily="@font/caviardreams"
         android:text="Your total income: "
         android:textAlignment="center"
+        android:textColor="@android:color/darker_gray"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -62,12 +65,27 @@
         android:id="@+id/userHi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/expenses"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/expenses"
-        android:layout_marginTop="50dp"
-        android:fontFamily="@font/CaviarDreams"
+        android:layout_marginTop="98dp"
+        android:fontFamily="@font/caviardreams"
         android:text="TextView"
         android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        android:textColor="@color/browser_actions_bg_grey"
+        android:textSize="38sp" />
+
+    <TextView
+        android:id="@+id/userHi2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/userHi"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="-98dp"
+        android:layout_marginStart="35dp"
+        android:fontFamily="@font/caviardreams"
+        android:text="Welcome"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        android:textColor="@color/browser_actions_bg_grey"
         android:textSize="38sp" />
 
 </RelativeLayout>

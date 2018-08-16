@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String name = user.getDisplayName();
 
-        userHi.setText("Welcome "  + name + "!");
+        userHi.setText(name + "!");
 
         // Access to DB
         model = new NewsModel();

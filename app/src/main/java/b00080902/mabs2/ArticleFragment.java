@@ -188,7 +188,10 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
                         PopulateView(fullItemList);
                     } catch (NullPointerException e){
                         Toast.makeText(getActivity().getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
-                    }
+                    } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
+
+                }
 
 
             }
