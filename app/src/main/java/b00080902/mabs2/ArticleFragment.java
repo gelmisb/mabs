@@ -113,6 +113,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
         model = new NewsModel();
         database = FirebaseDatabase.getInstance();
 
+        fullList();
 
         // Inflate the layout for this fragment
         return myView;
@@ -160,6 +161,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity().getApplicationContext(), "Incorrect dates were entered", Toast.LENGTH_SHORT).show();
 
 
+        Log.i("Dates", from + "  " + to);
         myRef.orderByChild("date").startAt(from).endAt(to).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -193,8 +195,58 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
 
                 }
 
-
             }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(getActivity().getApplicationContext(), "Oops, something went wrong, try again", Toast.LENGTH_SHORT).show();
+                Log.w("Failed", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    /**
+     * Structuring the database so it would be able
+     * to retrieve the wanted information about the
+     * items using a genericTypeIndicator for arrayLists
+     *
+     */
+    public void fullList(){
+
+        myRef = database.getReference("items");
+
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                    try{
+
+                        ArrayList<Article> fullItemList = new ArrayList<Article>();
+                        for (DataSnapshot child: dataSnapshot.getChildren()) {
+                            fullItemList.add(child.getValue(Article.class));
+                        }
+                        assert fullItemList != null;
+                        for (int i = 0 ; i < fullItemList.size(); i++){
+                            if(fullItemList.get(i) == null){
+                                fullItemList.remove(i);
+
+                            } else {
+                                Log.i("list" + i, fullItemList.get(i).getItem());
+
+                            }
+                        }
+
+                        PopulateView(fullItemList);
+                    } catch (NullPointerException e){
+                        Toast.makeText(getActivity().getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+
 
             @Override
             public void onCancelled(DatabaseError error) {
@@ -280,7 +332,6 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
 
             case R.id.showList:
                 recallDB();
-
 
                 break;
 

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,7 +46,10 @@ public class CatHouse extends AppCompatActivity {
     private ListView itemList;
     private static CustomListAdapter adapter;
     private NewsModel model;
+
     private String category = "";
+    private ImageButton backButton;
+    private TextView categoryHeading ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +81,18 @@ public class CatHouse extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        categoryHeading  = (TextView) findViewById(R.id.catTotal);
 
+
+        backButton = (ImageButton)findViewById(R.id.back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // stop talking when the application is closed.
+                finish();
+
+            }
+        });
 
         Intent intent = getIntent();
         category = intent.getStringExtra("cat");
@@ -88,6 +103,7 @@ public class CatHouse extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
 
         recallDB();
+        categoryTotal();
     }
 
     public void recallDB(){
@@ -127,6 +143,74 @@ public class CatHouse extends AppCompatActivity {
             }
         });
     }
+
+    public void categoryTotal(){
+
+        myRef = database.getReference("items");
+
+        myRef.orderByChild("category").equalTo(category).addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
+//
+//                ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
+
+
+
+                ArrayList<Article> fullItemList = new ArrayList<Article>();
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    fullItemList.add(child.getValue(Article.class));
+                }
+                assert fullItemList != null;
+                for (int i = 0 ; i < fullItemList.size(); i++){
+                    if(fullItemList.get(i) == null){
+                        fullItemList.remove(i);
+
+                    } else {
+                        Log.i("list" + i, fullItemList.get(i).getItem());
+
+                    }
+                }
+
+                int sum = 0 ;
+
+                for(int i = 0; i < fullItemList.size(); i++){
+
+                    // Retrieve each item
+                    String liveprice = fullItemList.get(i).getValue();
+
+                    // Remove all € signs
+                    String newStr = liveprice.replace("€", "");
+
+                    // Remove all commas
+                    String newStr1 = newStr.replace(",", "");
+
+                    // Replace all letters with 0
+                    String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+
+                    // Add everything together
+                    sum = sum + Integer.parseInt(newStr2);
+
+                }
+                String s1 = category.substring(0, 1).toUpperCase();
+                String nameCapitalized = s1 + category.substring(1);
+
+
+                categoryHeading.setText(nameCapitalized  + ": €" + sum);
+
+                PopulateView(fullItemList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(getApplicationContext(), "Oops, something went wrong, try again", Toast.LENGTH_SHORT).show();
+                Log.w("Failed", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
 
 
     /**
