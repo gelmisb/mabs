@@ -17,7 +17,6 @@ package b00080902.mabs2;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
@@ -27,16 +26,13 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -82,7 +78,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
     private ListView itemList;
     private static CustomListAdapter adapter;
 
-    private TextView categoryHeading , categoryHeading1;
+    private TextView balanceText , incomeText, expensesText;
     private View myView;
 
     private int incomeSum, expensesSum, total;
@@ -98,12 +94,12 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
 
         myView = inflater.inflate(R.layout.fragment_balance, container, false);
-        categoryHeading  = (TextView) myView.findViewById(R.id.catTotal);
-        categoryHeading1  = (TextView) myView.findViewById(R.id.catTotal1);
+        balanceText  = (TextView) myView.findViewById(R.id.balance);
+        incomeText  = (TextView) myView.findViewById(R.id.income);
+        expensesText  = (TextView) myView.findViewById(R.id.expenses);
 
 
         // Enable the ability for the user to speak to the application
-        income = (TextView) myView.findViewById(R.id.income);
         btnSpeak = (ImageButton) myView.findViewById(R.id.btnSpeak);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
@@ -196,11 +192,11 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
                     }
                 }
 
-                // Check if it's the right sum
-                Log.d("Sum", "Expenses : " + sum + "");
 
                 expensesSum = sum;
 
+                // Check if it's the right sum
+                Log.d("Sum", "Expenses : " + expensesSum + "");
 
 
             }
@@ -212,8 +208,9 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        myRef = database.getReference("income");
 
-        myRef.orderByChild("category").equalTo("Income").addValueEventListener(new ValueEventListener(){
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -229,11 +226,6 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
                     } else {
                         Log.i("list" + i, fullItemList.get(i).getItem());
                     }
-                }
-
-                int sum = 0 ;
-
-                for(int i = 0; i < fullItemList.size(); i++){
 
                     // Retrieve each item
                     String liveprice = fullItemList.get(i).getValue();
@@ -248,23 +240,17 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
                     String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
 
                     // Add everything together
-                    sum = sum + Integer.parseInt(newStr2);
-
+                    incomeSum = incomeSum + Integer.parseInt(newStr2);
                 }
 
-                Log.d("Sum", "Income : " + sum + "");
 
-//                String s1 = category.substring(0, 1).toUpperCase();
-//                String nameCapitalized = s1 + category.substring(1);
-
+                Log.d("Sum", "Income : " + incomeSum + "");
 
                 total = incomeSum - expensesSum;
 
-
-                categoryHeading.setText("Total income: €" + sum);
-                categoryHeading1.setText("Current balance: €" + total);
-
-
+                balanceText.setText("Current balance: €" + total);
+                incomeText.setText("Total income: €" + incomeSum);
+                expensesText.setText("Total expenses: €" + expensesSum);
 
                 PopulateView(fullItemList);
             }
@@ -397,7 +383,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
             Article items = new Article(name, value , date, category);
             model.addArticle(new Article(one, two, date, category));
 
-            myRef = database.getReference("items");
+            myRef = database.getReference("income");
             myRef.child(itemID).setValue(items);
 
             itemNo++ ;
@@ -420,7 +406,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
     public void PopulateView(ArrayList<Article> model){
         itemList = myView.findViewById(R.id.showcase);
 
-        adapter = new CustomListAdapter(model, getContext());
+        adapter = new CustomListAdapter(model, getActivity().getBaseContext());
 
         itemList.setAdapter(adapter);
 
@@ -439,6 +425,6 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
+        promptSpeechInput();
     }
 }

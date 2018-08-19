@@ -37,24 +37,13 @@
                     android:textStyle="normal" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/back"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="66dp"
-            android:background="@drawable/back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ListView
             android:id="@+id/showcase"
             android:layout_width="match_parent"
             android:layout_height="400dp"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
+            android:layout_marginBottom="81dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,26 +53,42 @@
             app:layout_constraintVertical_bias="0.976" />
 
         <TextView
-            android:id="@+id/catTotal"
+            android:id="@+id/balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_above="@+id/income"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="106dp"
+            android:layout_marginBottom="-144dp"
             android:fontFamily="@font/caviardreams"
             android:text="TextView"
+            android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textSize="36sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/catTotal1"
+            android:id="@+id/income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/back"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="144dp"
+            android:fontFamily="@font/caviardreams"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/expenses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/income"
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/caviardreams"
             android:text="TextView"
+            android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textSize="26sp"
             android:textStyle="bold" />
