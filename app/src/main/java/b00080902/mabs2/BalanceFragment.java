@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -81,10 +82,10 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
     private ListView itemList;
     private static CustomListAdapter adapter;
 
-    private String category = "";
-    private ImageButton backButton;
-    private TextView categoryHeading ;
+    private TextView categoryHeading , categoryHeading1;
     private View myView;
+
+    private int incomeSum, expensesSum, total;
 
 
     @Override
@@ -98,6 +99,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
         myView = inflater.inflate(R.layout.fragment_balance, container, false);
         categoryHeading  = (TextView) myView.findViewById(R.id.catTotal);
+        categoryHeading1  = (TextView) myView.findViewById(R.id.catTotal1);
 
 
         // Enable the ability for the user to speak to the application
@@ -110,7 +112,6 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String name = user.getDisplayName();
 
-        userHi.setText(name + "!");
 
         // Access to DB
         model = new NewsModel();
@@ -164,7 +165,55 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
         myRef = database.getReference("items");
 
-        myRef.orderByChild("category").equalTo("income").addValueEventListener(new ValueEventListener(){
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
+
+                ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
+
+                int sum = 0 ;
+
+                assert fullItemList != null;
+                for(int i = 0; i < fullItemList.size(); i++){
+
+                    if(fullItemList.get(i) != null){
+                        // Retrieve each item
+                        String liveprice = fullItemList.get(i).getValue();
+
+                        // Remove all € signs
+                        String newStr = liveprice.replace("€", "");
+
+                        // Remove all commas
+                        String newStr1 = newStr.replace(",", "");
+
+                        // Replace all letters with 0
+                        String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+
+                        // Add everything together
+                        sum = sum + Integer.parseInt(newStr2);
+                    }
+                }
+
+                // Check if it's the right sum
+                Log.d("Sum", "Expenses : " + sum + "");
+
+                expensesSum = sum;
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("Failed", "Failed to read value.", error.toException());
+            }
+        });
+
+
+        myRef.orderByChild("category").equalTo("Income").addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -202,11 +251,20 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
                     sum = sum + Integer.parseInt(newStr2);
 
                 }
-                String s1 = category.substring(0, 1).toUpperCase();
-                String nameCapitalized = s1 + category.substring(1);
+
+                Log.d("Sum", "Income : " + sum + "");
+
+//                String s1 = category.substring(0, 1).toUpperCase();
+//                String nameCapitalized = s1 + category.substring(1);
 
 
-                categoryHeading.setText(nameCapitalized  + ": €" + sum);
+                total = incomeSum - expensesSum;
+
+
+                categoryHeading.setText("Total income: €" + sum);
+                categoryHeading1.setText("Current balance: €" + total);
+
+
 
                 PopulateView(fullItemList);
             }

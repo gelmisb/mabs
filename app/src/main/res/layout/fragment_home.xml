@@ -19,7 +19,7 @@
             android:id="@+id/btnSpeak"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/mic"
+            android:background="@drawable/mic2"
             android:src="@null" />
 
         <TextView
@@ -39,11 +39,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="212dp"
+        android:layout_marginTop="250dp"
         android:fontFamily="@font/caviardreams"
         android:text="Your total expenses: "
         android:textAlignment="center"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="#4c4c4c"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -53,11 +53,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/expenses"
-        android:layout_marginTop="279dp"
+        android:layout_marginTop="326dp"
         android:fontFamily="@font/caviardreams"
         android:text="Your total income: "
         android:textAlignment="center"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="#4c4c4c"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -67,8 +67,8 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/expenses"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="98dp"
-        android:fontFamily="@font/caviardreams"
+        android:layout_marginTop="138dp"
+        android:fontFamily="@font/caviardreamsbold"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="38sp" />
@@ -77,10 +77,10 @@
         android:id="@+id/userHi2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/userHi"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="-98dp"
-        android:layout_marginStart="35dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="79dp"
         android:fontFamily="@font/caviardreams"
         android:text="Welcome"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
