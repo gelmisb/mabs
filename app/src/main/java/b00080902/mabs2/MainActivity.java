@@ -17,6 +17,7 @@ package b00080902.mabs2;
 
 
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -29,6 +30,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -107,9 +109,9 @@ public class MainActivity extends FragmentActivity{
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), WelcomeScreen.class);
-                startActivity(intent);
+
+
+                onBackPressed();
             }
         });
 
@@ -189,7 +191,6 @@ public class MainActivity extends FragmentActivity{
                     return true;
 
                 } else if (id == R.id.navigation_categories) {
-                    Toast.makeText(getApplicationContext(), "Categories", Toast.LENGTH_SHORT).show();
 
                     if (findViewById(R.id.fragment_container) != null) {
 
@@ -213,7 +214,25 @@ public class MainActivity extends FragmentActivity{
                     return true;
 
                 } else if (id == R.id.navigation_balance) {
-                    Toast.makeText(getApplicationContext(), "Balance", Toast.LENGTH_SHORT).show();
+
+                    if (findViewById(R.id.fragment_container) != null) {
+
+                        // Create fragment and give it an argument specifying the article it should show
+                        BalanceFragment newFragment = new BalanceFragment();
+                        Bundle args = new Bundle();
+                        args.putInt(BalanceFragment.ARG_POSITION, position);
+                        newFragment.setArguments(args);
+
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+                        // Replace whatever is in the fragment_container view with this fragment,
+                        // and add the transaction to the back stack so the user can navigate back
+                        transaction.replace(R.id.fragment_container, newFragment);
+                        transaction.addToBackStack(null);
+
+                        // Commit the transaction
+                        transaction.commit();
+                    }
 
                     return true;
 
@@ -228,7 +247,27 @@ public class MainActivity extends FragmentActivity{
         });
     }
 
+    public void onBackPressed() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Do you want to logout?");
 
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getApplicationContext(), WelcomeScreen.class);
+                startActivity(intent);
+            }
+        });
+
+        alert.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                });
+
+        alert.show();
+
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;

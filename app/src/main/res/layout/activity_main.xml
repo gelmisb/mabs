@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".MainActivity">
 
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigationView"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="65dp"
         android:background="#0265ab"
         app:itemBackground="@android:color/transparent"
         app:itemIconTint="@color/white"
