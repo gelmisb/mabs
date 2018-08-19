@@ -1,7 +1,9 @@
 package b00080902.mabs2;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,21 +48,38 @@ public class CustomListAdapter extends ArrayAdapter<Article> implements View.OnC
 
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
 
         int position=(Integer) v.getTag();
         Object object= getItem(position);
-        Article model =(Article) object;
+        final Article model =(Article) object;
 
-        switch (v.getId())
-        {
-            case R.id.item_info:
-                assert model != null;
-                Snackbar.make(v, " " +model.getCategory(), Snackbar.LENGTH_SHORT)
-                        .setAction("1 item removed", new Removing(model.getItem())).show();
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
 
-                break;
-        }
+        assert model != null;
+        alert.setTitle("Are you sure you want to delete '" + model.getItem() + "' ?");
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                switch (v.getId()) {
+                    case R.id.item_info:
+                        Snackbar.make(v, " " +model.getItem(), Snackbar.LENGTH_SHORT)
+                                .setAction("1 item removed", new Removing(model.getItem())).show();
+
+                        break;
+                }
+            }
+        });
+
+        alert.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                });
+
+        alert.show();
+
+
     }
 
 

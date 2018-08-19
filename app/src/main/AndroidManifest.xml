@@ -35,6 +35,7 @@
             android:label="@string/title_activity_list"
             android:theme="@style/AppTheme" />
         <activity android:name=".CatHouse" />
+        <activity android:name=".Removing" />
     </application>
 
 </manifest>
