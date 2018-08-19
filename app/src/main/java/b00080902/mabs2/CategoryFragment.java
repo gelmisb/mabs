@@ -147,7 +147,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
             case R.id.house:
 
                 Intent house1 = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house1.putExtra("cat", "house");
+                house1.putExtra("cat", "House");
                 startActivity(house1);
 
                 break;
@@ -155,49 +155,49 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
             case R.id.housing:
 
                 Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house.putExtra("cat", "housing");
+                house.putExtra("cat", "Housing");
                 startActivity(house);
 
                 break;
             case R.id.fuel:
 
                 Intent fuel = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                fuel.putExtra("cat", "fuel");
+                fuel.putExtra("cat", "Fuel");
                 startActivity(fuel);
 
                 break;
             case R.id.food:
 
                 Intent food = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                food.putExtra("cat", "food");
+                food.putExtra("cat", "Food");
                 startActivity(food);
 
                 break;
             case R.id.tel:
 
                 Intent tel = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                tel.putExtra("cat", "telephone");
+                tel.putExtra("cat", "Telephone");
                 startActivity(tel);
 
                 break;
             case R.id.other:
 
                 Intent other = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                other.putExtra("cat", "other");
+                other.putExtra("cat", "Other");
                 startActivity(other);
 
                 break;
             case R.id.transport:
 
                 Intent transport = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                transport.putExtra("cat", "transport");
+                transport.putExtra("cat", "Transport");
                 startActivity(transport);
 
                 break;
             case R.id.util:
 
                 Intent util = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                util.putExtra("cat", "utilities");
+                util.putExtra("cat", "Utilities");
                 startActivity(util);
 
                 break;
@@ -205,7 +205,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
             case R.id.leisure:
 
                 Intent leisure = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                leisure.putExtra("cat", "leisure");
+                leisure.putExtra("cat", "Leisure");
                 startActivity(leisure);
 
                 break;

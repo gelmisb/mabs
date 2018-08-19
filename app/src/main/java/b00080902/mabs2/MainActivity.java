@@ -74,8 +74,6 @@ public class MainActivity extends FragmentActivity{
     int position = 0;
 
 
-    /** Called when the activity is first created. */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,35 +82,11 @@ public class MainActivity extends FragmentActivity{
         model = new NewsModel();
         database = FirebaseDatabase.getInstance();
 
-        /**
-         * This is for the application remain in fullscreen mode
-         */
-        // Fullscreen without a title
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        // Overwriting the fullscreen parameters
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        // Inside your activity (if you did not enable transitions in your theme)
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-
         // Set the right content view
         setContentView(R.layout.activity_main);
 
-        // Hiding the Android soft navigation keys
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
         // Fixed Portrait orientation
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        // Decoration view
-        View decorView = getWindow().getDecorView();
-
-        // Force Hiding the Navigation UI
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-
 
         /**
          * UI initial params
@@ -252,24 +226,6 @@ public class MainActivity extends FragmentActivity{
                 return false;
             }
         });
-    }
-
-
-    /**
-     * Force hiding system UI
-     *
-     * @param hasFocus
-     */
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus){
-        super.onWindowFocusChanged(hasFocus);
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
 

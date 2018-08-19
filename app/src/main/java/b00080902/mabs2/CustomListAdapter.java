@@ -12,7 +12,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+
+import static com.firebase.ui.auth.AuthUI.TAG;
 
 public class CustomListAdapter extends ArrayAdapter<Article> implements View.OnClickListener{
 
@@ -34,6 +43,8 @@ public class CustomListAdapter extends ArrayAdapter<Article> implements View.OnC
 
     }
 
+
+
     @Override
     public void onClick(View v) {
 
@@ -46,10 +57,13 @@ public class CustomListAdapter extends ArrayAdapter<Article> implements View.OnC
             case R.id.item_info:
                 assert model != null;
                 Snackbar.make(v, " " +model.getCategory(), Snackbar.LENGTH_SHORT)
-                        .setAction("No action", null).show();
+                        .setAction("1 item removed", new Removing(model.getItem())).show();
+
                 break;
         }
     }
+
+
 
     private int lastPosition = -1;
 

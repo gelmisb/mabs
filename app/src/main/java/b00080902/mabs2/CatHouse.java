@@ -56,30 +56,14 @@ public class CatHouse extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        // Fullscreen without a title
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        // Overwriting the fullscreen parameters
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        // inside your activity (if you did not enable transitions in your theme)
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
         // Set the right content view
         setContentView(R.layout.activity_cat_house);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
         //  Fixed Portrait orientation
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        View decorView = getWindow().getDecorView();
-
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         categoryHeading  = (TextView) findViewById(R.id.catTotal);
 
@@ -109,6 +93,7 @@ public class CatHouse extends AppCompatActivity {
     public void recallDB(){
 
         myRef = database.getReference("items");
+
 
         myRef.orderByChild("category").equalTo(category).addValueEventListener(new ValueEventListener(){
             @Override

@@ -159,23 +159,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                 int sum = 0 ;
 
+                assert fullItemList != null;
                 for(int i = 0; i < fullItemList.size(); i++){
 
-                    // Retrieve each item
-                    String liveprice = fullItemList.get(i).getValue();
+                    if(fullItemList.get(i) != null){
+                        // Retrieve each item
+                        String liveprice = fullItemList.get(i).getValue();
 
-                    // Remove all € signs
-                    String newStr = liveprice.replace("€", "");
+                        // Remove all € signs
+                        String newStr = liveprice.replace("€", "");
 
-                    // Remove all commas
-                    String newStr1 = newStr.replace(",", "");
+                        // Remove all commas
+                        String newStr1 = newStr.replace(",", "");
 
-                    // Replace all letters with 0
-                    String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+                        // Replace all letters with 0
+                        String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
 
-                    // Add everything together
-                    sum = sum + Integer.parseInt(newStr2);
-
+                        // Add everything together
+                        sum = sum + Integer.parseInt(newStr2);
+                    }
                 }
 
                 // Check if it's the right sum
@@ -228,8 +230,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {
-
-
 
                     // Stores result
                     ArrayList<String> result = data

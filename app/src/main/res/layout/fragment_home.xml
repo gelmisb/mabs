@@ -11,15 +11,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="28dp"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageButton
             android:id="@+id/btnSpeak"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/mik"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/mic"
             android:src="@null" />
 
         <TextView
@@ -70,8 +70,7 @@
         android:layout_marginTop="98dp"
         android:fontFamily="@font/caviardreams"
         android:text="TextView"
-        android:textAppearance="@android:style/TextAppearance.Material.Body1"
-        android:textColor="@color/browser_actions_bg_grey"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="38sp" />
 
     <TextView
@@ -84,8 +83,7 @@
         android:layout_marginStart="35dp"
         android:fontFamily="@font/caviardreams"
         android:text="Welcome"
-        android:textAppearance="@android:style/TextAppearance.Material.Body1"
-        android:textColor="@color/browser_actions_bg_grey"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="38sp" />
 
 </RelativeLayout>
