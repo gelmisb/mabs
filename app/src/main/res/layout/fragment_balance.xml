@@ -1,21 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+    <!-- TODO: Update blank fragment layout -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".BalanceFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/userHi3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="77dp"
-        android:fontFamily="@font/caviardreams"
-        android:text="Balance"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="38sp" />
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <ListView
+            android:id="@+id/showcase"
+            android:layout_width="match_parent"
+            android:layout_height="650dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.976" />
+
+        <TextView
+            android:id="@+id/catTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="106dp"
+            android:fontFamily="@font/caviardreams"
+            android:text="TextView"
+            android:textColor="@android:color/background_light"
+            android:textSize="36sp"
+            android:textStyle="bold" />
 </RelativeLayout>

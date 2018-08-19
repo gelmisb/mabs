@@ -83,26 +83,6 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         return myView;
     }
 
-    public void onBackPressed() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity().getApplicationContext());
-        alert.setTitle("Do you want to logout?");
-        // alert.setMessage("Message");
-
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //Your action here
-            }
-        });
-
-        alert.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                    }
-                });
-
-        alert.show();
-
-    }
 
 
 

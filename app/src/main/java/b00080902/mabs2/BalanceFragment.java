@@ -15,20 +15,48 @@
  */
 package b00080902.mabs2;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.icu.text.SimpleDateFormat;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
+import android.speech.RecognizerIntent;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
+import static android.app.Activity.RESULT_OK;
 
 public class BalanceFragment extends Fragment implements View.OnClickListener {
 
@@ -38,8 +66,25 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
     private DatabaseReference myRef;
     private FirebaseDatabase database;
     private NewsModel model;
-    private TextView expenses, income;
+    private TextView expenses, income, userHi;
+    private ImageButton btnSpeak;
 
+    // STT params
+    private final int REQ_CODE_SPEECH_INPUT = 100;
+
+    // Iteration params
+    private String one, two, three, four, fullResponse;
+    int itemNo ;
+    int position = 0;
+
+    // UI config
+    private ListView itemList;
+    private static CustomListAdapter adapter;
+
+    private String category = "";
+    private ImageButton backButton;
+    private TextView categoryHeading ;
+    private View myView;
 
 
     @Override
@@ -49,12 +94,35 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
         if (savedInstanceState != null)
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
 
-        View myView = inflater.inflate(R.layout.fragment_balance, container, false);
 
+
+        myView = inflater.inflate(R.layout.fragment_balance, container, false);
+        categoryHeading  = (TextView) myView.findViewById(R.id.catTotal);
+
+
+        // Enable the ability for the user to speak to the application
+        income = (TextView) myView.findViewById(R.id.income);
+        btnSpeak = (ImageButton) myView.findViewById(R.id.btnSpeak);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        itemNo = preferences.getInt("Item", 0);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String name = user.getDisplayName();
+
+        userHi.setText(name + "!");
 
         // Access to DB
         model = new NewsModel();
         database = FirebaseDatabase.getInstance();
+
+
+        // Microphone to listen to the user when activated
+        btnSpeak.setOnClickListener(this);
+
+
+        // Show the results
+        categoryTotal();
 
         return myView;
     }
@@ -92,82 +160,227 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
         outState.putInt(ARG_POSITION, mCurrentPosition);
     }
 
+    public void categoryTotal(){
+
+        myRef = database.getReference("items");
+
+        myRef.orderByChild("category").equalTo("income").addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                ArrayList<Article> fullItemList = new ArrayList<Article>();
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    fullItemList.add(child.getValue(Article.class));
+                }
+                assert fullItemList != null;
+                for (int i = 0 ; i < fullItemList.size(); i++){
+                    if(fullItemList.get(i) == null){
+                        fullItemList.remove(i);
+
+                    } else {
+                        Log.i("list" + i, fullItemList.get(i).getItem());
+                    }
+                }
+
+                int sum = 0 ;
+
+                for(int i = 0; i < fullItemList.size(); i++){
+
+                    // Retrieve each item
+                    String liveprice = fullItemList.get(i).getValue();
+
+                    // Remove all € signs
+                    String newStr = liveprice.replace("€", "");
+
+                    // Remove all commas
+                    String newStr1 = newStr.replace(",", "");
+
+                    // Replace all letters with 0
+                    String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+
+                    // Add everything together
+                    sum = sum + Integer.parseInt(newStr2);
+
+                }
+                String s1 = category.substring(0, 1).toUpperCase();
+                String nameCapitalized = s1 + category.substring(1);
+
+
+                categoryHeading.setText(nameCapitalized  + ": €" + sum);
+
+                PopulateView(fullItemList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(getActivity().getApplicationContext(), "Oops, something went wrong, try again", Toast.LENGTH_SHORT).show();
+                Log.w("Failed", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    /**
+     * Showing google speech input dialog
+     */
+    private void promptSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+                getString(R.string.speech_prompt));
+        try {
+            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getActivity().getApplicationContext(),
+                    getString(R.string.speech_not_supported),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Receiving speech input
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQ_CODE_SPEECH_INPUT: {
+                if (resultCode == RESULT_OK && null != data) {
+
+                    // Stores result
+                    ArrayList<String> result = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+
+                    // Splits the string
+                    String[] alphabets= result.get(0).split("\\s");
+
+                    // Segments the string
+                    if (Arrays.asList(alphabets).contains(null)) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Oops! There was a problem, try again! ", Toast.LENGTH_LONG).show();
+
+
+                    } else {
+
+
+                        try {
+
+                            one = alphabets[0];
+                            two = alphabets[1];
+                            three = alphabets[2];
+
+                            String s1 = one.substring(0, 1).toUpperCase();
+                            String nameCapitalized = s1 + one.substring(1);
+
+                            String s2 = two.substring(0, 1).toUpperCase();
+                            String nameCapitalized1 = s2 + two.substring(1);
+
+                            String s3 = three.substring(0, 1).toUpperCase();
+                            String nameCapitalized2 = s3 + three.substring(1);
+
+
+                            one = nameCapitalized;
+                            two = nameCapitalized1;
+                            three = nameCapitalized2;
+
+
+
+                            // gets the current time
+                            Date c = Calendar.getInstance().getTime();
+
+                            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                            String formattedDate = df.format(c);
+
+                            // Logs the details for the dev
+                            Log.i("Name ", one);
+                            Log.i("Value ", two);
+                            Log.i("Category ", three);
+
+
+                            // Writes to DB
+                            writeNewItem(itemNo + "", one, two, three, formattedDate);
+
+
+                        } catch (ArrayIndexOutOfBoundsException e) {
+
+                            Toast.makeText(getActivity().getApplicationContext(), "Oops! There was an error, try again! ", Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                }
+            }
+
+            break;
+        }
+
+    }
+
+
+
+    // returns true if the string does not have a number at the beginning
+    public boolean isNoNumberAtBeginning(String s){
+        Log.i("Chosen One", " " + s);
+
+        return  s.matches(".*[a-zA-Z]+.*");
+    }
+    private void writeNewItem(String itemID, String name, String value, String category, String date) {
+
+
+        Log.i("You", "didn't get an error!");
+
+        if(isNoNumberAtBeginning(value)){
+            Toast.makeText(getActivity().getApplicationContext(), "The value you have entered was wrong!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(),  " '" + one  + "' has been added to your list", Toast.LENGTH_LONG).show();
+            Article items = new Article(name, value , date, category);
+            model.addArticle(new Article(one, two, date, category));
+
+            myRef = database.getReference("items");
+            myRef.child(itemID).setValue(items);
+
+            itemNo++ ;
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("Item", itemNo);
+            editor.apply();
+        }
+    }
+
+
+    /**
+     * Populating the view with the retrieved data
+     * which is encapsulated using a list view
+     * with a custom listView adapter
+     *
+     * @param model
+     */
+    public void PopulateView(ArrayList<Article> model){
+        itemList = myView.findViewById(R.id.showcase);
+
+        adapter = new CustomListAdapter(model, getContext());
+
+        itemList.setAdapter(adapter);
+
+        itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Vibrator vibe = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+                MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.whoop);
+                mp.start();
+                if (vibe != null) {
+                    vibe.vibrate(100);
+                }
+            }
+        });
+    }
 
     @Override
     public void onClick(View v) {
 
-
-        switch (v.getId()) {
-
-            case R.id.house:
-
-                Intent house1 = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house1.putExtra("cat", "House");
-                startActivity(house1);
-
-                break;
-
-            case R.id.housing:
-
-                Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house.putExtra("cat", "Housing");
-                startActivity(house);
-
-                break;
-            case R.id.fuel:
-
-                Intent fuel = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                fuel.putExtra("cat", "Fuel");
-                startActivity(fuel);
-
-                break;
-            case R.id.food:
-
-                Intent food = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                food.putExtra("cat", "Food");
-                startActivity(food);
-
-                break;
-            case R.id.tel:
-
-                Intent tel = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                tel.putExtra("cat", "Telephone");
-                startActivity(tel);
-
-                break;
-            case R.id.other:
-
-                Intent other = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                other.putExtra("cat", "Other");
-                startActivity(other);
-
-                break;
-            case R.id.transport:
-
-                Intent transport = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                transport.putExtra("cat", "Transport");
-                startActivity(transport);
-
-                break;
-            case R.id.util:
-
-                Intent util = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                util.putExtra("cat", "Utilities");
-                startActivity(util);
-
-                break;
-
-            case R.id.leisure:
-
-                Intent leisure = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                leisure.putExtra("cat", "Leisure");
-                startActivity(leisure);
-
-                break;
-
-            default:
-                break;
-
-        }
     }
 }

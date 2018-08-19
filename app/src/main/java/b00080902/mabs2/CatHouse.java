@@ -74,7 +74,6 @@ public class CatHouse extends AppCompatActivity {
             public void onClick(View view) {
                 // stop talking when the application is closed.
                 finish();
-
             }
         });
 
