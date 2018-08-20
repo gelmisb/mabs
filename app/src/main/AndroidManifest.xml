@@ -18,9 +18,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/mabslogo"
+        android:icon="@mipmap/mabs"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/mabslogo"
+        android:roundIcon="@mipmap/mabs"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
@@ -38,7 +38,6 @@
             android:label="@string/title_activity_list"
             android:theme="@style/AppTheme" />
         <activity android:name=".CatHouse" />
-        <activity android:name=".Removing" />
     </application>
 
 </manifest>
