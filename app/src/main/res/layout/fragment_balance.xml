@@ -56,13 +56,13 @@
             android:id="@+id/balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/income"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="-144dp"
+            android:layout_marginTop="138dp"
             android:fontFamily="@font/caviardreamsbold"
             android:text="TextView"
             android:textAlignment="center"
-            android:textColor="@android:color/background_light"
+            android:textColor="#4c4c4c"
             android:textSize="36sp"
             android:textStyle="bold" />
 
@@ -70,13 +70,12 @@
             android:id="@+id/income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/expenses"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="144dp"
             android:fontFamily="@font/caviardreams"
             android:text="TextView"
             android:textAlignment="center"
-            android:textColor="@android:color/background_light"
+            android:textColor="#4c4c4c"
             android:textSize="26sp"
             android:textStyle="bold" />
 
@@ -84,12 +83,12 @@
             android:id="@+id/expenses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/income"
+            android:layout_below="@+id/balance"
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/caviardreams"
             android:text="TextView"
             android:textAlignment="center"
-            android:textColor="@android:color/background_light"
+            android:textColor="#4c4c4c"
             android:textSize="26sp"
             android:textStyle="bold" />
 </RelativeLayout>

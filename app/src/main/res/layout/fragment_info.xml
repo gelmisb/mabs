@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InfoFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/find"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="28dp"
+            android:layout_weight="1"
+            android:background="@drawable/roundlayoutyellow"
+            android:fontFamily="@font/caviardreams"
+            android:text="Find Us!" />
+
+        <Button
+            android:id="@+id/call"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="127dp"
+            android:layout_weight="1"
+            android:background="@drawable/roundlayoutyellow"
+            android:fontFamily="@font/caviardreams"
+            android:text="Call now" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="273dp"
+        android:fontFamily="@font/caviardreamsbold"
+        android:text="About MABS"
+        android:textSize="28sp" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="141dp"
+        android:src="@drawable/mabslogo" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="236dp"
+        android:fontFamily="@font/caviardreams"
+        android:text="The Money Advice and Budgeting Service is the State’s money advice service, guiding people through dealing with problem debt for more than twenty years.  MABS runs a Helpline (0761 07 2000, Monday to Friday, 9am to 8pm) and also operates from more than 60 locations nationwide.  MABS is free, confidential and independent.  We have a proven track record in helping people get back on their feet. All kinds of people, with all kinds of debt, come to MABS."
+        android:textAlignment="viewStart"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="98dp"
+        android:fontFamily="@font/caviardreams"
+        android:text="Mon - Fri, 9am - 8pm" />
+
+</RelativeLayout>

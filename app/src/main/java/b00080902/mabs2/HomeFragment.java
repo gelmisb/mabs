@@ -187,7 +187,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 expenses = myView.findViewById(R.id.expenses);
 
                 // Show the total to the user
-                expenses.setText("Your total expenses: €" + sum);
+                expenses.setText("Your total expenses: €" + NumberFormat.getNumberInstance(Locale.US).format(sum));
             }
 
             @Override

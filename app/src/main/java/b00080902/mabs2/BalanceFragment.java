@@ -47,6 +47,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -248,9 +249,10 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
                 total = incomeSum - expensesSum;
 
-                balanceText.setText("Current balance: €" + total);
-                incomeText.setText("Total income: €" + incomeSum);
-                expensesText.setText("Total expenses: €" + expensesSum);
+
+                balanceText.setText("Current balance: €" + NumberFormat.getNumberInstance(Locale.US).format(total));
+                incomeText.setText("Total income: €" + NumberFormat.getNumberInstance(Locale.US).format(incomeSum));
+                expensesText.setText("Total expenses: €" + NumberFormat.getNumberInstance(Locale.US).format(expensesSum));
 
                 PopulateView(fullItemList);
             }

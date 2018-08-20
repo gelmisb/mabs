@@ -21,7 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static com.firebase.ui.auth.AuthUI.TAG;
 
@@ -48,39 +50,23 @@ public class CustomListAdapter extends ArrayAdapter<Article> implements View.OnC
 
 
     @Override
-    public void onClick(final View v) {
+    public void onClick(View v) {
 
         int position=(Integer) v.getTag();
         Object object= getItem(position);
-        final Article model =(Article) object;
+        Article model =(Article) object;
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        switch (v.getId())
+        {
+            case R.id.item_info:
+                assert model != null;
+                Snackbar.make(v, " " +model.getItem(), Snackbar.LENGTH_SHORT)
+                        .setAction("1 item removed", new Removing(model.getItem())).show();
 
-        assert model != null;
-        alert.setTitle("Are you sure you want to delete '" + model.getItem() + "' ?");
-
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                switch (v.getId()) {
-                    case R.id.item_info:
-                        Snackbar.make(v, " " +model.getItem(), Snackbar.LENGTH_SHORT)
-                                .setAction("1 item removed", new Removing(model.getItem())).show();
-
-                        break;
-                }
-            }
-        });
-
-        alert.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                    }
-                });
-
-        alert.show();
-
-
+                break;
+        }
     }
+
 
 
 
@@ -123,6 +109,7 @@ public class CustomListAdapter extends ArrayAdapter<Article> implements View.OnC
         }else {
             viewHolder.txtName.setText(model.getItem());
         }
+
 
         viewHolder.txtType.setText(model.getDate());
         viewHolder.txtVersion.setText(model.getValue());

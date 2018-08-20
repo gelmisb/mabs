@@ -1,12 +1,16 @@
 package b00080902.mabs2;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -74,6 +78,7 @@ public class CatHouse extends AppCompatActivity {
             public void onClick(View view) {
                 // stop talking when the application is closed.
                 finish();
+
             }
         });
 

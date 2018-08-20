@@ -16,11 +16,14 @@
 package b00080902.mabs2;
 
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -28,6 +31,7 @@ import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -209,6 +213,8 @@ public class MainActivity extends FragmentActivity{
 
                         // Commit the transaction
                         transaction.commit();
+
+
                     }
 
                     return true;
@@ -237,7 +243,22 @@ public class MainActivity extends FragmentActivity{
                     return true;
 
                 } else if (id == R.id.navigation_info) {
-                    Toast.makeText(getApplicationContext(), "Info", Toast.LENGTH_SHORT).show();
+
+                    // Create fragment and give it an argument specifying the article it should show
+                    InfoFragment newFragment = new InfoFragment();
+                    Bundle args = new Bundle();
+                    args.putInt(InfoFragment.ARG_POSITION, position);
+                    newFragment.setArguments(args);
+
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+                    // Replace whatever is in the fragment_container view with this fragment,
+                    // and add the transaction to the back stack so the user can navigate back
+                    transaction.replace(R.id.fragment_container, newFragment);
+                    transaction.addToBackStack(null);
+
+                    // Commit the transaction
+                    transaction.commit();
 
                     return true;
                 }
