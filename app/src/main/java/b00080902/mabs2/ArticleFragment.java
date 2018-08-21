@@ -162,6 +162,9 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
 
         myRef = database.getReference("items");
 
+        sum = 0;
+        allItems = 0;
+
 
         if(from.isEmpty() || to.isEmpty())
             Toast.makeText(getActivity().getApplicationContext(), "Incorrect dates were entered", Toast.LENGTH_SHORT).show();

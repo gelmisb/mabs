@@ -38,6 +38,7 @@ limitations under the License.
             android:layout_weight="1"
             android:fontFamily="@font/caviardreams"
             android:text="Total: 'Please select a date'"
+            android:textAlignment="center"
             android:textSize="24sp" />
 
         <TextView
@@ -47,6 +48,7 @@ limitations under the License.
             android:layout_weight="1"
             android:fontFamily="@font/caviardreams"
             android:text="TextView"
+            android:textAlignment="center"
             android:textSize="24sp" />
 
     </LinearLayout>

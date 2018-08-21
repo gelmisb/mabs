@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
     private TextView expenses, income;
     private Button press, press1, press2, press3, press4, press5, press6, press7, press8;
 
-
+    private View myView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,7 +51,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         if (savedInstanceState != null)
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
 
-        View myView = inflater.inflate(R.layout.fragment_category, container, false);
+        myView = inflater.inflate(R.layout.fragment_category, container, false);
 
         income = (TextView)myView.findViewById(R.id.income);
         press = (Button)myView.findViewById(R.id.housing);
@@ -118,81 +119,69 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
     }
 
 
+
+
     @Override
     public void onClick(View v) {
 
+        Intent intent = new Intent(getActivity().getApplicationContext(), CatHouse.class);
 
         switch (v.getId()) {
 
             case R.id.house:
 
-                Intent house1 = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house1.putExtra("cat", "House");
-                startActivity(house1);
+                intent.putExtra("cat", "House");
 
                 break;
 
             case R.id.housing:
 
-                Intent house = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                house.putExtra("cat", "Housing");
-                startActivity(house);
+                intent.putExtra("cat", "Housing");
 
                 break;
             case R.id.fuel:
 
-                Intent fuel = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                fuel.putExtra("cat", "Fuel");
-                startActivity(fuel);
+                intent.putExtra("cat", "Fuel");
 
                 break;
             case R.id.food:
 
-                Intent food = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                food.putExtra("cat", "Food");
-                startActivity(food);
+                intent.putExtra("cat", "Food");
 
                 break;
             case R.id.tel:
 
-                Intent tel = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                tel.putExtra("cat", "Telephone");
-                startActivity(tel);
+                intent.putExtra("cat", "Telephone");
 
                 break;
             case R.id.other:
 
-                Intent other = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                other.putExtra("cat", "Other");
-                startActivity(other);
+                intent.putExtra("cat", "Other");
 
                 break;
             case R.id.transport:
 
-                Intent transport = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                transport.putExtra("cat", "Transport");
-                startActivity(transport);
+                intent.putExtra("cat", "Transport");
 
                 break;
             case R.id.util:
 
-                Intent util = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                util.putExtra("cat", "Utilities");
-                startActivity(util);
+                intent.putExtra("cat", "Utilities");
 
                 break;
 
             case R.id.leisure:
 
-                Intent leisure = new Intent(getActivity().getApplicationContext(), CatHouse.class);
-                leisure.putExtra("cat", "Leisure");
-                startActivity(leisure);
+                intent.putExtra("cat", "Leisure");
 
                 break;
+
 
             default:
                 break;
 
         }
+        startActivity(intent);
+
     }
 }
