@@ -64,7 +64,7 @@ public class MainActivity extends FragmentActivity{
 
     // UI config
     private TextView txtSpeechInput;
-    private ImageButton btnSpeak, btnSignOut;
+    private ImageButton btnSpeak, btnSignOut, homePage;
     private ListView itemList;
     private static CustomListAdapter adapter;
     private ArrayList<String> full ;
@@ -103,10 +103,17 @@ public class MainActivity extends FragmentActivity{
          */
         // To show speech results
         txtSpeechInput = (TextView) findViewById(R.id.txtSpeechInput);
+        // Button to sign out
+        btnSignOut = (ImageButton) findViewById(R.id.btnSignOut);
 
+        // Home page top button
+        homePage = (ImageButton) findViewById(R.id.homePage);
 
         // Bottom nav bar
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.navigationView);
+
+
+
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
         for (int i = 0; i < menuView.getChildCount(); i++) {
             final View iconView = menuView.getChildAt(i).findViewById(android.support.design.R.id.icon);
@@ -120,18 +127,19 @@ public class MainActivity extends FragmentActivity{
         }
 
 
-
-        // Button to sign out
-        btnSignOut = (ImageButton) findViewById(R.id.btnSignOut);
-
-
+        homePage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse("https://www.mabs.ie/en/"));
+                startActivity(browserIntent);
+            }
+        });
 
         // User sign out using Firebase
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 onBackPressed();
             }
         });
@@ -152,6 +160,8 @@ public class MainActivity extends FragmentActivity{
 
         // Commit the transaction
         transaction.commit();
+
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

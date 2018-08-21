@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#343e99"
     tools:context=".WelcomeScreen">
 
     <LinearLayout
@@ -20,17 +20,7 @@
             android:id="@+id/imageView4"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/itblogo" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="200dp"
-            android:layout_height="98dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/gevelop"
-            tools:layout_editor_absoluteY="66dp" />
+            app:srcCompat="@drawable/cib" />
 
     </LinearLayout>
 
@@ -46,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.154"
-        app:srcCompat="@drawable/mabs" />
+        app:srcCompat="@drawable/mabslogo" />
 
     <ImageButton
         android:id="@+id/log"
@@ -54,7 +44,7 @@
         android:layout_height="70dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/login"
+        android:background="@drawable/login12345"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
