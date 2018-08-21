@@ -129,10 +129,21 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="69dp"
         android:fontFamily="@font/caviardreams"
         android:text="Purchase list"
         android:textColor="@color/common_google_signin_btn_text_light_pressed"
         android:textSize="38sp" />
+
+    <TextView
+        android:id="@+id/totalDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="143dp"
+        android:fontFamily="@font/caviardreams"
+        android:text="Total: 'Please select a date'"
+        android:textSize="24sp" />
 
 </RelativeLayout>

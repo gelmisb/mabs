@@ -66,12 +66,18 @@ import static com.firebase.ui.auth.AuthUI.getInstance;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
-
+    // Positioning for the fragments
     final static String ARG_POSITION = "position";
     int mCurrentPosition = -1;
+
+    // Database initials
     private DatabaseReference myRef;
     private FirebaseDatabase database;
+
+    // Reference for items MVC
     private NewsModel model;
+
+    // UI config
     private TextView expenses, income, userHi;
     private ImageButton btnSpeak;
 
@@ -79,10 +85,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
     // Iteration params
-    private String one, two, three, four, fullResponse;
+    private String one, two, three;
     int itemNo ;
     int position = 0;
 
+    // Global for further uses
     private View myView;
 
     @Override
@@ -92,20 +99,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         if (savedInstanceState != null)
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
 
+        // Initialising the view the right parameters
         myView = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        // Enable the ability for the user to speak to the application
+        // Enable the ability for the user to speak to the application & UI params
         income = (TextView) myView.findViewById(R.id.income);
         userHi = (TextView) myView.findViewById(R.id.userHi);
         btnSpeak = (ImageButton) myView.findViewById(R.id.btnSpeak);
 
+        // Cached item number - will reset when the app is deleted or reset
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         itemNo = preferences.getInt("Item", 0);
 
+        // Firebase username
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String name = user.getDisplayName();
 
+        // Welcoming user
         userHi.setText(name + "!");
 
         // Access to DB
@@ -118,13 +129,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
         // Show the results
-        recallDB();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            recallDB();
+        }
 
         // Inflate the layout for this fragment
         return myView;
-
-
     }
+
+
 
     @Override
     public void onStart() {
@@ -145,25 +158,43 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
 
+    /**
+     * For calling the database to retrieve the full expenses for the day
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void recallDB(){
 
+        //  Getting today's date
+        // gets the current time
+        Date c = Calendar.getInstance().getTime();
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = df.format(c);
+
+
+        // Getting the DB reference
         myRef = database.getReference("items");
 
-
-        myRef.addValueEventListener(new ValueEventListener() {
+        // Getting the event listener
+        myRef.orderByChild("date").startAt(formattedDate).endAt(formattedDate).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                // Using generic type becuase it will suit for any type of object that could be processed
                 GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
 
+                // Initialising the array
                 ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
 
+                // Full some of the expenses
                 int sum = 0 ;
 
+                // Asserting
                 assert fullItemList != null;
                 for(int i = 0; i < fullItemList.size(); i++){
 
                     if(fullItemList.get(i) != null){
+
                         // Retrieve each item
                         String liveprice = fullItemList.get(i).getValue();
 
@@ -178,11 +209,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                         // Add everything together
                         sum = sum + Integer.parseInt(newStr2);
-                    }
-                }
+                    } // end of if statement
+                } // end of for loop statement
 
-                // Check if it's the right sum
-                Log.d("Sum", "Sum is: : " + sum + "");
 
                 // Show it to the user
                 expenses = myView.findViewById(R.id.expenses);

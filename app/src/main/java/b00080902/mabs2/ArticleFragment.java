@@ -54,7 +54,7 @@ import java.util.Locale;
 
 public class ArticleFragment extends Fragment implements View.OnClickListener {
 
-    private static TextView start, end;
+    private static TextView start, end, totalDay;
 
     // Fragment params
     final static String ARG_POSITION = "position";
@@ -73,6 +73,9 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
     private Calendar myCalendar;
     private Button selectDate1, selectDate2, showList;
     private DatePickerDialog.OnDateSetListener date;
+
+
+    int sum = 0 ;
 
     /**
      * If activity recreated (such as from screen rotate), restore
@@ -96,6 +99,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
 
         start = (TextView) myView.findViewById(R.id.startDate);
         end = (TextView) myView.findViewById(R.id.endDate);
+        totalDay = (TextView) myView.findViewById(R.id.totalDay);
 
 
 
@@ -182,10 +186,27 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
                                 fullItemList.remove(i);
 
                             } else {
+
+                                // Retrieve each item
+                                String liveprice = fullItemList.get(i).getValue();
+
+                                // Remove all € signs
+                                String newStr = liveprice.replace("€", "");
+
+                                // Remove all commas
+                                String newStr1 = newStr.replace(",", "");
+
+                                // Replace all letters with 0
+                                String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+
+                                // Add everything together
+                                sum = sum + Integer.parseInt(newStr2);
+
                                 Log.i("list" + i, fullItemList.get(i).getItem());
 
                             }
                         }
+                        totalDay.setText("Total: €" + sum);
 
                         PopulateView(fullItemList);
                     } catch (NullPointerException e){
