@@ -315,7 +315,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         if(isNoNumberAtBeginning(value)){
             Toast.makeText(getActivity().getApplicationContext(), "The value you have entered was wrong!", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getActivity().getApplicationContext(),  " '" + one  + "' has been added to your list", Toast.LENGTH_LONG).show();
+
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), " '" + one  + "' has been added to your list", Toast.LENGTH_LONG);
+            View view = toast.getView();
+            view.setBackgroundResource(R.drawable.toastieslayout);
+            toast.show();
+
             Article items = new Article(name, value , date, category);
             model.addArticle(new Article(one, two, date, category));
 
