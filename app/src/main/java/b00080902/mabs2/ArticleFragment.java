@@ -54,7 +54,7 @@ import java.util.Locale;
 
 public class ArticleFragment extends Fragment implements View.OnClickListener {
 
-    private static TextView start, end, totalDay;
+    private static TextView start, end, totalDay, totalItems;
 
     // Fragment params
     final static String ARG_POSITION = "position";
@@ -76,6 +76,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
 
 
     int sum = 0 ;
+    int allItems = 0 ;
 
     /**
      * If activity recreated (such as from screen rotate), restore
@@ -100,6 +101,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
         start = (TextView) myView.findViewById(R.id.startDate);
         end = (TextView) myView.findViewById(R.id.endDate);
         totalDay = (TextView) myView.findViewById(R.id.totalDay);
+        totalItems = (TextView) myView.findViewById(R.id.totalItems);
 
 
 
@@ -165,13 +167,11 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity().getApplicationContext(), "Incorrect dates were entered", Toast.LENGTH_SHORT).show();
 
 
-        Log.i("Dates", from + "  " + to);
         myRef.orderByChild("date").startAt(from).endAt(to).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 long value=dataSnapshot.getChildrenCount();
-                Log.d("Number","no of children: "+value);
 
                 if(value > 0 )
                     try{
@@ -202,11 +202,11 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
                                 // Add everything together
                                 sum = sum + Integer.parseInt(newStr2);
 
-                                Log.i("list" + i, fullItemList.get(i).getItem());
-
+                                allItems += 1;
                             }
                         }
                         totalDay.setText("Total: €" + sum);
+                        totalItems.setText("Items: " + allItems);
 
                         PopulateView(fullItemList);
                     } catch (NullPointerException e){
@@ -255,17 +255,31 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
                                 fullItemList.remove(i);
 
                             } else {
-                                Log.i("list" + i, fullItemList.get(i).getItem());
+                                // Retrieve each item
+                                String liveprice = fullItemList.get(i).getValue();
 
+                                // Remove all € signs
+                                String newStr = liveprice.replace("€", "");
+
+                                // Remove all commas
+                                String newStr1 = newStr.replace(",", "");
+
+                                // Replace all letters with 0
+                                String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+
+                                // Add everything together
+                                sum = sum + Integer.parseInt(newStr2);
+
+                                allItems += 1;
                             }
                         }
+                        totalDay.setText("Total: €" + sum);
+                        totalItems.setText("Items: " + allItems);
 
                         PopulateView(fullItemList);
                     } catch (NullPointerException e){
                         Toast.makeText(getActivity().getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
                     }
-
-
                 }
 
 
