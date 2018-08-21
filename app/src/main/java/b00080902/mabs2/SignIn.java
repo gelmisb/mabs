@@ -50,7 +50,7 @@ public class SignIn extends AppCompatActivity {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
-                        .setLogo(R.drawable.logo)      // Set logo drawable
+                        .setLogo(R.drawable.mabslogo)      // Set logo drawable
                         .build(),
                 RC_SIGN_IN);
 
