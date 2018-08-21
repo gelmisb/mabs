@@ -9,13 +9,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="650dp"
+        android:layout_height="700dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:fadeScrollbars="true"
         android:fillViewport="false"
-        android:scrollbars="none"
-        android:padding="30dp">
+        android:padding="30dp"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -146,11 +146,29 @@
                 android:id="@+id/textView13"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="250dp"
+                android:layout_marginBottom="100dp"
                 android:fontFamily="@font/caviardreams"
                 android:lineSpacingExtra="8sp"
                 android:padding="10dp"
                 android:text="21 June 2018: Central BoI statistics and Abhaile helpline trends offer hope to those in serious mortgage arrears " />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/caviardreams"
+                android:text="February"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
+                android:fontFamily="@font/caviardreams"
+                android:lineSpacingExtra="8sp"
+                android:padding="10dp"
+                android:text="15 February 2018:     Over 50% of MABS clients go without heat in Ballyfermot and Cherry Orchard area according to new report - Left Behind in the Cold? " />
 
         </LinearLayout>
     </ScrollView>

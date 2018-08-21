@@ -30,6 +30,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -319,6 +320,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), " '" + one  + "' has been added to your list", Toast.LENGTH_LONG);
             View view = toast.getView();
             view.setBackgroundResource(R.drawable.toastieslayout);
+            toast.setGravity(Gravity.BOTTOM, 0, 100);
             toast.show();
 
             Article items = new Article(name, value , date, category);
