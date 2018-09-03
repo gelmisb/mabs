@@ -166,10 +166,15 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
 
-                ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
+                // Using generic type because it will suit for any type of object that could be processed
+                // Initialising the array
+                ArrayList<Article> fullItemList = new ArrayList<Article>();
 
+                // Sorting the array
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    fullItemList.add(child.getValue(Article.class));
+                }
                 int sum = 0 ;
 
                 assert fullItemList != null;

@@ -180,44 +180,55 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                // Using generic type becuase it will suit for any type of object that could be processed
-                GenericTypeIndicator<ArrayList<Article>> genericTypeIndicator =new GenericTypeIndicator<ArrayList<Article>>(){};
-
+                // Using generic type because it will suit for any type of object that could be processed
                 // Initialising the array
-                ArrayList<Article> fullItemList = dataSnapshot.getValue(genericTypeIndicator);
+                ArrayList<Article> fullItemList = new ArrayList<Article>();
+
+                // Sorting the array
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    fullItemList.add(child.getValue(Article.class));
+                }
 
                 // Full some of the expenses
                 int sum = 0 ;
 
                 // Asserting
-                assert fullItemList != null;
-                for(int i = 0; i < fullItemList.size(); i++){
+                if(fullItemList != null) {
+                    for (int i = 0; i < fullItemList.size(); i++) {
 
-                    if(fullItemList.get(i) != null){
+                        if (fullItemList.get(i) != null) {
 
-                        // Retrieve each item
-                        String liveprice = fullItemList.get(i).getValue();
+                            // Retrieve each item
+                            String liveprice = fullItemList.get(i).getValue();
 
-                        // Remove all € signs
-                        String newStr = liveprice.replace("€", "");
+                            // Remove all € signs
+                            String newStr = liveprice.replace("€", "");
 
-                        // Remove all commas
-                        String newStr1 = newStr.replace(",", "");
+                            // Remove all commas
+                            String newStr1 = newStr.replace(",", "");
 
-                        // Replace all letters with 0
-                        String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+                            // Replace all letters with 0
+                            String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
 
-                        // Add everything together
-                        sum = sum + Integer.parseInt(newStr2);
-                    } // end of if statement
-                } // end of for loop statement
+                            // Add everything together
+                            sum = sum + Integer.parseInt(newStr2);
 
+                        } // end of if statement
+
+                    } // end of for loop statement
+
+                }
 
                 // Show it to the user
                 expenses = myView.findViewById(R.id.expenses);
 
                 // Show the total to the user
-                expenses.setText("Today's expenses: €" + NumberFormat.getNumberInstance(Locale.US).format(sum));
+                if(sum != 0)
+                    expenses.setText("Today's expenses: €" + NumberFormat.getNumberInstance(Locale.US).format(sum));
+
+                else
+                    expenses.setText("Today's expenses: €0");
+
             }
 
             @Override

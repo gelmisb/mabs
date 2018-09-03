@@ -35,36 +35,54 @@ public class Removing extends Activity implements View.OnClickListener{
         removeItem(name);
     }
 
-    private void removeItem(String name){
+    private void removeItem(final String name){
 
         // Access to DB
         model = new NewsModel();
         database = FirebaseDatabase.getInstance();
 
-
         myRef = database.getReference("items");
 
+        if(myRef.orderByChild("item").equalTo(name) != null){
 
-        myRef.orderByChild("item").equalTo(name).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            myRef.orderByChild("item").equalTo(name).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                    appleSnapshot.getRef().removeValue();
+                    if (dataSnapshot.exists()) {
+                        // dataSnapshot is the "issue" node with all children with id 0
+                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                            appleSnapshot.getRef().removeValue();
+                        }
+                    } else {
+                        myRef = database.getReference("income");
+
+                        myRef.orderByChild("item").equalTo(name).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                    appleSnapshot.getRef().removeValue();
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.e(TAG, "onCancelled", databaseError.toException());
+                            }
+                        });
+                    }
                 }
 
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e(TAG, "onCancelled", databaseError.toException());
+                }
+            });
+        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e(TAG, "onCancelled", databaseError.toException());
-            }
-        });
     }
-
-
-
-
 
 
     public void onClick(View v) {

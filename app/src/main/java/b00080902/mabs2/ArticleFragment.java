@@ -52,6 +52,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import static com.firebase.ui.auth.AuthUI.TAG;
+
 public class ArticleFragment extends Fragment implements View.OnClickListener {
 
     private static TextView start, end, totalDay, totalItems;
@@ -73,6 +75,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
     private Calendar myCalendar;
     private Button selectDate1, selectDate2, showList;
     private DatePickerDialog.OnDateSetListener date;
+    private EditText searching;
 
 
     int sum = 0 ;
@@ -104,11 +107,14 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
         totalItems = (TextView) myView.findViewById(R.id.totalItems);
 
 
+        searching = (EditText) myView.findViewById(R.id.searching);
 
 
         selectDate1 = (Button) myView.findViewById(R.id.picDate);
         selectDate2 = (Button) myView.findViewById(R.id.picDate2);
         showList = (Button) myView.findViewById(R.id.showList);
+
+
 
         selectDate1.setOnClickListener(this);
         selectDate2.setOnClickListener(this);
@@ -159,11 +165,13 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
 
         String from = start.getText().toString();
         String to = end.getText().toString();
+        final String name = searching.getText().toString();
 
         myRef = database.getReference("items");
 
         sum = 0;
         allItems = 0;
+        Log.i("Name", name);
 
 
         if(from.isEmpty() || to.isEmpty())
@@ -174,50 +182,63 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                long value=dataSnapshot.getChildrenCount();
+                myRef.orderByChild("item").equalTo(name).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        long value=dataSnapshot.getChildrenCount();
 
-                if(value > 0 )
-                    try{
+                        if(value > 0 )
+                            try{
 
-                        ArrayList<Article> fullItemList = new ArrayList<Article>();
-                        for (DataSnapshot child: dataSnapshot.getChildren()) {
-                            fullItemList.add(child.getValue(Article.class));
-                        }
-                        assert fullItemList != null;
-                        for (int i = 0 ; i < fullItemList.size(); i++){
-                            if(fullItemList.get(i) == null){
-                                fullItemList.remove(i);
+                                ArrayList<Article> fullItemList = new ArrayList<Article>();
+                                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                                    fullItemList.add(child.getValue(Article.class));
+                                }
+                                assert fullItemList != null;
+                                for (int i = 0 ; i < fullItemList.size(); i++){
+                                    if(fullItemList.get(i) == null){
+                                        fullItemList.remove(i);
 
-                            } else {
+                                    } else {
 
-                                // Retrieve each item
-                                String liveprice = fullItemList.get(i).getValue();
+                                        // Retrieve each item
+                                        String liveprice = fullItemList.get(i).getValue();
 
-                                // Remove all € signs
-                                String newStr = liveprice.replace("€", "");
+                                        // Remove all € signs
+                                        String newStr = liveprice.replace("€", "");
 
-                                // Remove all commas
-                                String newStr1 = newStr.replace(",", "");
+                                        // Remove all commas
+                                        String newStr1 = newStr.replace(",", "");
 
-                                // Replace all letters with 0
-                                String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+                                        // Replace all letters with 0
+                                        String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
 
-                                // Add everything together
-                                sum = sum + Integer.parseInt(newStr2);
+                                        // Add everything together
+                                        sum = sum + Integer.parseInt(newStr2);
 
-                                allItems += 1;
+                                        allItems += 1;
+                                    }
+                                }
+                                totalDay.setText("Total: €" + sum);
+                                totalItems.setText("Items: " + allItems);
+
+                                PopulateView(fullItemList);
+                            } catch (NullPointerException e){
+                                Toast.makeText(getActivity().getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
                             }
+
+                        else {
+                            Toast.makeText(getActivity().getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
                         }
-                        totalDay.setText("Total: €" + sum);
-                        totalItems.setText("Items: " + allItems);
+                    }
 
-                        PopulateView(fullItemList);
-                    } catch (NullPointerException e){
-                        Toast.makeText(getActivity().getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
-                    } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
-
-                }
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Toast.makeText(getActivity().getApplicationContext(), "Oops, something went wrong, try again", Toast.LENGTH_SHORT).show();
+                        Log.w("Failed", "Failed to read value.", error.toException());
+                    }
+                });
 
             }
 
@@ -294,6 +315,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
 
     /**
      * Populating the view with the retrieved data
