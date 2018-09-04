@@ -15,9 +15,12 @@
  */
 package b00080902.mabs2;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -124,11 +127,16 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        Intent intent = new Intent(getActivity().getApplicationContext(), CatHouse.class);
+
+        Vibrator vibe = (Vibrator) myView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        MediaPlayer mp = MediaPlayer.create(myView.getContext(), R.raw.whoop);
+
+        Intent intent = new Intent(myView.getContext(), CatHouse.class);
 
         switch (v.getId()) {
 
             case R.id.house:
+
 
                 intent.putExtra("cat", "House");
 
@@ -178,10 +186,17 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
 
 
             default:
+
                 break;
 
         }
         startActivity(intent);
+
+
+        mp.start();
+
+        if (vibe != null)
+            vibe.vibrate(100);
 
     }
 }

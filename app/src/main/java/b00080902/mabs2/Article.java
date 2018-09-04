@@ -3,16 +3,30 @@ package b00080902.mabs2;
 
 import java.io.Serializable;
 
+/**
+ *  This a class to define the model for MVC
+ *
+ *  It is made serializable in order to
+ *  make sure the information can be overwritten
+ *
+ *
+ */
 public class Article implements Serializable{
+
 
     private String item;
     private String value;
     private String date;
     private String category;
 
+    // Empty constructor is needed
     public Article() {
 
+        // DO NOT REMOVE
+
     }
+
+
 
     public Article(String item, String value, String date, String category){
 

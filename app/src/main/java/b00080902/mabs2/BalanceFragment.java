@@ -103,7 +103,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
         // Enable the ability for the user to speak to the application
         btnSpeak = (ImageButton) myView.findViewById(R.id.btnSpeak);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
         itemNo = preferences.getInt("Item", 0);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -265,7 +265,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Toast.makeText(getActivity().getApplicationContext(), "Oops, something went wrong, try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(myView.getContext(), "Oops, something went wrong, try again", Toast.LENGTH_SHORT).show();
                 Log.w("Failed", "Failed to read value.", error.toException());
             }
         });
@@ -284,7 +284,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
         try {
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException a) {
-            Toast.makeText(getActivity().getApplicationContext(),
+            Toast.makeText(myView.getContext(),
                     getString(R.string.speech_not_supported),
                     Toast.LENGTH_SHORT).show();
         }
@@ -312,7 +312,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
                     // Segments the string
                     if (Arrays.asList(alphabets).contains(null)) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Oops! There was a problem, try again! ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(myView.getContext(), "Oops! There was a problem, try again! ", Toast.LENGTH_LONG).show();
 
 
                     } else {
@@ -358,7 +358,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
                         } catch (ArrayIndexOutOfBoundsException e) {
 
-                            Toast.makeText(getActivity().getApplicationContext(), "Oops! There was an error, try again! ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(myView.getContext(), "Oops! There was an error, try again! ", Toast.LENGTH_LONG).show();
 
                         }
                     }
@@ -384,9 +384,9 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
         Log.i("You", "didn't get an error!");
 
         if(isNoNumberAtBeginning(value)){
-            Toast.makeText(getActivity().getApplicationContext(), "The value you have entered was wrong!", Toast.LENGTH_LONG).show();
+            Toast.makeText(myView.getContext(), "The value you have entered was wrong!", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getActivity().getApplicationContext(),  " '" + one  + "' has been added to your list", Toast.LENGTH_LONG).show();
+            Toast.makeText(myView.getContext(),  " '" + one  + "' has been added to your list", Toast.LENGTH_LONG).show();
             Article items = new Article(name, value , date, category);
             model.addArticle(new Article(one, two, date, category));
 
@@ -395,7 +395,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
             itemNo++ ;
 
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("Item", itemNo);
             editor.apply();
@@ -413,14 +413,14 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
     public void PopulateView(ArrayList<Article> model){
         itemList = myView.findViewById(R.id.showcase);
 
-        adapter = new CustomListAdapter(model, getActivity().getBaseContext());
+        adapter = new CustomListAdapter(model, myView.getContext());
 
         itemList.setAdapter(adapter);
 
         itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Vibrator vibe = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+                Vibrator vibe = (Vibrator) myView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
                 MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.whoop);
                 mp.start();
                 if (vibe != null) {

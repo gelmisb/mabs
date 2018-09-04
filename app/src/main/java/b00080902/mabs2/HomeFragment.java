@@ -17,31 +17,24 @@ package b00080902.mabs2;
 
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
-import android.media.MediaPlayer;
 import android.os.Build;
-import android.os.Vibrator;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,23 +44,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-import static com.firebase.ui.auth.AuthUI.getInstance;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
@@ -119,11 +105,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         addNew = (ImageButton) myView.findViewById(R.id.addNew);
 
         // Cached item number - will reset when the app is deleted or reset
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
         itemNo = preferences.getInt("Item", 0);
 
         // Firebase username
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
         String name = user.getDisplayName();
 
         // Welcoming user
@@ -209,6 +196,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     // For the size of the list
                     for (int i = 0; i < fullItemList.size(); i++) {
 
+                        // If the received item is not null proceed
                         if (fullItemList.get(i) != null) {
 
                             // Retrieve each item
@@ -230,7 +218,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                     } // end of for loop statement
 
-                }
+                } // end of if statement
 
                 // Show it to the user
                 expenses = myView.findViewById(R.id.expenses);
@@ -242,7 +230,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 else
                     expenses.setText("Today's expenses: €0");
 
-            }
+            } // end of DataChange
 
             @Override
             public void onCancelled(DatabaseError error) {
@@ -250,7 +238,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 Log.w("Failed", "Failed to read value.", error.toException());
             }
         });
-    }
+    } // end of recallDB method
 
 
 
@@ -258,20 +246,37 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
      * Showing google speech input dialog
      */
     private void promptSpeechInput() {
+
+        // Intent for speech recognition
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+        // Setting the language models
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+
+        // Getting the default locale language
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        // Intent for to display the instructions
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
                 getString(R.string.speech_prompt));
+
+        // trying to start the service
         try {
+
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+
         } catch (ActivityNotFoundException a) {
-            Toast.makeText(getActivity().getApplicationContext(),
+
+            Toast.makeText(myView.getContext(),
                     getString(R.string.speech_not_supported),
                     Toast.LENGTH_SHORT).show();
-        }
-    }
+
+        }// end of catch
+
+    }// end of promptSpeech method
+
+
 
     /**
      * Receiving speech input
@@ -286,8 +291,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 if (resultCode == RESULT_OK && null != data) {
 
                     // Stores result
-                    ArrayList<String> result = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
 
                     // Splits the string
@@ -295,28 +299,36 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                     // Segments the string
                     if (Arrays.asList(alphabets).contains(null)) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Oops! There was a problem, try again! ", Toast.LENGTH_LONG).show();
-
+                        Toast.makeText(myView.getContext(), "Oops! There was a problem, try again! ", Toast.LENGTH_LONG).show();
 
                     } else {
 
 
                         try {
 
+                            // Item name
                             one = alphabets[0];
+
+                            // Value of the item
                             two = alphabets[1];
+
+                            // Category of the item
                             three = alphabets[2];
 
+                            // Converting the first letter of the word to uppercase
                             String s1 = one.substring(0, 1).toUpperCase();
                             String nameCapitalized = s1 + one.substring(1);
 
+                            // Converting the first letter of the word to uppercase
                             String s2 = two.substring(0, 1).toUpperCase();
                             String nameCapitalized1 = s2 + two.substring(1);
 
+                            // Converting the first letter of the word to uppercase
                             String s3 = three.substring(0, 1).toUpperCase();
                             String nameCapitalized2 = s3 + three.substring(1);
 
 
+                            // Converting the first letter of the word to uppercase
                             one = nameCapitalized;
                             two = nameCapitalized1;
                             three = nameCapitalized2;
@@ -335,7 +347,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                         } catch (ArrayIndexOutOfBoundsException e) {
 
-                            Toast.makeText(getActivity().getApplicationContext(), "Oops! There was an error, try again! ", Toast.LENGTH_LONG).show();
+                            // Notify the user that there was a problem
+                            Toast.makeText(myView.getContext(), "Oops! There was an error, try again! ", Toast.LENGTH_LONG).show();
 
                         }
                     }
@@ -377,12 +390,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         if(isNoNumberAtBeginning(value)){
 
             // Notify the user of any errors
-            Toast.makeText(getActivity().getApplicationContext(), "The value you have entered was wrong!", Toast.LENGTH_LONG).show();
+            Toast.makeText(myView.getContext(), "The value you have entered was wrong!", Toast.LENGTH_LONG).show();
         } else {
 
             // Notify the user that the item has been added
             // Creating a custom toast
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), " '" + name  + "' has been added to your list", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(myView.getContext(), " '" + name  + "' has been added to your list", Toast.LENGTH_LONG);
 
             // Defines the view for display purposes
             View view = toast.getView();
@@ -419,7 +432,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             // as long as the application is not reset
 
             // Getting sharedPreferences ready for caching
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
 
             // Defining the editor
             SharedPreferences.Editor editor = preferences.edit();
@@ -557,6 +570,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         // What happens when the user chooses to cancel this action
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
+
+                // Do nothing || exit the modal window
+
+
             }
         });
 

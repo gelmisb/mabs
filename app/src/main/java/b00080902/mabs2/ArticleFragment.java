@@ -53,10 +53,23 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import static com.firebase.ui.auth.AuthUI.TAG;
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
+
+/**
+ *  An activity for displaying
+ *  the items in a custom list
+ */
 public class ArticleFragment extends Fragment implements View.OnClickListener {
 
+
+    // Defining the textViews
     private static TextView start, end, totalDay, totalItems;
+
+    // Some UI configs
+    private Button selectDate1, selectDate2, showList;
+    private EditText searching;
+
 
     // Fragment params
     final static String ARG_POSITION = "position";
@@ -72,12 +85,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
     private static CustomListAdapter adapter;
     private NewsModel model;
 
-    private Calendar myCalendar;
-    private Button selectDate1, selectDate2, showList;
-    private DatePickerDialog.OnDateSetListener date;
-    private EditText searching;
-
-
+    // For displaying the sum to the user
     int sum = 0 ;
     int allItems = 0 ;
 
@@ -99,32 +107,44 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
         if (savedInstanceState != null)
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
 
+        // Getting the current view
+        // this allows to retrieve the current context
+        // from the base activity
         myView = inflater.inflate(R.layout.article_view, container, false);
 
+
+        // Defining the textViews
         start = (TextView) myView.findViewById(R.id.startDate);
         end = (TextView) myView.findViewById(R.id.endDate);
         totalDay = (TextView) myView.findViewById(R.id.totalDay);
         totalItems = (TextView) myView.findViewById(R.id.totalItems);
 
-
+        // EditText for the the input
         searching = (EditText) myView.findViewById(R.id.searching);
 
 
+        // Buttons for the dates
         selectDate1 = (Button) myView.findViewById(R.id.picDate);
         selectDate2 = (Button) myView.findViewById(R.id.picDate2);
+
+        // To commit any changes
         showList = (Button) myView.findViewById(R.id.showList);
 
 
-
+        // Since this fragment is partially an OnClickListener
+        // The buttons are added straight to the fragment
         selectDate1.setOnClickListener(this);
         selectDate2.setOnClickListener(this);
         showList.setOnClickListener(this);
 
 
-
+        // Defining the model for MVC
         model = new NewsModel();
+
+        // Getting the reference for the database
         database = FirebaseDatabase.getInstance();
 
+        // Showing the full list at the very beginning
         fullList();
 
         // Inflate the layout for this fragment
@@ -155,6 +175,8 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+
+
     /**
      * Structuring the database so it would be able
      * to retrieve the wanted information about the
@@ -163,6 +185,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
      */
     public void recallDB(){
 
+        // Getting the dates
         String from = start.getText().toString();
         String to = end.getText().toString();
         final String name = searching.getText().toString();
@@ -376,21 +399,45 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
+        Vibrator vibe = (Vibrator) myView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        MediaPlayer mp = MediaPlayer.create(myView.getContext(), R.raw.whoop);
+
 
         switch (v.getId()){
             case R.id.picDate:
+
+                mp.start();
+
+                if (vibe != null)
+                    vibe.vibrate(100);
+
                 DialogFragment newFragment = new SelectDateFragment();
+                assert getFragmentManager() != null;
                 newFragment.show(getFragmentManager(), "DatePicker");
 
                 break;
 
             case R.id.picDate2:
+
+                mp.start();
+
+                if (vibe != null)
+                    vibe.vibrate(100);
+
                 DialogFragment newFragment1 = new SelectDateFragment1();
+                assert getFragmentManager() != null;
                 newFragment1.show(getFragmentManager(), "DatePicker");
 
                 break;
 
             case R.id.showList:
+
+                mp.start();
+
+                if (vibe != null)
+                    vibe.vibrate(100);
+
+
                 recallDB();
 
                 break;

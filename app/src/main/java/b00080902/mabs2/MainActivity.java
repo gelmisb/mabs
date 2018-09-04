@@ -18,14 +18,17 @@ package b00080902.mabs2;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
@@ -163,15 +166,29 @@ public class MainActivity extends FragmentActivity{
 
 
 
+
+
+
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
 
+
+                Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.whoop);
+
                 int id = item.getItemId();
 
                 // If home navigation is clicked
                 if (id == R.id.navigation_home) {
+
+                    mp.start();
+
+                    if (vibe != null)
+                        vibe.vibrate(50);
 
                     // Check that the activity is using the layout version with
                     // the fragment_container FrameLayout
@@ -198,6 +215,11 @@ public class MainActivity extends FragmentActivity{
 
                 } else if (id == R.id.navigation_list) {
 
+                    mp.start();
+
+                    if (vibe != null)
+                        vibe.vibrate(50);
+
                     // Check that the activity is using the layout version with
                     // the fragment_container FrameLayout
                     if (findViewById(R.id.fragment_container) != null) {
@@ -222,6 +244,11 @@ public class MainActivity extends FragmentActivity{
                     return true;
 
                 } else if (id == R.id.navigation_categories) {
+
+                    mp.start();
+
+                    if (vibe != null)
+                        vibe.vibrate(50);
 
                     if (findViewById(R.id.fragment_container) != null) {
 
@@ -248,6 +275,11 @@ public class MainActivity extends FragmentActivity{
 
                 } else if (id == R.id.navigation_balance) {
 
+                    mp.start();
+
+                    if (vibe != null)
+                        vibe.vibrate(50);
+
                     if (findViewById(R.id.fragment_container) != null) {
 
                         // Create fragment and give it an argument specifying the article it should show
@@ -270,6 +302,11 @@ public class MainActivity extends FragmentActivity{
                     return true;
 
                 } else if (id == R.id.navigation_info) {
+
+                    mp.start();
+
+                    if (vibe != null)
+                        vibe.vibrate(50);
 
                     // Create fragment and give it an argument specifying the article it should show
                     InfoFragment newFragment = new InfoFragment();
@@ -296,10 +333,23 @@ public class MainActivity extends FragmentActivity{
     }
 
     public void onBackPressed() {
+
+
+
+        Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.whoop);
+
+        mp.start();
+
+        if (vibe != null)
+            vibe.vibrate(50);
+
+
+
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Do you want to logout?");
 
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(getApplicationContext(), WelcomeScreen.class);
