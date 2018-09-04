@@ -36,8 +36,13 @@ import android.support.annotation.RequiresApi;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -91,6 +96,7 @@ public class MainActivity extends FragmentActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         // Instantiate initial params for DB
         model = new NewsModel();
         database = FirebaseDatabase.getInstance();
@@ -100,6 +106,7 @@ public class MainActivity extends FragmentActivity{
 
         // Fixed Portrait orientation
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 
         /**
          * UI initial params
@@ -165,12 +172,6 @@ public class MainActivity extends FragmentActivity{
         transaction.commit();
 
 
-
-
-
-
-
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -178,14 +179,12 @@ public class MainActivity extends FragmentActivity{
 
 
                 Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.whoop);
 
                 int id = item.getItemId();
 
                 // If home navigation is clicked
                 if (id == R.id.navigation_home) {
 
-                    mp.start();
 
                     if (vibe != null)
                         vibe.vibrate(50);
@@ -215,7 +214,6 @@ public class MainActivity extends FragmentActivity{
 
                 } else if (id == R.id.navigation_list) {
 
-                    mp.start();
 
                     if (vibe != null)
                         vibe.vibrate(50);
@@ -245,7 +243,6 @@ public class MainActivity extends FragmentActivity{
 
                 } else if (id == R.id.navigation_categories) {
 
-                    mp.start();
 
                     if (vibe != null)
                         vibe.vibrate(50);
@@ -275,7 +272,6 @@ public class MainActivity extends FragmentActivity{
 
                 } else if (id == R.id.navigation_balance) {
 
-                    mp.start();
 
                     if (vibe != null)
                         vibe.vibrate(50);
@@ -303,7 +299,6 @@ public class MainActivity extends FragmentActivity{
 
                 } else if (id == R.id.navigation_info) {
 
-                    mp.start();
 
                     if (vibe != null)
                         vibe.vibrate(50);
@@ -332,6 +327,8 @@ public class MainActivity extends FragmentActivity{
         });
     }
 
+
+    @Override
     public void onBackPressed() {
 
 
@@ -372,5 +369,6 @@ public class MainActivity extends FragmentActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
+
 
 }

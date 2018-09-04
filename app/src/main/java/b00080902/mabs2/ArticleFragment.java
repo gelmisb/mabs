@@ -409,7 +409,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
                 mp.start();
 
                 if (vibe != null)
-                    vibe.vibrate(100);
+                    vibe.vibrate(50);
 
                 DialogFragment newFragment = new SelectDateFragment();
                 assert getFragmentManager() != null;
@@ -422,7 +422,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
                 mp.start();
 
                 if (vibe != null)
-                    vibe.vibrate(100);
+                    vibe.vibrate(50);
 
                 DialogFragment newFragment1 = new SelectDateFragment1();
                 assert getFragmentManager() != null;
@@ -435,7 +435,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
                 mp.start();
 
                 if (vibe != null)
-                    vibe.vibrate(100);
+                    vibe.vibrate(50);
 
 
                 recallDB();
