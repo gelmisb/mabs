@@ -15,8 +15,10 @@
  */
 package b00080902.mabs2;
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
@@ -29,13 +31,16 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,7 +84,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     // UI config
     private TextView expenses, income, userHi;
-    private ImageButton btnSpeak;
+    private ImageButton btnSpeak, addNew;
 
     // STT params
     private final int REQ_CODE_SPEECH_INPUT = 100;
@@ -91,6 +96,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     // Global for further uses
     private View myView;
+
+    private String m_Text = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,7 +113,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         // Enable the ability for the user to speak to the application & UI params
         income = (TextView) myView.findViewById(R.id.income);
         userHi = (TextView) myView.findViewById(R.id.userHi);
+
+
         btnSpeak = (ImageButton) myView.findViewById(R.id.btnSpeak);
+        addNew = (ImageButton) myView.findViewById(R.id.addNew);
 
         // Cached item number - will reset when the app is deleted or reset
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
@@ -126,6 +136,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         // Microphone to listen to the user when activated
         btnSpeak.setOnClickListener(this);
+        addNew.setOnClickListener(this);
 
 
         // Show the results
@@ -194,6 +205,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                 // Asserting
                 if(fullItemList != null) {
+
+                    // For the size of the list
                     for (int i = 0; i < fullItemList.size(); i++) {
 
                         if (fullItemList.get(i) != null) {
@@ -316,12 +329,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                             SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
                             String formattedDate = df.format(c);
 
-                            // Logs the details for the dev
-                            Log.i("Name ", one);
-                            Log.i("Value ", two);
-                            Log.i("Category ", three);
-
-
                             // Writes to DB
                             writeNewItem(itemNo + "", one, two, three, formattedDate);
 
@@ -348,44 +355,97 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         return  s.matches(".*[a-zA-Z]+.*");
     }
+
+    /***
+     * Writing a new item into the firebase database
+     *
+     * This method first double checks for any
+     * errors and then proceeds to write any
+     * given information to the database
+     *
+     *
+     * @param itemID
+     * @param name
+     * @param value
+     * @param category
+     * @param date
+     */
     private void writeNewItem(String itemID, String name, String value, String category, String date) {
 
 
-        Log.i("You", "didn't get an error!");
-
+        // Checking whether the given string is suited for processing
         if(isNoNumberAtBeginning(value)){
+
+            // Notify the user of any errors
             Toast.makeText(getActivity().getApplicationContext(), "The value you have entered was wrong!", Toast.LENGTH_LONG).show();
         } else {
 
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), " '" + one  + "' has been added to your list", Toast.LENGTH_LONG);
+            // Notify the user that the item has been added
+            // Creating a custom toast
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), " '" + name  + "' has been added to your list", Toast.LENGTH_LONG);
+
+            // Defines the view for display purposes
             View view = toast.getView();
+
+            // Setting the background
             view.setBackgroundResource(R.drawable.toastieslayout);
+
+            // Setting the gravity, this stays at the center of the screen at the very bottom
             toast.setGravity(Gravity.BOTTOM, 0, 100);
+
+            // Showing the created toast
             toast.show();
 
+            // Adding a new item through MVC
             Article items = new Article(name, value , date, category);
+
+            // Defining the MVC model
             model.addArticle(new Article(one, two, date, category));
 
+
+            // Getting the reference of the database
             myRef = database.getReference("items");
+
+            // Setting the value for the count
             myRef.child(itemID).setValue(items);
 
+            // Increasing the item number when the
+            // item has been fully submitted
             itemNo++ ;
 
+            // This is for storing the item number locally
+            // This means that we can track the items not only through
+            // the firebase given analytics but also through the device
+            // as long as the application is not reset
+
+            // Getting sharedPreferences ready for caching
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+
+            // Defining the editor
             SharedPreferences.Editor editor = preferences.edit();
+
+            // Putting the information
             editor.putInt("Item", itemNo);
+
+            // Submitting the request
             editor.apply();
         }
-
-
     }
 
 
-    public void updateArticleView(int position) {
+    /**
+     * Updates the fragment view
+     *
+     * @param position
+     */
+    public void updateArticleView(int position) { mCurrentPosition = position; }
 
-        mCurrentPosition = position;
-    }
 
+    /**
+     * SavedInstanceState to follow the path of activity
+     *
+     * @param outState
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -395,9 +455,116 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onClick(View v) {
-        promptSpeechInput();
+
+        // Switch statements were most efficient to use here
+        // DO NOT CHANGE
+        switch (v.getId()){
+
+            case R.id.btnSpeak:
+
+                promptSpeechInput();
+
+                break;
+
+            case R.id.addNew:
+
+                onAddNewItem();
+
+                break;
+
+
+            default:
+                break;
+
+        }
+    }
+
+
+    /**
+     * Adding a new item manually
+     * This has been created upon request
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void onAddNewItem() {
+
+        //Alert dialog addition
+        AlertDialog.Builder builder = new AlertDialog.Builder(myView.getContext());
+
+        // Setting a native title
+        builder.setTitle("Add new item");
+
+        // Creating a layout for multiple editText's
+        LinearLayout layout = new LinearLayout(myView.getContext());
+
+        // Setting a native orientation
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        // Add a TextView here for the "Title" label, as noted in the comments
+        final EditText inputBox = new EditText(myView.getContext());
+        // Setting a hint for the user
+        inputBox.setHint("Item");
+
+        // Add another TextView here for the "Description" label
+        final EditText valueBox = new EditText(myView.getContext());
+        // Setting a hint for the user
+        valueBox.setHint("Value");
+
+        // Add a TextView here for the "Title" label, as noted in the comments
+        final EditText categoryBox = new EditText(myView.getContext());
+        // Setting a hint for the user
+        categoryBox.setHint("Category");
+
+
+        // Adding editText's to the layout
+        layout.addView(inputBox);
+        layout.addView(valueBox);
+        layout.addView(categoryBox);
+
+        // Setting alert message
+        builder.setMessage("Please input the item details manually");
+
+        // What happens when the user chooses to add the item
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                //  Getting the strings from the editText
+                String item = inputBox.getText().toString();
+
+                //  Getting the strings from the editText
+                String value = valueBox.getText().toString();
+
+                //  Getting the strings from the editText
+                String cat = categoryBox.getText().toString();
+
+                // gets the current time
+                Date c = Calendar.getInstance().getTime();
+
+                // Formatting the date to match Firebase format
+                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+
+                // Casting to a string format
+                String formattedDate = df.format(c);
+
+                // Writes to DB
+                writeNewItem(itemNo + "", item, value, cat, formattedDate);
+            }
+        });
+
+
+        // What happens when the user chooses to cancel this action
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        });
+
+        // Setting the view for thew layout
+        builder.setView(layout);
+
+        // Showing the alert builder
+        builder.show();
 
     }
 }

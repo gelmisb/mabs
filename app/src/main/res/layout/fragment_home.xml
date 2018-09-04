@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +10,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="400dp"
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/expenses"
         android:fadeScrollbars="true"
@@ -45,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/caviardreams"
                 android:text="August"
+                android:textSize="15dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -54,7 +56,8 @@
                 android:fontFamily="@font/caviardreams"
                 android:lineSpacingExtra="8sp"
                 android:padding="10dp"
-                android:text="15 August 2018: Offaly homeowners in mortgage arrears urged to contact MABS " />
+                android:text="15 August 2018: Offaly homeowners in mortgage arrears urged to contact MABS "
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -63,7 +66,8 @@
                 android:layout_marginBottom="30dp"
                 android:fontFamily="@font/caviardreams"
                 android:padding="10dp"
-                android:text="03 August 2018: Sale of home mortgages to 'funds' " />
+                android:text="03 August 2018: Sale of home mortgages to 'funds' "
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -71,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/caviardreams"
                 android:text="July"
+                android:textSize="15dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -81,7 +86,8 @@
                 android:fontFamily="@font/caviardreams"
                 android:lineSpacingExtra="8sp"
                 android:padding="10dp"
-                android:text="04 July 2018:     Mortgage to Rent Scheme and Abhaile help homeowners stay in their homes " />
+                android:text="04 July 2018:     Mortgage to Rent Scheme and Abhaile help homeowners stay in their homes "
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -89,6 +95,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/caviardreams"
                 android:text="June"
+                android:textSize="15dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -98,7 +105,8 @@
                 android:fontFamily="@font/caviardreams"
                 android:lineSpacingExtra="8sp"
                 android:padding="10dp"
-                android:text="25 June 2018: MABS submission to the Central Bank of Ireland’s Discussion Paper on ‘Digitalisation and the Consumer Protection Code’ " />
+                android:text="25 June 2018: MABS submission to the Central Bank of Ireland’s Discussion Paper on ‘Digitalisation and the Consumer Protection Code’ "
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/textView13"
@@ -108,7 +116,8 @@
                 android:fontFamily="@font/caviardreams"
                 android:lineSpacingExtra="8sp"
                 android:padding="10dp"
-                android:text="21 June 2018: Central BoI statistics and Abhaile helpline trends offer hope to those in serious mortgage arrears " />
+                android:text="21 June 2018: Central BoI statistics and Abhaile helpline trends offer hope to those in serious mortgage arrears "
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/textView14"
@@ -116,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/caviardreams"
                 android:text="February"
+                android:textSize="15dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -126,7 +136,8 @@
                 android:fontFamily="@font/caviardreams"
                 android:lineSpacingExtra="8sp"
                 android:padding="10dp"
-                android:text="15 February 2018:     Over 50% of MABS clients go without heat in Ballyfermot and Cherry Orchard area according to new report - Left Behind in the Cold? " />
+                android:text="15 February 2018:     Over 50% of MABS clients go without heat in Ballyfermot and Cherry Orchard area according to new report - Left Behind in the Cold? "
+                android:textSize="15dp" />
 
         </LinearLayout>
     </ScrollView>
@@ -134,7 +145,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_margin="0dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:orientation="vertical">
 
         <TextView
@@ -144,6 +156,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:fontFamily="@font/caviardreams"
+            android:paddingLeft="10dp"
             android:text="Welcome"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="38sp" />
@@ -178,29 +191,66 @@
         android:textStyle="bold" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="19dp"
+        android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/btnSpeak"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@drawable/mik2"
-            android:src="@null" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/caviardreams"
-            android:text="@string/tap_on_mic"
-            android:textColor="@color/white"
-            android:textSize="15dp"
-            android:textStyle="normal" />
+            <ImageButton
+                android:id="@+id/addNew"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/add"
+                android:src="@null" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/caviardreams"
+                android:text="Add new"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:textStyle="normal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnSpeak"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/mik2"
+                android:src="@null" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/caviardreams"
+                android:text="@string/tap_on_mic"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:textStyle="normal" />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
