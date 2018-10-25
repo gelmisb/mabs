@@ -1,0 +1,17 @@
+Home Screen
+	Previous days 
+		- Show all the expenses for each day
+		- (Exapnd / collapse)
+Lists
+	- Search
+	- Specific dates
+	- Search items
+
+Breakdown
+	- Show all expenses between dates
+	- Totals
+
+Wallet
+
+Notifications
+	

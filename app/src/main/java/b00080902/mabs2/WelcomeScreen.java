@@ -30,7 +30,6 @@ public class WelcomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         // Fullscreen without a title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
