@@ -145,7 +145,7 @@ limitations under the License.
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="331dp"
-        android:background="@drawable/roundlayout"
+        android:background="@drawable/show"
         android:fontFamily="@font/caviardreams"
         android:text="Show"
         android:textColor="@android:color/background_light"

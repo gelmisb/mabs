@@ -30,6 +30,7 @@ import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.MenuPopupWindow;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.util.Log;
@@ -40,10 +41,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -638,6 +641,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void onAddNewItem() {
 
+
+        String[] s = { "Housing ", "House costs", "Food", "Transport", "Tools", "Fuel", "Telephone", "Leisure", "Other"};
+
         //Alert dialog addition
         AlertDialog.Builder builder = new AlertDialog.Builder(myView.getContext());
 
@@ -662,6 +668,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         // Add a TextView here for the "Title" label, as noted in the comments
         final EditText categoryBox = new EditText(myView.getContext());
+
+
+
+        final ArrayAdapter<String> adp = new ArrayAdapter<String>(myView.getContext(),
+                android.R.layout.simple_spinner_item, s);
+
+        final Spinner sp = new Spinner(myView.getContext());
+        sp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+        sp.setAdapter(adp);
+
         // Setting a hint for the user
         categoryBox.setHint("Category");
 
@@ -669,7 +685,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         // Adding editText's to the layout
         layout.addView(inputBox);
         layout.addView(valueBox);
-        layout.addView(categoryBox);
+        layout.addView(sp);
 
         // Setting alert message
         builder.setMessage("Please input the item details manually");
@@ -685,7 +701,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 String value = valueBox.getText().toString();
 
                 //  Getting the strings from the editText
-                String cat = categoryBox.getText().toString();
+                String cat = sp.getSelectedItem().toString();
 
                 // gets the current time
                 Date c = Calendar.getInstance().getTime();
