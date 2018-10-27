@@ -44,6 +44,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -58,6 +60,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -66,8 +71,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
-public class MainActivity extends FragmentActivity{
+public class MainActivity extends AppCompatActivity {
 
 
     // UI config
@@ -90,8 +96,11 @@ public class MainActivity extends FragmentActivity{
     private String one, two, three, four, fullResponse;
     int itemNo ;
     int position = 0;
+    private ShowcaseView sv;
 
 
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,12 +116,12 @@ public class MainActivity extends FragmentActivity{
         // Fixed Portrait orientation
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
         /**
          * UI initial params
          */
         // To show speech results
         txtSpeechInput = (TextView) findViewById(R.id.txtSpeechInput);
+
         // Button to sign out
         btnSignOut = (ImageButton) findViewById(R.id.btnSignOut);
 
@@ -121,7 +130,6 @@ public class MainActivity extends FragmentActivity{
 
         // Bottom nav bar
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.navigationView);
-
 
 
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
@@ -135,7 +143,6 @@ public class MainActivity extends FragmentActivity{
             layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, displayMetrics);
             iconView.setLayoutParams(layoutParams);
         }
-
 
         homePage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +160,7 @@ public class MainActivity extends FragmentActivity{
                 onBackPressed();
             }
         });
-
+//
 
         // Create fragment and give it an argument specifying the article it should show
         HomeFragment newFragment = new HomeFragment();
@@ -208,6 +215,8 @@ public class MainActivity extends FragmentActivity{
 
                         // Commit the transaction
                         transaction.commit();
+//                        showcaseDialogTutorial();
+
                     }
 
                     return true;
@@ -361,7 +370,6 @@ public class MainActivity extends FragmentActivity{
                 });
 
         alert.show();
-
     }
 
 
@@ -370,5 +378,67 @@ public class MainActivity extends FragmentActivity{
         return true;
     }
 
+
+    private void showcaseDialogTutorial(){
+
+        boolean run;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        run = preferences.getBoolean("run?", true);
+
+//        if(run){//If the buyer already went through the showcases it won't do it again.
+
+        //This creates the first showcase.
+
+        sv = new ShowcaseView.Builder(this)
+                .setTarget( new ViewTarget( findViewById(R.id.my_toolbar)))
+                .setContentTitle("Add new item manually")
+                .setStyle(R.style.AppTheme_AppBarOverlay)
+                .setContentText("To add new item manually, click this and specify item, value and choose the category")
+                .hideOnTouchOutside()
+                .build();
+        sv.setButtonText("Next");
+
+        //When the button is clicked then the switch statement will check the counter and make the new showcase.
+        sv.overrideButtonClick(new View.OnClickListener() {
+            int count1 = 0;
+
+            @Override
+            public void onClick(View v) {
+                count1++;
+                switch (count1) {
+                    case 1:
+                        sv.setTarget(new ViewTarget(findViewById(R.id.navigationView)));
+                        sv.setContentTitle("Add new item hands-free");
+                        sv.setContentText("Specify item, value and choose the category");
+                        sv.setButtonText("Next");
+                        break;
+
+                    case 2:
+//                            sv.setTarget(new ViewTarget(((View) myView.findViewById(R.id.my_toolbar))));
+//                            sv.setContentTitle("Toolbar");
+//                            sv.setContentText("Here you can change the settings to your preferences");
+//                            sv.setButtonText("Next");
+//                            break;
+
+                    case 3:
+//                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
+//
+//                            // Defining the editor
+//                            SharedPreferences.Editor editor = preferences.edit();
+//
+//                            // Putting the information
+//                            editor.putBoolean("run?", false);
+//
+//                            // Submitting the request
+//                            editor.apply();
+
+
+                        sv.hide();
+                        break;
+                }
+            }
+        });
+    }
+//    }
 
 }

@@ -18,206 +18,293 @@
         android:text="Categories"
         android:textSize="36sp" />
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="605dp"
+        android:layout_height="match_parent"
+        android:stretchColumns="*"
+        android:layout_marginTop="100dp"
+        android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         tools:context=".CategoryFragment">
 
-        <!-- TODO: Update blank fragment layout -->
 
-        <Button
-            android:id="@+id/other"
-            android:layout_width="100dp"
-            android:layout_height="90dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/food"
-            android:layout_marginBottom="294dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/roundlayout"
-            android:fontFamily="@font/caviardreams"
-            android:text="Other"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tel"
-            app:layout_constraintTop_toBottomOf="@+id/transport" />
+        <TableRow
+            android:id="@+id/row3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/tel"
-            android:layout_width="100dp"
-            android:layout_height="90dp"
-            android:layout_alignStart="@+id/housing"
-            android:layout_alignTop="@+id/other"
-            android:layout_marginBottom="294dp"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/roundlayout"
-            android:fontFamily="@font/caviardreams"
-            android:text="Telephone"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/util" />
+            <Button
+                android:id="@+id/housing"
+                android:layout_width="70dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginBottom="10dp"
+                android:layout_column="0"
+                android:background="@drawable/homes"
+                app:layout_constraintBottom_toTopOf="@+id/fuel"
+                app:layout_constraintEnd_toStartOf="@+id/food"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/leisure"
-            android:layout_width="100dp"
-            android:layout_height="90dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/other"
-            android:layout_marginBottom="294dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/roundlayout"
-            android:fontFamily="@font/caviardreams"
-            android:text="Leisure"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tel"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fuel" />
+            <Button
+                android:id="@+id/house"
+                android:layout_width="70dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/housekeep"
+                android:layout_column="1"
+                app:layout_constraintBottom_toTopOf="@+id/transport"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/food"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/transport"
-            android:layout_width="100dp"
-            android:layout_height="90dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/food"
-            android:layout_marginBottom="25dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/roundlayout"
-            android:fontFamily="@font/caviardreams"
-            android:text="Transport"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/other"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/util"
-            app:layout_constraintTop_toBottomOf="@+id/house" />
+            <Button
+                android:id="@+id/food"
+                android:layout_width="70dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/food"
+                android:layout_column="2"
+                app:layout_constraintBottom_toTopOf="@+id/util"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </TableRow>
 
-        <Button
-            android:id="@+id/util"
-            android:layout_width="100dp"
-            android:layout_height="90dp"
-            android:layout_alignStart="@+id/housing"
-            android:layout_alignTop="@+id/transport"
-            android:layout_marginBottom="25dp"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/roundlayout"
-            android:fontFamily="@font/caviardreams"
-            android:text="Utilities"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/tel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/food" />
 
-        <Button
-            android:id="@+id/fuel"
-            android:layout_width="100dp"
-            android:layout_height="90dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/transport"
-            android:layout_marginBottom="25dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/roundlayout"
-            android:fontFamily="@font/caviardreams"
-            android:text="Fuel"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/leisure"
-            app:layout_constraintEnd_toStartOf="@+id/util"
-            app:layout_constraintHorizontal_bias="0.51"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/housing" />
+        <!-- Row for button labels -->
 
-        <Button
-            android:id="@+id/housing"
-            android:layout_width="100dp"
-            android:layout_height="90dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/house"
-            android:layout_marginBottom="25dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="100dp"
-            android:background="@drawable/roundlayout"
-            android:fontFamily="@font/caviardreams"
-            android:text="Housing costs"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/fuel"
-            app:layout_constraintEnd_toStartOf="@+id/food"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <TableRow
+            android:id="@+id/fisrtRow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="35dp">
 
-        <Button
-            android:id="@+id/house"
-            android:layout_width="100dp"
-            android:layout_height="90dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/food"
-            android:layout_marginBottom="25dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="100dp"
-            android:background="@drawable/roundlayout"
-            android:fontFamily="@font/caviardreams"
-            android:text="House Keeping"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/transport"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/food"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/food"
-            android:layout_width="100dp"
-            android:layout_height="90dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="25dp"
-            android:layout_marginTop="100dp"
-            android:background="@drawable/roundlayout"
-            android:fontFamily="@font/caviardreams"
-            android:text="Food"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/util"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/housingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/caviardreams"
+                android:text="Housing"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
 
-    </android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/houseText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/caviardreams"
+                android:text="House costs"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/foodText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/caviardreams"
+                android:text="Food"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/row2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/transport"
+                android:layout_width="70dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/transport"
+                android:layout_column="0"
+                app:layout_constraintBottom_toTopOf="@+id/other"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/util"
+                app:layout_constraintTop_toBottomOf="@+id/house" />
+
+            <Button
+                android:id="@+id/util"
+                android:layout_width="70dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/util"
+                android:layout_column="1"
+                app:layout_constraintBottom_toTopOf="@+id/tel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/food" />
+
+            <Button
+                android:id="@+id/fuel"
+                android:layout_width="70dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/fuel"
+                android:layout_column="2"
+                app:layout_constraintBottom_toTopOf="@+id/leisure"
+                app:layout_constraintEnd_toStartOf="@+id/util"
+                app:layout_constraintHorizontal_bias="0.51"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/housing" />
+        </TableRow>
+
+
+        <TableRow
+            android:id="@+id/secondRow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="35dp">
+
+
+            <TextView
+                android:id="@+id/transText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/caviardreams"
+                android:text="Transport"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/toolsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/caviardreams"
+                android:text="Tools"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/fuelText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/caviardreams"
+                android:text="Fuel"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/row1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/other"
+                android:layout_width="70dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/others"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tel"
+                app:layout_constraintTop_toBottomOf="@+id/transport" />
+
+            <Button
+                android:id="@+id/tel"
+                android:layout_width="70dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/tel"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/util" />
+
+            <Button
+                android:id="@+id/leisure"
+                android:layout_width="70dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/leisure"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fuel" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/row4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="35dp">
+
+
+            <TextView
+                android:id="@+id/otherText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/caviardreams"
+                android:text="Other"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/telText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/caviardreams"
+                android:text="Telephone"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/leisureText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/caviardreams"
+                android:text="Leisure"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+        </TableRow>
+
+    </TableLayout>
+
 </RelativeLayout>

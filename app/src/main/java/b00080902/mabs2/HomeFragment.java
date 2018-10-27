@@ -15,6 +15,8 @@
  */
 package b00080902.mabs2;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -27,17 +29,27 @@ import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -46,14 +58,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
@@ -85,6 +100,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private String m_Text = "";
 
+
+    private ShowcaseView sv;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,6 +118,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         // Enable the ability for the user to speak to the application & UI params
         income = (TextView) myView.findViewById(R.id.income);
         userHi = (TextView) myView.findViewById(R.id.userHi);
+
 
 
         btnSpeak = (ImageButton) myView.findViewById(R.id.btnSpeak);
@@ -131,11 +151,115 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             recallDB();
         }
 
+        // Show tips on the start for the first time only
+        showcaseDialogTutorial();
+
         // Inflate the layout for this fragment
         return myView;
     }
 
+    private void showcaseDialogTutorial(){
 
+
+        final Activity activity = getActivity();
+        final ViewTarget target;
+
+        assert activity != null;
+        target = new ViewTarget(activity.findViewById(R.id.navigationView));
+
+//        boolean run;
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
+//        run = preferences.getBoolean("run?", true);
+
+//        if(run){//If the buyer already went through the showcases it won't do it again.
+
+            //This creates the first showcase.
+
+        sv = new ShowcaseView.Builder(getActivity())
+                .setTarget( new ViewTarget( ((View) myView.findViewById(R.id.addNew)) ) )
+                .setContentTitle("Add new item manually")
+                .setStyle(R.style.AppTheme_AppBarOverlay)
+                .setContentText("To add new item manually, click this and specify item, value and choose the category")
+                .hideOnTouchOutside()
+                .blockAllTouches()
+                .build();
+        sv.setButtonText("Next");
+
+            //When the button is clicked then the switch statement will check the counter and make the new showcase.
+            sv.overrideButtonClick(new View.OnClickListener() {
+                int count1 = 0;
+
+                @Override
+                public void onClick(View v) {
+                    count1++;
+                    switch (count1) {
+                        case 1:
+                            sv.setTarget(new ViewTarget(((View) myView.findViewById(R.id.btnSpeak))));
+                            sv.setContentTitle("Add new item hands-free");
+                            sv.setContentText("Specify item, value and choose the category");
+                            sv.setButtonText("Next");
+                            break;
+
+                        case 2:
+                            sv.setTarget(new ViewTarget(((View) myView.findViewById(R.id.navigationView1))));
+                            sv.setContentTitle("Navigation bar");
+                            sv.setContentText("Here, you can swap between different pages. \n\n\n Go ahead and click 'Next' and then on the next page");
+                            sv.setButtonText("Next");
+                            break;
+
+                        case 3:
+//                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
+//
+//                            // Defining the editor
+//                            SharedPreferences.Editor editor = preferences.edit();
+//
+//                            // Putting the information
+//                            editor.putBoolean("run?", false);
+//
+//                            // Submitting the request
+//                            editor.apply();
+
+
+                            sv.hide();
+                            break;
+                    }
+                }
+            });
+        }
+//    }
+
+    public static ViewTarget navigationButtonViewTarget(Toolbar toolbar) throws NullPointerException, NoSuchFieldException, IllegalAccessException {
+        Field field = Toolbar.class.getDeclaredField("mNavButtonView");
+        field.setAccessible(true);
+        View navigationView = (View) field.get(toolbar);
+        return new ViewTarget(navigationView);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.abar, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+            case R.id.action_refresh:
+                Toast.makeText(getContext(), "Refresh selected", Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            // action with ID action_settings was selected
+            case R.id.action_settings:
+                Toast.makeText(getContext(), "Settings selected", Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            default:
+                break;
+        }
+
+        return true;
+    }
 
     @Override
     public void onStart() {
@@ -478,13 +602,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
             case R.id.btnSpeak:
 
-                promptSpeechInput();
+                sv.setShowcase(new ViewTarget(btnSpeak), true);
+                sv.setContentTitle("Adding new item hands-free");
+                sv.setContentText("To add new item, specify it's name, value and choose the category");
+//                promptSpeechInput();
 
                 break;
 
             case R.id.addNew:
-
-                onAddNewItem();
+                sv.setContentTitle("Adding new item");
+                sv.setContentText("To add new item, specify it's name, value and choose the category");
+//                onAddNewItem();
 
                 break;
 

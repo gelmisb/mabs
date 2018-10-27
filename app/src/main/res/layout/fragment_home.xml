@@ -6,141 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/expenses"
-        android:fadeScrollbars="true"
-        android:fillViewport="false"
-        android:padding="30dp"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/income"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="30dp"
-                android:fontFamily="@font/caviardreams"
-                android:paddingTop="50dp"
-                android:text="News"
-                android:textAlignment="viewStart"
-                android:textColor="#4c4c4c"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/caviardreams"
-                android:text="August"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/caviardreams"
-                android:lineSpacingExtra="8sp"
-                android:padding="10dp"
-                android:text="15 August 2018: Offaly homeowners in mortgage arrears urged to contact MABS "
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:fontFamily="@font/caviardreams"
-                android:padding="10dp"
-                android:text="03 August 2018: Sale of home mortgages to 'funds' "
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/caviardreams"
-                android:text="July"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:fontFamily="@font/caviardreams"
-                android:lineSpacingExtra="8sp"
-                android:padding="10dp"
-                android:text="04 July 2018:     Mortgage to Rent Scheme and Abhaile help homeowners stay in their homes "
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/caviardreams"
-                android:text="June"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/caviardreams"
-                android:lineSpacingExtra="8sp"
-                android:padding="10dp"
-                android:text="25 June 2018: MABS submission to the Central Bank of Ireland’s Discussion Paper on ‘Digitalisation and the Consumer Protection Code’ "
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:fontFamily="@font/caviardreams"
-                android:lineSpacingExtra="8sp"
-                android:padding="10dp"
-                android:text="21 June 2018: Central BoI statistics and Abhaile helpline trends offer hope to those in serious mortgage arrears "
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/textView14"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/caviardreams"
-                android:text="February"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="100dp"
-                android:fontFamily="@font/caviardreams"
-                android:lineSpacingExtra="8sp"
-                android:padding="10dp"
-                android:text="15 February 2018:     Over 50% of MABS clients go without heat in Ballyfermot and Cherry Orchard area according to new report - Left Behind in the Cold? "
-                android:textSize="15dp" />
-
-        </LinearLayout>
-    </ScrollView>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -182,12 +47,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="187dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="223dp"
         android:fontFamily="@font/caviardreams"
+        android:lineSpacingExtra="4sp"
         android:text="Your total expenses: "
         android:textAlignment="center"
-        android:textColor="#4c4c4c"
-        android:textSize="24sp"
+        android:textColor="@color/fui_bgEmail"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -252,5 +119,27 @@
                 android:textStyle="normal" />
         </LinearLayout>
     </LinearLayout>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigationView1"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="#343e99"
+        app:elevation="10dp"
+        app:itemBackground="@android:color/transparent"
+        app:itemIconTint="#ffffff"
+        app:itemTextColor="@android:color/white"
+        app:menu="@menu/navigation" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="218dp"
+        android:src="@drawable/mabslogo" />
 
 </RelativeLayout>
