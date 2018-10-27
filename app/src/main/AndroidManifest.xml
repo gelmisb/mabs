@@ -8,8 +8,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -25,11 +25,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:icon="@drawable/mabslogo"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SignIn" />
         <activity android:name=".Fail" />
         <activity android:name=".WelcomeScreen">
@@ -43,9 +43,10 @@
             android:name=".ListActivity"
             android:label="@string/title_activity_list"
             android:theme="@style/AppTheme" />
-        <activity android:name=".CatHouse"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+        <activity
+            android:name=".CatHouse"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".FullList"></activity>
     </application>
 
 </manifest>

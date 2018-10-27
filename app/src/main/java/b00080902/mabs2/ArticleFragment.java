@@ -91,7 +91,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
     // For displaying the sum to the user
     int sum = 0 ;
     int allItems = 0 ;
-
+    CustomDialog customDialog;
     private String userName, userID;
 
     /**
@@ -117,6 +117,8 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
         // from the base activity
         myView = inflater.inflate(R.layout.article_view, container, false);
 
+        showList = (Button) myView.findViewById(R.id.showList);
+
 
         // Defining the textViews
         start = (TextView) myView.findViewById(R.id.startDate);
@@ -133,7 +135,6 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
         selectDate2 = (Button) myView.findViewById(R.id.picDate2);
 
         // To commit any changes
-        showList = (Button) myView.findViewById(R.id.showList);
 
 
         // Since this fragment is partially an OnClickListener
@@ -455,8 +456,10 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
                 if (vibe != null)
                     vibe.vibrate(50);
 
+                customDialog = new CustomDialog();
+                customDialog.setupDialog(myView.getContext());
+//                recallDB();
 
-                recallDB();
 
                 break;
 
