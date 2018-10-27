@@ -167,7 +167,7 @@ public class ListActivity extends AppCompatActivity {
     public void PopulateView(ArrayList<Article> model){
         itemList = (ListView) findViewById(R.id.itemList);
 
-        adapter = new CustomListAdapter(model,this);
+        adapter = new CustomListAdapter(model,"expenses", this);
 
         itemList.setAdapter(adapter);
 

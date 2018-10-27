@@ -30,7 +30,7 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/navigationView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <FrameLayout
@@ -43,25 +43,24 @@
 
         </FrameLayout>
 
-
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/my_toolbar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#343e99"
-            android:elevation="10dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            android:layout_height="65dp"
+            android:background="@drawable/border"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
                 android:id="@+id/homePage"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="13dp"
+                android:layout_alignParentStart="true"
                 android:layout_marginBottom="10dp"
+                android:layout_marginStart="13dp"
                 android:background="@drawable/mabslogo"
                 android:padding="0dp" />
 
@@ -70,18 +69,23 @@
                 style="@style/Widget.AppCompat.ImageButton"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="false"
                 android:background="@drawable/logout45"
-                android:cropToPadding="false"/>
-
-        </android.support.v7.widget.Toolbar>
+                android:cropToPadding="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.012" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/txtSpeechInput"

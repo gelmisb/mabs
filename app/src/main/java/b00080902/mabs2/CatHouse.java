@@ -208,7 +208,7 @@ public class CatHouse extends AppCompatActivity {
     public void PopulateView(ArrayList<Article> model){
         itemList = findViewById(R.id.showcase);
 
-        adapter = new CustomListAdapter(model, getBaseContext());
+        adapter = new CustomListAdapter(model, "expenses", getBaseContext());
 
         itemList.setAdapter(adapter);
 

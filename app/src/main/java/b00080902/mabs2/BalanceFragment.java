@@ -421,7 +421,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
     public void PopulateView(ArrayList<Article> model){
         itemList = myView.findViewById(R.id.showcase);
 
-        adapter = new CustomListAdapter(model, myView.getContext());
+        adapter = new CustomListAdapter(model, "income", myView.getContext());
 
         itemList.setAdapter(adapter);
 

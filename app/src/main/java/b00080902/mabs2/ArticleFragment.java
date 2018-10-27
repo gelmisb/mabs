@@ -368,7 +368,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
     public void PopulateView(ArrayList<Article> model){
         itemList = myView.findViewById(R.id.itemList);
 
-        adapter = new CustomListAdapter(model, getActivity().getBaseContext());
+        adapter = new CustomListAdapter(model, "expenses", getActivity().getBaseContext());
 
         itemList.setAdapter(adapter);
 

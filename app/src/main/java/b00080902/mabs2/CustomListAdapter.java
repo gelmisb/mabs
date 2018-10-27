@@ -32,6 +32,8 @@ public class CustomListAdapter extends ArrayAdapter<Article> implements View.OnC
     private ArrayList<Article> dataSet;
     Context mContext;
 
+    private String type;
+
     // View lookup cache
     private static class ViewHolder {
         TextView txtName;
@@ -40,10 +42,11 @@ public class CustomListAdapter extends ArrayAdapter<Article> implements View.OnC
         ImageView info;
     }
 
-    public CustomListAdapter(ArrayList<Article> data, Context context) {
-        super(context, R.layout.row_item, data);
+    public CustomListAdapter(ArrayList<Article> data, String type, Context context) {
+        super(context, R.layout.row_item_add, data);
         this.dataSet = data;
         this.mContext=context;
+        this.type = type;
 
     }
 
@@ -85,7 +88,12 @@ public class CustomListAdapter extends ArrayAdapter<Article> implements View.OnC
 
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.row_item, parent, false);
+            if(type.equals("income")){
+                convertView = inflater.inflate(R.layout.row_item_add, parent, false);
+            }
+            else {
+                convertView = inflater.inflate(R.layout.row_item_remove, parent, false);
+            }
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.title);
             viewHolder.txtType = (TextView) convertView.findViewById(R.id.type);
             viewHolder.txtVersion = (TextView) convertView.findViewById(R.id.date);

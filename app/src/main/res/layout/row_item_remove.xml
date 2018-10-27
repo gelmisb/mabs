@@ -9,7 +9,7 @@
     android:layout_marginRight="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
-    android:background="@color/common_google_signin_btn_text_light_disabled"
+    android:background="#8Cff3333"
     android:orientation="vertical"
     android:padding="10dp">
 
