@@ -1,42 +1,29 @@
 package b00080902.mabs2;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Vibrator;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.os.Vibrator;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 public class CatHouse extends AppCompatActivity {
 
@@ -52,6 +39,7 @@ public class CatHouse extends AppCompatActivity {
     private NewsModel model;
 
     private String category = "";
+    private String userName, userID;
     private ImageButton backButton;
     private TextView categoryHeading ;
 
@@ -86,6 +74,13 @@ public class CatHouse extends AppCompatActivity {
         category = intent.getStringExtra("cat");
 
 
+        // Firebase username
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        userName = user.getDisplayName();
+        userID = user.getUid();
+
+
         // Instantiate initial params for DB
         model = new NewsModel();
         database = FirebaseDatabase.getInstance();
@@ -96,7 +91,8 @@ public class CatHouse extends AppCompatActivity {
 
     public void recallDB(){
 
-        myRef = database.getReference("items");
+        // Getting the DB reference
+        myRef = database.getReference(userID);
 
 
         myRef.orderByChild("category").equalTo(category).addValueEventListener(new ValueEventListener(){
@@ -135,7 +131,7 @@ public class CatHouse extends AppCompatActivity {
 
     public void categoryTotal(){
 
-        myRef = database.getReference("items");
+        myRef = database.getReference(userID);
 
         myRef.orderByChild("category").equalTo(category).addValueEventListener(new ValueEventListener(){
             @Override

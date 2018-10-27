@@ -27,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -91,7 +92,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
     // Iteration params
-    private String one, two, three;
+    private String one, two, three, userID, userName;
     int itemNo ;
     int position = 0;
 
@@ -102,6 +103,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
     private ShowcaseView sv;
+
+    private FirebaseUser user;
 
 
     @Override
@@ -129,12 +132,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         itemNo = preferences.getInt("Item", 0);
 
         // Firebase username
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
-        String name = user.getDisplayName();
+        userName = user.getDisplayName();
 
+        userID = user.getUid();
         // Welcoming user
-        userHi.setText(name + "!");
+        userHi.setText(userName + "!");
 
         // Access to DB
         model = new NewsModel();
@@ -152,7 +156,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         }
 
         // Show tips on the start for the first time only
-        showcaseDialogTutorial();
+//        showcaseDialogTutorial();
 
         // Inflate the layout for this fragment
         return myView;
@@ -280,11 +284,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
 
+
     /**
      * For calling the database to retrieve the full expenses for the day
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void recallDB(){
+
+        // Getting the DB reference
+        myRef = database.getReference(userID);
 
         //  Getting today's date
         // gets the current time
@@ -293,76 +301,89 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = df.format(c);
 
-
-        // Getting the DB reference
-        myRef = database.getReference("items");
-
-        // Getting the event listener
         myRef.orderByChild("date").startAt(formattedDate).endAt(formattedDate).addValueEventListener(new ValueEventListener() {
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                // Using generic type because it will suit for any type of object that could be processed
-                // Initialising the array
-                ArrayList<Article> fullItemList = new ArrayList<Article>();
+                // Getting the event listener
+                myRef.orderByChild("type").equalTo("Expenses").addValueEventListener(new ValueEventListener() {
 
-                // Sorting the array
-                for (DataSnapshot child: dataSnapshot.getChildren()) {
-                    fullItemList.add(child.getValue(Article.class));
-                }
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                // Full some of the expenses
-                int sum = 0 ;
+                        // Using generic type because it will suit for any type of object that could be processed
+                        // Initialising the array
+                        ArrayList<Article> fullItemList = new ArrayList<Article>();
 
-                // Asserting
-                if(fullItemList != null) {
+                        // Sorting the array
+                        for (DataSnapshot child: dataSnapshot.getChildren()) {
+                            fullItemList.add(child.getValue(Article.class));
+                        }
 
-                    // For the size of the list
-                    for (int i = 0; i < fullItemList.size(); i++) {
+                        // Full some of the expenses
+                        int sum = 0 ;
 
-                        // If the received item is not null proceed
-                        if (fullItemList.get(i) != null) {
+                        // Asserting
+                        if(fullItemList != null) {
 
-                            // Retrieve each item
-                            String liveprice = fullItemList.get(i).getValue();
+                            // For the size of the list
+                            for (int i = 0; i < fullItemList.size(); i++) {
 
-                            // Remove all € signs
-                            String newStr = liveprice.replace("€", "");
+                                // If the received item is not null proceed
+                                if (fullItemList.get(i) != null) {
 
-                            // Remove all commas
-                            String newStr1 = newStr.replace(",", "");
+                                    // Retrieve each item
+                                    String liveprice = fullItemList.get(i).getValue();
 
-                            // Replace all letters with 0
-                            String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+                                    // Remove all € signs
+                                    String newStr = liveprice.replace("€", "");
 
-                            // Add everything together
-                            sum = sum + Integer.parseInt(newStr2);
+                                    // Remove all commas
+                                    String newStr1 = newStr.replace(",", "");
+
+                                    // Replace all letters with 0
+                                    String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+
+                                    // Add everything together
+                                    sum = sum + Integer.parseInt(newStr2);
+
+                                } // end of if statement
+
+                            } // end of for loop statement
 
                         } // end of if statement
 
-                    } // end of for loop statement
+                        // Show it to the user
+                        expenses = myView.findViewById(R.id.expenses);
 
-                } // end of if statement
+                        // Show the total to the user
+                        if(sum != 0)
+                            expenses.setText("Today's expenses: €" + NumberFormat.getNumberInstance(Locale.US).format(sum));
 
-                // Show it to the user
-                expenses = myView.findViewById(R.id.expenses);
+                        else
+                            expenses.setText("Today's expenses: €0");
 
-                // Show the total to the user
-                if(sum != 0)
-                    expenses.setText("Today's expenses: €" + NumberFormat.getNumberInstance(Locale.US).format(sum));
+                    } // end of DataChange
 
-                else
-                    expenses.setText("Today's expenses: €0");
-
-            } // end of DataChange
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w("Failed", "Failed to read value.", error.toException());
+                    }
+                });
+            }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("Failed", "Failed to read value.", error.toException());
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
+
         });
     } // end of recallDB method
+
+
 
 
 
@@ -466,7 +487,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                             String formattedDate = df.format(c);
 
                             // Writes to DB
-                            writeNewItem(itemNo + "", one, two, three, formattedDate);
+                            writeNewItem(one, two, three, formattedDate);
 
 
                         } catch (ArrayIndexOutOfBoundsException e) {
@@ -501,13 +522,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
      * given information to the database
      *
      *
-     * @param itemID
      * @param name
      * @param value
      * @param category
      * @param date
      */
-    private void writeNewItem(String itemID, String name, String value, String category, String date) {
+    private void writeNewItem(String name, String value, String category, String date) {
 
 
         // Checking whether the given string is suited for processing
@@ -534,38 +554,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             toast.show();
 
             // Adding a new item through MVC
-            Article items = new Article(name, value , date, category);
+            Article items = new Article(name, value , date, category, "Expenses");
+
+            User user = new User(userID, userName);
 
             // Defining the MVC model
-            model.addArticle(new Article(one, two, date, category));
+            model.addArticle(new Article(one, two, date, category, "Expenses"));
 
+
+            myRef.child(userID).setValue(user);
 
             // Getting the reference of the database
-            myRef = database.getReference("items");
+            myRef = database.getReference(userID);
+
+            String mGroupId = myRef.push().getKey();
 
             // Setting the value for the count
-            myRef.child(itemID).setValue(items);
+            assert mGroupId != null;
+            myRef.child(mGroupId).setValue(items);
 
-            // Increasing the item number when the
-            // item has been fully submitted
-            itemNo++ ;
-
-            // This is for storing the item number locally
-            // This means that we can track the items not only through
-            // the firebase given analytics but also through the device
-            // as long as the application is not reset
-
-            // Getting sharedPreferences ready for caching
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
-
-            // Defining the editor
-            SharedPreferences.Editor editor = preferences.edit();
-
-            // Putting the information
-            editor.putInt("Item", itemNo);
-
-            // Submitting the request
-            editor.apply();
         }
     }
 
@@ -602,17 +609,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
             case R.id.btnSpeak:
 
-                sv.setShowcase(new ViewTarget(btnSpeak), true);
-                sv.setContentTitle("Adding new item hands-free");
-                sv.setContentText("To add new item, specify it's name, value and choose the category");
-//                promptSpeechInput();
+//                sv.setShowcase(new ViewTarget(btnSpeak), true);
+//                sv.setContentTitle("Adding new item hands-free");
+//                sv.setContentText("To add new item, specify it's name, value and choose the category");
+                promptSpeechInput();
 
                 break;
 
             case R.id.addNew:
-                sv.setContentTitle("Adding new item");
-                sv.setContentText("To add new item, specify it's name, value and choose the category");
-//                onAddNewItem();
+//                sv.setContentTitle("Adding new item");
+//                sv.setContentText("To add new item, specify it's name, value and choose the category");
+                onAddNewItem();
 
                 break;
 
@@ -690,7 +697,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 String formattedDate = df.format(c);
 
                 // Writes to DB
-                writeNewItem(itemNo + "", item, value, cat, formattedDate);
+                writeNewItem(item, value, cat, formattedDate);
             }
         });
 

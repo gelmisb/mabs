@@ -71,9 +71,8 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
     // Iteration params
-    private String one, two, three, four, fullResponse;
+    private String one, two, three, userName, userID;
     int itemNo ;
-    int position = 0;
 
     // UI config
     private ListView itemList;
@@ -103,12 +102,11 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
         // Enable the ability for the user to speak to the application
         btnSpeak = (ImageButton) myView.findViewById(R.id.btnSpeak);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
-        itemNo = preferences.getInt("Item", 0);
-
+        // Firebase username
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String name = user.getDisplayName();
-
+        assert user != null;
+        userName = user.getDisplayName();
+        userID = user.getUid();
 
         // Access to DB
         model = new NewsModel();
@@ -160,9 +158,9 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
     public void categoryTotal(){
 
-        myRef = database.getReference("items");
+        myRef = database.getReference(userID);
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.orderByChild("type").equalTo("Expenses").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -214,9 +212,9 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        myRef = database.getReference("income");
+        myRef = database.getReference(userID);
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.orderByChild("type").equalTo("Income").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -353,7 +351,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
 
                             // Writes to DB
-                            writeNewItem(itemNo + "", one, two, three, formattedDate);
+                            writeNewItem( one, two, three, formattedDate);
 
 
                         } catch (ArrayIndexOutOfBoundsException e) {
@@ -378,7 +376,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
         return  s.matches(".*[a-zA-Z]+.*");
     }
-    private void writeNewItem(String itemID, String name, String value, String category, String date) {
+    private void writeNewItem( String name, String value, String category, String date) {
 
 
         Log.i("You", "didn't get an error!");
@@ -387,18 +385,28 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(myView.getContext(), "The value you have entered was wrong!", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(myView.getContext(),  " '" + one  + "' has been added to your list", Toast.LENGTH_LONG).show();
-            Article items = new Article(name, value , date, category);
-            model.addArticle(new Article(one, two, date, category));
 
-            myRef = database.getReference("income");
-            myRef.child(itemID).setValue(items);
+            // Adding a new item through MVC
+            Article items = new Article(name, value , date, category, "Income");
 
-            itemNo++ ;
+            User user = new User(userID, userName);
 
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt("Item", itemNo);
-            editor.apply();
+            // Defining the MVC model
+            model.addArticle(new Article(one, two, date, category, "Income"));
+
+
+            myRef.child(userID).setValue(user);
+
+            // Getting the reference of the database
+            myRef = database.getReference(userID);
+
+            String mGroupId = myRef.push().getKey();
+
+            // Setting the value for the count
+            assert mGroupId != null;
+            myRef.child(mGroupId).setValue(items);
+
+
         }
     }
 

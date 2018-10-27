@@ -18,6 +18,7 @@ public class Article implements Serializable{
     private String value;
     private String date;
     private String category;
+    private String type;
 
     // Empty constructor is needed
     public Article() {
@@ -28,15 +29,24 @@ public class Article implements Serializable{
 
 
 
-    public Article(String item, String value, String date, String category){
+    public Article(String item, String value, String date, String category, String type){
 
         this.item = item;
         this.value = value;
         this.date = date;
         this.category = category;
+        this.type = type;
 
     }
 
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getItem() {
         return item;

@@ -24,6 +24,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -39,6 +40,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -88,6 +91,8 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
     // For displaying the sum to the user
     int sum = 0 ;
     int allItems = 0 ;
+
+    private String userName, userID;
 
     /**
      * If activity recreated (such as from screen rotate), restore
@@ -144,6 +149,14 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
         // Getting the reference for the database
         database = FirebaseDatabase.getInstance();
 
+        // Firebase username
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        userName = user.getDisplayName();
+        userID = user.getUid();
+
+
+
         // Showing the full list at the very beginning
         fullList();
 
@@ -183,43 +196,47 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
      * items using a genericTypeIndicator for arrayLists
      *
      */
-    public void recallDB(){
+    public void recallDB() {
+
+        // Getting the DB reference
+        myRef = database.getReference(userID);
+
 
         // Getting the dates
-        String from = start.getText().toString();
-        String to = end.getText().toString();
+        final String from = start.getText().toString();
+        final String to = end.getText().toString();
         final String name = searching.getText().toString();
 
-        myRef = database.getReference("items");
 
         sum = 0;
         allItems = 0;
-        Log.i("Name", name);
-
-
-        if(from.isEmpty() || to.isEmpty())
-            Toast.makeText(getActivity().getApplicationContext(), "Incorrect dates were entered", Toast.LENGTH_SHORT).show();
-
 
         myRef.orderByChild("date").startAt(from).endAt(to).addValueEventListener(new ValueEventListener() {
+
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                if (from.isEmpty() || to.isEmpty())
+                    Toast.makeText(getActivity().getApplicationContext(), "Incorrect dates were entered", Toast.LENGTH_SHORT).show();
+
 
                 myRef.orderByChild("item").equalTo(name).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        long value=dataSnapshot.getChildrenCount();
+                        long value = dataSnapshot.getChildrenCount();
 
-                        if(value > 0 )
-                            try{
+                        if (value > 0)
+                            try {
 
                                 ArrayList<Article> fullItemList = new ArrayList<Article>();
-                                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                                for (DataSnapshot child : dataSnapshot.getChildren()) {
                                     fullItemList.add(child.getValue(Article.class));
                                 }
                                 assert fullItemList != null;
-                                for (int i = 0 ; i < fullItemList.size(); i++){
-                                    if(fullItemList.get(i) == null){
+                                for (int i = 0; i < fullItemList.size(); i++) {
+                                    if (fullItemList.get(i) == null) {
                                         fullItemList.remove(i);
 
                                     } else {
@@ -246,7 +263,7 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
                                 totalItems.setText("Items: " + allItems);
 
                                 PopulateView(fullItemList);
-                            } catch (NullPointerException e){
+                            } catch (NullPointerException e) {
                                 Toast.makeText(getActivity().getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
                             }
 
@@ -266,14 +283,13 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getActivity().getApplicationContext(), "Oops, something went wrong, try again", Toast.LENGTH_SHORT).show();
-                Log.w("Failed", "Failed to read value.", error.toException());
+
             }
         });
-    }
 
+    }
     /**
      * Structuring the database so it would be able
      * to retrieve the wanted information about the
@@ -282,52 +298,54 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
      */
     public void fullList(){
 
-        myRef = database.getReference("items");
+        // Getting the DB reference
+        myRef = database.getReference(userID);
 
 
-        myRef.addValueEventListener(new ValueEventListener() {
+
+        myRef.orderByChild("type").equalTo("Expenses").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                    try{
+                try{
 
-                        ArrayList<Article> fullItemList = new ArrayList<Article>();
-                        for (DataSnapshot child: dataSnapshot.getChildren()) {
-                            fullItemList.add(child.getValue(Article.class));
-                        }
-                        assert fullItemList != null;
-                        for (int i = 0 ; i < fullItemList.size(); i++){
-                            if(fullItemList.get(i) == null){
-                                fullItemList.remove(i);
-
-                            } else {
-                                // Retrieve each item
-                                String liveprice = fullItemList.get(i).getValue();
-
-                                // Remove all € signs
-                                String newStr = liveprice.replace("€", "");
-
-                                // Remove all commas
-                                String newStr1 = newStr.replace(",", "");
-
-                                // Replace all letters with 0
-                                String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
-
-                                // Add everything together
-                                sum = sum + Integer.parseInt(newStr2);
-
-                                allItems += 1;
-                            }
-                        }
-                        totalDay.setText("Total: €" + sum);
-                        totalItems.setText("Items: " + allItems);
-
-                        PopulateView(fullItemList);
-                    } catch (NullPointerException e){
-                        Toast.makeText(getActivity().getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
+                    ArrayList<Article> fullItemList = new ArrayList<Article>();
+                    for (DataSnapshot child: dataSnapshot.getChildren()) {
+                        fullItemList.add(child.getValue(Article.class));
                     }
+                    assert fullItemList != null;
+                    for (int i = 0 ; i < fullItemList.size(); i++){
+                        if(fullItemList.get(i) == null){
+                            fullItemList.remove(i);
+
+                        } else {
+                            // Retrieve each item
+                            String liveprice = fullItemList.get(i).getValue();
+
+                            // Remove all € signs
+                            String newStr = liveprice.replace("€", "");
+
+                            // Remove all commas
+                            String newStr1 = newStr.replace(",", "");
+
+                            // Replace all letters with 0
+                            String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+
+                            // Add everything together
+                            sum = sum + Integer.parseInt(newStr2);
+
+                            allItems += 1;
+                        }
+                    }
+                    totalDay.setText("Total: €" + sum);
+                    totalItems.setText("Items: " + allItems);
+
+                    PopulateView(fullItemList);
+                } catch (NullPointerException e){
+                    Toast.makeText(getActivity().getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
                 }
+            }
 
 
             @Override
