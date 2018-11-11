@@ -9,7 +9,7 @@
     android:layout_marginRight="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
-    android:background="#8Cff3333"
+    android:background="#8C545fc4"
     android:orientation="vertical"
     android:padding="10dp">
 

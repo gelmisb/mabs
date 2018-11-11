@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cardview_light_background"
     android:fillViewport="true"
     tools:context=".InfoFragment">
 
@@ -27,14 +28,14 @@
             android:id="@+id/imageView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/mabslogo" />
+            android:src="@mipmap/mabs" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="-263dp"
             android:layout_marginStart="38dp"
+            android:layout_marginBottom="-263dp"
             android:fontFamily="@font/caviardreamsbold"
             android:text="About MABS"
             android:textAlignment="center"
@@ -88,8 +89,8 @@
                 android:id="@+id/find"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:layout_marginTop="40dp"
+                android:layout_marginBottom="2dp"
                 android:layout_weight="1"
                 android:background="@drawable/roundlayoutyellow"
                 android:fontFamily="@font/caviardreams"

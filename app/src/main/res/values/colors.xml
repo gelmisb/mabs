@@ -5,7 +5,7 @@
     <color name="colorAccent">#113ab2</color>
     <color name="bg_bubble_self">#008ae6</color>
     <color name="bg_bubble_watbot">#c3dce1e1</color>
-    <color name="backgroundColour">#004d99</color>
+    <color name="backgroundColour">#8c545fc4</color>
 
     <color name="firstOne">#4db8ff</color>
     <color name="secondOne">#008ae6</color>
@@ -14,4 +14,5 @@
     <color name="bg_gradient_start">#31244e</color>
     <color name="bg_gradient_end">#6b394c</color>
     <color name="black_overlay">#0066cc</color>
+    <color name="backColour">#8c0a21df</color>
 </resources>

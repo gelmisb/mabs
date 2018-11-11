@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -89,8 +90,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     // UI config
     private TextView expenses, income, userHi;
-    private ImageButton btnSpeak, addNew;
-
+    private ImageButton btnSpeak, addNew, findMe;
     // STT params
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
@@ -129,6 +129,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         btnSpeak = (ImageButton) myView.findViewById(R.id.btnSpeak);
         addNew = (ImageButton) myView.findViewById(R.id.addNew);
+        findMe = (ImageButton) myView.findViewById(R.id.findMe);
 
         // Cached item number - will reset when the app is deleted or reset
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
@@ -151,6 +152,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         // Microphone to listen to the user when activated
         btnSpeak.setOnClickListener(this);
         addNew.setOnClickListener(this);
+        findMe.setOnClickListener(this);
 
 
         // Show the results
@@ -159,7 +161,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         }
 
         // Show tips on the start for the first time only
-//        showcaseDialogTutorial();
+        showcaseDialogTutorial();
 
         // Inflate the layout for this fragment
         return myView;
@@ -174,13 +176,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         assert activity != null;
         target = new ViewTarget(activity.findViewById(R.id.navigationView));
 
-//        boolean run;
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
-//        run = preferences.getBoolean("run?", true);
+        boolean run;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
+        run = preferences.getBoolean("run?", true);
 
-//        if(run){//If the buyer already went through the showcases it won't do it again.
+        if(run){//If the buyer already went through the showcases it won't do it again.
 
-            //This creates the first showcase.
+//            This creates the first showcase.
 
         sv = new ShowcaseView.Builder(getActivity())
                 .setTarget( new ViewTarget( ((View) myView.findViewById(R.id.addNew)) ) )
@@ -215,16 +217,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                             break;
 
                         case 3:
-//                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
-//
-//                            // Defining the editor
-//                            SharedPreferences.Editor editor = preferences.edit();
-//
-//                            // Putting the information
-//                            editor.putBoolean("run?", false);
-//
-//                            // Submitting the request
-//                            editor.apply();
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
+
+                            // Defining the editor
+                            SharedPreferences.Editor editor = preferences.edit();
+
+                            // Putting the information
+                            editor.putBoolean("run?", false);
+
+                            // Submitting the request
+                            editor.apply();
 
 
                             sv.hide();
@@ -233,7 +235,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 }
             });
         }
-//    }
+    }
 
     public static ViewTarget navigationButtonViewTarget(Toolbar toolbar) throws NullPointerException, NoSuchFieldException, IllegalAccessException {
         Field field = Toolbar.class.getDeclaredField("mNavButtonView");
@@ -626,6 +628,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                 break;
 
+            case R.id.findMe:
+
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=mabs");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+
+                break;
 
             default:
                 break;

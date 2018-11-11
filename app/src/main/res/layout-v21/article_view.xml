@@ -147,7 +147,6 @@ limitations under the License.
         android:layout_marginBottom="331dp"
         android:background="@drawable/show"
         android:fontFamily="@font/caviardreams"
-        android:text="Show"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toTopOf="@+id/itemList"
         app:layout_constraintEnd_toEndOf="parent"
