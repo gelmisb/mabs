@@ -89,16 +89,27 @@ public class ShowList extends AppCompatActivity {
             search = (String) savedInstanceState.getSerializable("name");
         }
 
-        //  1. Check with dates
+        //  1. Check with dates only
         //  2. Check with dates and term
         //  3. Check with term only
         //  4. Show all
 
-        // Calling the viewing for the custom list activity
+        // ---- SHOW WITH TERM ONLY ----
         if (start.isEmpty() || end.isEmpty())
-            fullList();
+            checkingItems(search);
+
+        // ---- SHOW WITH DATES AND TERM ----
+        else if (!search.isEmpty() & !start.isEmpty() & !end.isEmpty())
+            checkingItems(start, end, search);
+
+        // ---- SHOW DATES ONLY ----
+        else if (start.isEmpty() != false & end.isEmpty() != false )
+            checkingItems(start, end);
+
+        // ---- SHOW ALL items ----
         else
-            checkingDatesAndTerm();
+            checkingItems();
+
 
     }
 
@@ -108,19 +119,19 @@ public class ShowList extends AppCompatActivity {
      * end retrieve the wanted information about the
      * items using a genericTypeIndicator for arrayLists
      *
+     *                DATES AND TERM
+     *
      */
-    public void checkingDatesAndTerm() {
+    public void checkingItems(final String start, final String end, final String search) {
 
         // Getting the DB reference
         myRef = database.getReference(userID);
-
 
 
         sum = 0;
         allItems = 0;
 
         myRef.orderByChild("date").startAt(start).endAt(end).addValueEventListener(new ValueEventListener() {
-
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -206,30 +217,33 @@ public class ShowList extends AppCompatActivity {
      * to retrieve the wanted information about the
      * items using a genericTypeIndicator for arrayLists
      *
+     *                  TERM ONLY
      */
-    public void fullList(){
+    public void checkingItems(String search){
 
         // Getting the DB reference
         myRef = database.getReference(userID);
 
 
+        sum = 0;
+        allItems = 0;
 
-//        myRef.orderByChild("type").equalTo("Expenses").addValueEventListener(new ValueEventListener() {
+
         myRef.orderByChild("item").equalTo(search).addValueEventListener(new ValueEventListener() {
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                try{
+                try {
 
                     ArrayList<Article> fullItemList = new ArrayList<Article>();
-                    for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
                         fullItemList.add(child.getValue(Article.class));
                     }
                     assert fullItemList != null;
-                    for (int i = 0 ; i < fullItemList.size(); i++){
-                        if(fullItemList.get(i) == null){
+                    for (int i = 0; i < fullItemList.size(); i++) {
+                        if (fullItemList.get(i) == null) {
                             fullItemList.remove(i);
 
                         } else {
@@ -255,7 +269,147 @@ public class ShowList extends AppCompatActivity {
                     totalItems.setText("Items: " + allItems);
 
                     PopulateView(fullItemList);
-                } catch (NullPointerException e){
+                } catch (NullPointerException e) {
+                    Toast.makeText(getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(getApplicationContext(), "Oops, something went wrong, try again", Toast.LENGTH_SHORT).show();
+                Log.w("Failed", "Failed to read value.", error.toException());
+            }
+        });
+
+    }
+
+
+    /**
+     * Structuring the database so it would be able
+     * to retrieve the wanted information about the
+     * items using a genericTypeIndicator for arrayLists
+     *
+     *               SHOWING ALL ITEMS
+     */
+    public void checkingItems(){
+        // Getting the DB reference
+        myRef = database.getReference(userID);
+
+
+        sum = 0;
+        allItems = 0;
+
+        myRef.orderByChild("type").equalTo("Expenses").addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                try {
+
+                    ArrayList<Article> fullItemList = new ArrayList<Article>();
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        fullItemList.add(child.getValue(Article.class));
+                    }
+                    assert fullItemList != null;
+                    for (int i = 0; i < fullItemList.size(); i++) {
+                        if (fullItemList.get(i) == null) {
+                            fullItemList.remove(i);
+
+                        } else {
+                            // Retrieve each item
+                            String liveprice = fullItemList.get(i).getValue();
+
+                            // Remove all € signs
+                            String newStr = liveprice.replace("€", "");
+
+                            // Remove all commas
+                            String newStr1 = newStr.replace(",", "");
+
+                            // Replace all letters with 0
+                            String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+
+                            // Add everything together
+                            sum = sum + Integer.parseInt(newStr2);
+
+                            allItems += 1;
+                        }
+                    }
+                    totalDay.setText("Total: €" + sum);
+                    totalItems.setText("Items: " + allItems);
+
+                    PopulateView(fullItemList);
+                } catch (NullPointerException e) {
+                    Toast.makeText(getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(getApplicationContext(), "Oops, something went wrong, try again", Toast.LENGTH_SHORT).show();
+                Log.w("Failed", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    /**
+     * Structuring the database so it would be able
+     * to retrieve the wanted information about the
+     * items using a genericTypeIndicator for arrayLists
+     *
+     *               SHOWING DATES ONLY
+     */
+    public void checkingItems(String start, String end){
+        // Getting the DB reference
+        myRef = database.getReference(userID);
+
+
+        sum = 0;
+        allItems = 0;
+
+        myRef.orderByChild("date").startAt(start).endAt(end).addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                try {
+
+                    ArrayList<Article> fullItemList = new ArrayList<Article>();
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        fullItemList.add(child.getValue(Article.class));
+                    }
+                    assert fullItemList != null;
+                    for (int i = 0; i < fullItemList.size(); i++) {
+                        if (fullItemList.get(i) == null) {
+                            fullItemList.remove(i);
+
+                        } else {
+                            // Retrieve each item
+                            String liveprice = fullItemList.get(i).getValue();
+
+                            // Remove all € signs
+                            String newStr = liveprice.replace("€", "");
+
+                            // Remove all commas
+                            String newStr1 = newStr.replace(",", "");
+
+                            // Replace all letters with 0
+                            String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+
+                            // Add everything together
+                            sum = sum + Integer.parseInt(newStr2);
+
+                            allItems += 1;
+                        }
+                    }
+                    totalDay.setText("Total: €" + sum);
+                    totalItems.setText("Items: " + allItems);
+
+                    PopulateView(fullItemList);
+                } catch (NullPointerException e) {
                     Toast.makeText(getApplicationContext(), "No items found for this date", Toast.LENGTH_SHORT).show();
                 }
             }
