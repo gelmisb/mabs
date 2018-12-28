@@ -15,70 +15,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ArticleFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView2"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/totalDay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_weight="1"
-            android:fontFamily="@font/caviardreams"
-            android:text="Total: 'Please select a date'"
-            android:textAlignment="center"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/totalItems"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="@font/caviardreams"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textSize="24sp" />
-
-    </LinearLayout>
-
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/itemList"
-        android:layout_width="match_parent"
-        android:layout_height="175dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:cacheColorHint="@android:color/holo_blue_light"
-        android:divider="@color/backgroundColour"
-        android:dividerHeight="@dimen/cardview_compat_inset_shadow"
-        android:fadingEdge="vertical"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
     <Button
         android:id="@+id/picDate"
         android:layout_width="125dp"
-        android:layout_height="wrap_content"
+        android:layout_height="46dp"
         android:layout_alignStart="@+id/picDate2"
         android:layout_alignParentTop="true"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="143dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/roundlayout"
         android:fontFamily="@font/caviardreams"
         android:text="Start date"
@@ -94,17 +46,18 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="204dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="296dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="26dp"
         android:background="@drawable/roundlayout"
         android:fontFamily="@font/caviardreams"
         android:text="End date"
         android:textColor="@android:color/background_light"
-        app:layout_constraintBottom_toTopOf="@+id/itemList"
+        app:layout_constraintBottom_toTopOf="@+id/searching"
         app:layout_constraintEnd_toStartOf="@+id/endDate"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.303" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/startDate"
@@ -112,6 +65,8 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/picDate"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="212dp"
+        android:layout_marginBottom="72dp"
         android:fontFamily="@font/caviardreams"
         android:hint="e.g. 10/08/2018"
         android:textAlignment="center"
@@ -128,32 +83,36 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/picDate2"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="308dp"
+        android:layout_marginBottom="38dp"
         android:fontFamily="@font/caviardreams"
         android:hint="e.g. 18/08/2018"
         android:textAlignment="center"
         android:textColor="#3f3f3f"
         android:textSize="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/picDate2"
+        app:layout_constraintBottom_toTopOf="@+id/searching"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toEndOf="@+id/picDate2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/showList"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignEnd="@+id/searching"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="29dp"
         android:layout_marginEnd="-80dp"
-        android:layout_marginBottom="204dp"
+        android:layout_marginBottom="76dp"
         android:background="@drawable/show"
         android:fontFamily="@font/caviardreams"
         android:textColor="@android:color/background_light"
-        app:layout_constraintBottom_toTopOf="@+id/itemList"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.469"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/picDate2" />
+        app:layout_constraintTop_toBottomOf="@+id/searching" />
 
     <TextView
         android:id="@+id/textView2"
@@ -161,11 +120,16 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="100dp"
         android:fontFamily="@font/caviardreams"
         android:text="Purchase list"
         android:textColor="@color/common_google_signin_btn_text_light_pressed"
-        android:textSize="38sp" />
+        android:textSize="38sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/searching"
@@ -173,10 +137,17 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="260dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="388dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="21dp"
         android:ems="10"
         android:hint="Enter item"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/showList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.102"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

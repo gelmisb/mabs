@@ -28,8 +28,10 @@
     <string name="your_total_expenses">Your total expenses:</string>
     <string name="textview">TextView</string>
     <string name="add_new">Add new</string>
-    <string name="todo">TODO</string>
     <string name="welcome">Welcome</string>
+    <string name="login">Login</string>
+    <string name="todo">TODO</string>
+    <string name="items">Items</string>
 </resources>
 
 

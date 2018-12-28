@@ -313,6 +313,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * If user goes back from activity (presses back button)
+     */
     @Override
     public void onBackPressed() {
 

@@ -46,7 +46,8 @@
         <activity
             android:name=".CatHouse"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FullList"></activity>
+        <activity android:name=".FullList" />
+        <activity android:name=".ShowList"></activity>
     </application>
 
 </manifest>
