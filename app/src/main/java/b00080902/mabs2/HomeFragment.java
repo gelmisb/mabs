@@ -15,7 +15,6 @@
  */
 package b00080902.mabs2;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -31,9 +30,7 @@ import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.MenuPopupWindow;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,14 +43,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
-import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -70,10 +64,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MODE_PRIVATE;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
@@ -91,18 +83,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     // UI config
     private TextView expenses, income, userHi;
     private ImageButton btnSpeak, addNew, findMe;
+
     // STT params
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
     // Iteration params
     private String one, two, three, userID, userName;
     int itemNo ;
-    int position = 0;
 
     // Global for further uses
     private View myView;
-
-    private String m_Text = "";
 
 
     private ShowcaseView sv;
@@ -126,7 +116,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         userHi = (TextView) myView.findViewById(R.id.userHi);
 
 
-
+        // UI Navigation buttons
         btnSpeak = (ImageButton) myView.findViewById(R.id.btnSpeak);
         addNew = (ImageButton) myView.findViewById(R.id.addNew);
         findMe = (ImageButton) myView.findViewById(R.id.findMe);
@@ -140,8 +130,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         assert user != null;
         userName = user.getDisplayName();
 
-        userID = user.getUid();
         // Welcoming user
+        userID = user.getUid();
         userHi.setText(userName + "!");
 
         // Access to DB
@@ -167,14 +157,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         return myView;
     }
 
+
+    // Showing a detailed tutorial
     private void showcaseDialogTutorial(){
 
 
+        // Getting activity since this is an fragment
         final Activity activity = getActivity();
-        final ViewTarget target;
 
+        // Asserting the activity
         assert activity != null;
-        target = new ViewTarget(activity.findViewById(R.id.navigationView));
+        ViewTarget target = new ViewTarget(activity.findViewById(R.id.navigationView1));
 
         boolean run;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(myView.getContext());
@@ -182,8 +175,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         if(run){//If the buyer already went through the showcases it won't do it again.
 
-//            This creates the first showcase.
-
+        // This creates the first showcase.
         sv = new ShowcaseView.Builder(getActivity())
                 .setTarget( new ViewTarget( ((View) myView.findViewById(R.id.addNew)) ) )
                 .setContentTitle("Add new item manually")
@@ -348,8 +340,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                                     // Remove all commas
                                     String newStr1 = newStr.replace(",", "");
 
+                                    String newStr3 = newStr1.replace(".", "");
+
                                     // Replace all letters with 0
-                                    String newStr2 = newStr1.replaceAll("[A-Za-z]", "0");
+                                    String newStr2 = newStr3.replaceAll("[A-Za-z]", "0");
 
                                     // Add everything together
                                     sum = sum + Integer.parseInt(newStr2);

@@ -26,7 +26,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:orientation="vertical"
         android:stretchColumns="*"
         tools:context=".CategoryFragment">
@@ -39,8 +39,8 @@
 
             <Button
                 android:id="@+id/housing"
-                android:layout_width="70dp"
-                android:layout_height="80dp"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
                 android:layout_column="0"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="100dp"
@@ -54,8 +54,8 @@
 
             <Button
                 android:id="@+id/house"
-                android:layout_width="70dp"
-                android:layout_height="80dp"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
                 android:layout_column="1"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="100dp"
@@ -69,8 +69,8 @@
 
             <Button
                 android:id="@+id/food"
-                android:layout_width="70dp"
-                android:layout_height="80dp"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
                 android:layout_column="2"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="100dp"
@@ -133,8 +133,8 @@
 
             <Button
                 android:id="@+id/transport"
-                android:layout_width="70dp"
-                android:layout_height="80dp"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
                 android:layout_column="0"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="20dp"
@@ -148,8 +148,8 @@
 
             <Button
                 android:id="@+id/util"
-                android:layout_width="70dp"
-                android:layout_height="80dp"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
                 android:layout_column="1"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="20dp"
@@ -163,8 +163,8 @@
 
             <Button
                 android:id="@+id/fuel"
-                android:layout_width="70dp"
-                android:layout_height="80dp"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
                 android:layout_column="2"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="20dp"
@@ -225,8 +225,8 @@
 
             <Button
                 android:id="@+id/other"
-                android:layout_width="70dp"
-                android:layout_height="80dp"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="35dp"
@@ -239,8 +239,8 @@
 
             <Button
                 android:id="@+id/tel"
-                android:layout_width="70dp"
-                android:layout_height="80dp"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="35dp"
@@ -253,8 +253,8 @@
 
             <Button
                 android:id="@+id/leisure"
-                android:layout_width="70dp"
-                android:layout_height="80dp"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="35dp"

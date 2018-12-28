@@ -455,10 +455,10 @@ public class ArticleFragment extends Fragment implements View.OnClickListener {
 
                 if (vibe != null)
                     vibe.vibrate(50);
-
-                customDialog = new CustomDialog();
-                customDialog.setupDialog(myView.getContext());
-//                recallDB();
+//
+//                customDialog = new CustomDialog();
+//                customDialog.setupDialog(myView.getContext());
+                recallDB();
 
 
                 break;

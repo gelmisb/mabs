@@ -25,6 +25,11 @@
     <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input, please use the manual addition</string>
     <string name="tap_on_mic">Tap on mic to speak</string>
     <string name="title_activity_list">ListActivity</string>
+    <string name="your_total_expenses">Your total expenses:</string>
+    <string name="textview">TextView</string>
+    <string name="add_new">Add new</string>
+    <string name="todo">TODO</string>
+    <string name="welcome">Welcome</string>
 </resources>
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,22 +8,63 @@
     tools:context=".HomeFragment">
 
 
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigationView1"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        android:background="#343e99"
+        android:visibility="invisible"
+        app:itemBackground="@android:color/transparent"
+        app:itemIconTint="#ffffff"
+        app:itemTextColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/navigation" />
+
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:orientation="vertical">
+        android:layout_marginBottom="32dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/findMe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/expenses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="105dp"
+            android:fontFamily="@font/caviardreams"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/your_total_expenses"
+            android:textAlignment="center"
+            android:textColor="@color/fui_bgEmail"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="115dp" />
 
         <TextView
             android:id="@+id/userHi2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
             android:fontFamily="@font/caviardreams"
-            android:paddingLeft="10dp"
-            android:text="Welcome"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/welcome"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="38sp" />
 
@@ -33,44 +74,34 @@
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/expenses"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="138dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="51dp"
+            android:layout_marginBottom="94dp"
             android:fontFamily="@font/caviardreamsbold"
-            android:text="TextView"
+            android:text="@string/textview"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="38sp" />
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/expenses"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="223dp"
-        android:fontFamily="@font/caviardreams"
-        android:lineSpacingExtra="4sp"
-        android:text="Your total expenses: "
-        android:textAlignment="center"
-        android:textColor="@color/fui_bgEmail"
-        android:textSize="30sp"
-        android:textStyle="bold" />
-
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="19dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/findMe"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
@@ -80,24 +111,23 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/add"
-                android:src="@null" />
+                android:src="@null"
+                android:contentDescription="@string/todo" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/caviardreams"
-                android:text="Add new"
+                android:text="@string/add_new"
                 android:textColor="@color/white"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="normal" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
@@ -107,7 +137,8 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/mik2"
-                android:src="@null" />
+                android:src="@null"
+                android:contentDescription="@string/todo" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -116,32 +147,23 @@
                 android:fontFamily="@font/caviardreams"
                 android:text="@string/tap_on_mic"
                 android:textColor="@color/white"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="normal" />
         </LinearLayout>
     </LinearLayout>
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigationView1"
-        android:layout_width="0dp"
-        android:layout_height="65dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="#343e99"
-        app:elevation="10dp"
-        app:itemBackground="@android:color/transparent"
-        app:itemIconTint="#ffffff"
-        app:itemTextColor="@android:color/white"
-        app:menu="@menu/navigation" />
-
     <ImageButton
         android:id="@+id/findMe"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="150dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="273dp"
-        android:background="@drawable/findmabs" />
+        android:layout_marginTop="32dp"
+        android:background="@drawable/findmabs"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+        android:contentDescription="@string/todo" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
